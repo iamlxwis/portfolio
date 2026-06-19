@@ -3,363 +3,157 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Work — lxwis</title>
-  <meta name="description" content="Projects and work by lxwis — student developer from General Santos, PH." />
-  <meta name="theme-color" content="#0E0E0E" />
+  <title>Work · lxwis</title>
+  <meta name="description" content="Projects and work by lxwis, student developer from General Santos, PH." />
+  <meta name="theme-color" content="#14110D" />
   <link rel="icon" type="image/webp" href="https://i.imgur.com/9jrzHF1_d.webp?maxwidth=64&fidelity=grand" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink:   #0E0E0E;
-      --paper: #EDE8DE;
-      --warm:  #C8A97E;
-      --muted: #6B6257;
-      --dim:   #3A3530;
-      --serif: 'Playfair Display', Georgia, serif;
-      --mono:  'DM Mono', monospace;
+      --noir:    #14110D;
+      --bone:    #ECE6D6;
+      --moss:    #7E9B79;
+      --ash:     #7A7165;
+      --line:    #2C2720;
+      --display: 'Fraunces', Georgia, serif;
+      --mono:    'JetBrains Mono', monospace;
     }
 
-    html { font-size: 16px; scroll-behavior: smooth; }
-    body {
-      background: var(--ink);
-      color: var(--paper);
-      font-family: var(--mono);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+    html { font-size: 16px; }
+    body { background: var(--noir); color: var(--bone); font-family: var(--mono); min-height: 100vh; overflow-x: hidden; }
     a { text-decoration: none; color: inherit; }
-
     ::-webkit-scrollbar { width: 2px; }
-    ::-webkit-scrollbar-thumb { background: var(--warm); }
+    ::-webkit-scrollbar-thumb { background: var(--moss); }
 
-    .wrap { max-width: 780px; margin: 0 auto; padding: 0 2rem; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 2rem; }
 
-    header {
-      padding: 2.5rem 0 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .logo {
-      font-family: var(--serif);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--paper);
-    }
-    .logo em { color: var(--warm); font-style: italic; }
-    .nav-back {
-      font-size: 0.68rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      transition: color .2s;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-    .nav-back:hover { color: var(--paper); }
+    header { padding: 2.25rem 0 0; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: var(--display); font-size: 1.05rem; font-weight: 700; }
+    .logo em { color: var(--moss); font-style: italic; }
+    .nav-back { font-size: 0.68rem; color: var(--ash); transition: color .2s; }
+    .nav-back:hover { color: var(--bone); }
 
-    .page-header {
-      padding: 6rem 0 4rem;
-      border-bottom: 1px solid var(--dim);
-    }
-    .page-eyebrow {
-      font-size: 0.65rem;
-      color: var(--warm);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .page-eyebrow::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--warm);
-    }
+    .page-header { padding: 5rem 0 3rem; border-bottom: 1px solid var(--line); }
+    .page-eyebrow { font-size: 0.68rem; color: var(--moss); letter-spacing: 0.08em; margin-bottom: 1.25rem; }
     .page-title {
-      font-family: var(--serif);
-      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-family: var(--display);
+      font-size: clamp(2.4rem, 7vw, 4rem);
       font-weight: 900;
-      line-height: 0.95;
-      letter-spacing: -0.04em;
-      color: var(--paper);
+      line-height: 0.98;
+      letter-spacing: -0.02em;
     }
-    .page-title em { font-style: italic; color: var(--warm); }
-    .page-sub {
+    .page-title em { font-style: italic; color: var(--moss); }
+    .page-sub { font-size: 0.8rem; color: var(--ash); line-height: 1.7; max-width: 420px; margin-top: 1.25rem; }
+
+    .bio-line {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--line);
       font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 420px;
-      margin-top: 1.5rem;
+      color: var(--ash);
+      line-height: 1.7;
     }
+    .bio-line b { color: var(--bone); font-weight: 500; }
+    .bio-line .accent { color: var(--moss); }
 
-    .about-strip {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0;
-      border-bottom: 1px solid var(--dim);
-    }
-    .about-cell {
-      padding: 2rem 0;
-      border-right: 1px solid var(--dim);
-    }
-    .about-cell:first-child { padding-right: 2rem; }
-    .about-cell:nth-child(2) { padding: 2rem; }
-    .about-cell:last-child { border-right: none; padding-left: 2rem; }
-    .about-cell-label {
-      font-size: 0.6rem;
-      color: var(--muted);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-    .about-cell-value {
-      font-family: var(--serif);
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--paper);
-      letter-spacing: -0.01em;
-    }
-
-    .stack-section {
-      padding: 4rem 0;
-      border-bottom: 1px solid var(--dim);
-    }
-    .section-label {
-      font-size: 0.65rem;
-      color: var(--muted);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-    }
-    .stack-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+    .stack-section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
+    .section-label { font-size: 0.65rem; color: var(--ash); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .stack-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .stack-item {
       font-size: 0.72rem;
-      color: var(--paper);
-      border: 1px solid var(--dim);
-      padding: 0.4rem 0.85rem;
+      border: 1px solid var(--line);
+      padding: 0.35rem 0.8rem;
       border-radius: 2px;
-      letter-spacing: 0.04em;
       transition: border-color .2s, color .2s;
     }
-    .stack-item:hover { border-color: var(--warm); color: var(--warm); }
+    .stack-item:hover { border-color: var(--moss); color: var(--moss); }
 
-    .projects-section {
-      padding: 4rem 0;
-    }
-
-    .project {
-      padding: 3rem 0;
-      border-top: 1px solid var(--dim);
-      transition: border-color .25s;
-    }
-    .project:hover { border-color: var(--warm); }
-
-    .project-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    .project-meta-row {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 0.5rem;
-    }
-    .project-num {
-      font-size: 0.6rem;
-      color: var(--muted);
-      letter-spacing: 0.15em;
-    }
-    .project-year {
-      font-size: 0.6rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-    }
-    .status-live {
-      font-size: 0.58rem;
-      color: var(--warm);
-      letter-spacing: 0.12em;
-    }
-    .status-wip {
-      font-size: 0.58rem;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-    }
+    .projects-section { padding: 3rem 0; }
+    .project { padding: 2.25rem 0; border-top: 1px solid var(--line); }
+    .project-meta { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.5rem; font-size: 0.62rem; letter-spacing: 0.08em; }
+    .status-live { color: var(--moss); }
+    .status-wip { color: var(--ash); }
     .project-title {
-      font-family: var(--serif);
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-family: var(--display);
+      font-size: clamp(1.6rem, 4.5vw, 2.3rem);
       font-weight: 700;
-      color: var(--paper);
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-      transition: color .2s;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
     }
-    .project:hover .project-title { color: var(--warm); }
-    .project-ext-link {
-      font-size: 1.1rem;
-      color: var(--muted);
-      flex-shrink: 0;
-      padding-top: 0.3rem;
-      transition: color .2s, transform .2s;
-    }
-    .project:hover .project-ext-link {
-      color: var(--warm);
-      transform: translate(3px,-3px);
-    }
-
-    .project-tagline {
-      font-size: 0.72rem;
-      color: var(--warm);
-      letter-spacing: 0.06em;
-      margin-bottom: 1rem;
-    }
-    .project-body {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.85;
-      max-width: 560px;
-      margin-bottom: 1rem;
-    }
-    .project-detail {
-      font-size: 0.78rem;
-      color: #4A443E;
-      line-height: 1.8;
-      max-width: 560px;
-      margin-bottom: 1.25rem;
-    }
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-    .tag {
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      border: 1px solid var(--dim);
-      padding: 0.2rem 0.55rem;
-      border-radius: 2px;
-      transition: border-color .2s, color .2s;
-    }
-    .project:hover .tag { border-color: rgba(200,169,126,0.3); color: #9E8870; }
+    .project-link { font-size: 0.95rem; color: var(--ash); margin-left: 0.5rem; transition: color .2s; }
+    .project:hover .project-link { color: var(--moss); }
+    .project-tagline { font-size: 0.74rem; color: var(--moss); margin-bottom: 0.85rem; }
+    .project-body { font-size: 0.82rem; color: #B7AE9D; line-height: 1.8; max-width: 540px; margin-bottom: 0.75rem; }
+    .project-detail { font-size: 0.78rem; color: var(--ash); line-height: 1.75; max-width: 540px; margin-bottom: 1.1rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag { font-size: 0.6rem; color: var(--ash); border: 1px solid var(--line); padding: 0.18rem 0.5rem; border-radius: 2px; }
 
     .cta-section {
-      padding: 5rem 0;
-      border-top: 1px solid var(--dim);
+      padding: 4rem 0;
+      border-top: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 1.5rem;
     }
-    .cta-text {
-      font-family: var(--serif);
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 700;
-      color: var(--paper);
-      letter-spacing: -0.02em;
-    }
-    .cta-text em { font-style: italic; color: var(--warm); }
+    .cta-text { font-family: var(--display); font-size: clamp(1.3rem, 3.5vw, 1.8rem); font-weight: 700; }
+    .cta-text em { font-style: italic; color: var(--moss); }
     .cta-btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
       font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      color: var(--ink);
-      background: var(--paper);
-      padding: 0.75rem 1.5rem;
-      border-radius: 2px;
+      color: var(--noir);
+      background: var(--bone);
+      padding: 0.7rem 1.4rem;
+      border-radius: 3px;
       white-space: nowrap;
       transition: background .2s;
     }
-    .cta-btn:hover { background: var(--warm); }
+    .cta-btn:hover { background: var(--moss); }
 
     footer {
-      padding: 2.5rem 0;
-      border-top: 1px solid var(--dim);
+      padding: 2rem 0;
+      border-top: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-    .footer-copy {
       font-size: 0.62rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
+      color: var(--ash);
     }
-    .footer-home {
-      font-size: 0.62rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      transition: color .2s;
-    }
-    .footer-home:hover { color: var(--warm); }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity .6s ease, transform .6s ease;
-    }
-    .fade-in.visible { opacity: 1; transform: none; }
-    .d1 { transition-delay: .05s; }
-    .d2 { transition-delay: .12s; }
-    .d3 { transition-delay: .19s; }
-    .d4 { transition-delay: .26s; }
+    footer a:hover { color: var(--moss); }
+    #clock { color: var(--moss); }
 
     @media (max-width: 560px) {
-      .about-strip { grid-template-columns: 1fr; }
-      .about-cell { border-right: none; border-bottom: 1px solid var(--dim); padding: 1.5rem 0; }
-      .about-cell:last-child { border-bottom: none; }
-      footer { flex-direction: column; gap: 0.75rem; text-align: center; }
-      .cta-section { flex-direction: column; }
+      .cta-section { flex-direction: column; align-items: flex-start; }
+      footer { flex-direction: column; gap: 0.6rem; text-align: center; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header class="fade-in d1">
+    <header>
       <span class="logo">lx<em>wis</em></span>
       <a href="/" class="nav-back">← Home</a>
     </header>
 
     <div class="page-header">
-      <p class="page-eyebrow fade-in d1">Portfolio</p>
-      <h1 class="page-title fade-in d2">Things<br>I've <em>built.</em></h1>
-      <p class="page-sub fade-in d3">A few things I've shipped. Mostly solo, mostly Firebase + Vercel.</p>
+      <p class="page-eyebrow">Portfolio</p>
+      <h1 class="page-title">What I've <em>shipped.</em></h1>
+      <p class="page-sub">A few things I've built, mostly solo, mostly Firebase and Vercel.</p>
     </div>
 
-    <div class="about-strip">
-      <div class="about-cell fade-in d1">
-        <p class="about-cell-label">Based in</p>
-        <p class="about-cell-value">GenSan, PH</p>
-      </div>
-      <div class="about-cell fade-in d2">
-        <p class="about-cell-label">Building since</p>
-        <p class="about-cell-value">2022</p>
-      </div>
-      <div class="about-cell fade-in d3">
-        <p class="about-cell-label">Status</p>
-        <p class="about-cell-value" style="color:var(--warm)">Open to collabs</p>
-      </div>
+    <div class="bio-line">
+      Based in <b>General Santos, PH</b>. Building since <b>2022</b>. Currently <span class="accent">open to collabs</span>.
     </div>
 
     <section class="stack-section">
-      <p class="section-label fade-in">Stack</p>
-      <div class="stack-grid fade-in d1">
+      <p class="section-label">Stack</p>
+      <div class="stack-grid">
         <span class="stack-item">HTML5</span>
         <span class="stack-item">CSS3</span>
         <span class="stack-item">JavaScript</span>
@@ -373,23 +167,19 @@
     </section>
 
     <section class="projects-section">
-      <p class="section-label fade-in">Selected Work</p>
+      <p class="section-label">Projects</p>
 
-      <article class="project fade-in" style="cursor:pointer" onclick="window.open('https://libnav.lxwis.site','_blank')">
-        <div class="project-header">
-          <div>
-            <div class="project-meta-row">
-              <span class="project-num">01</span>
-              <span class="project-year">2025</span>
-              <span class="status-live">● Live</span>
-            </div>
-            <h2 class="project-title">LibNav</h2>
-          </div>
-          <span class="project-ext-link">↗</span>
+      <article class="project">
+        <div class="project-meta">
+          <span class="status-live">● Live</span>
+          <span>2025</span>
         </div>
-        <p class="project-tagline">Library Navigation System</p>
+        <h2 class="project-title">
+          <a href="https://libnav.lxwis.site" target="_blank">LibNav<span class="project-link">↗</span></a>
+        </h2>
+        <p class="project-tagline">Library navigation system</p>
         <p class="project-body">Helps students find books and navigate the library at Notre Dame-Siena College. Admins manage content and post announcements.</p>
-        <p class="project-detail">My capstone, built solo. Real-time search via Firebase RTDB, admin panel, maintenance mode, and offline support through service workers.</p>
+        <p class="project-detail">My capstone, built solo. Real-time search via Firebase RTDB, an admin panel, maintenance mode, and offline support through service workers.</p>
         <div class="project-tags">
           <span class="tag">Vanilla JS</span>
           <span class="tag">Firebase RTDB</span>
@@ -400,21 +190,15 @@
         </div>
       </article>
 
-      <article class="project fade-in" style="cursor:pointer" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        <div class="project-header">
-          <div>
-            <div class="project-meta-row">
-              <span class="project-num">02</span>
-              <span class="project-year">2025</span>
-              <span class="status-live">● You are here</span>
-            </div>
-            <h2 class="project-title">lxwis.site</h2>
-          </div>
-          <span class="project-ext-link">↗</span>
+      <article class="project">
+        <div class="project-meta">
+          <span class="status-live">● You're here</span>
+          <span>2025</span>
         </div>
-        <p class="project-tagline">Personal Portfolio</p>
-        <p class="project-body">This site. No frameworks — just HTML, CSS, and JS, written by hand.</p>
-        <p class="project-detail">Editorial layout with Playfair Display and DM Mono. Scroll reveals, fully responsive, zero dependencies.</p>
+        <h2 class="project-title">lxwis.site</h2>
+        <p class="project-tagline">Personal portfolio</p>
+        <p class="project-body">This site. No framework, just HTML, CSS, and JS, written by hand.</p>
+        <p class="project-detail">Editorial layout, type-led, fully responsive, zero dependencies beyond two Google Fonts.</p>
         <div class="project-tags">
           <span class="tag">HTML5</span>
           <span class="tag">CSS3</span>
@@ -423,21 +207,17 @@
         </div>
       </article>
 
-      <article class="project fade-in" style="cursor:pointer" onclick="window.open('https://t.me/AllinOneTools_Bot','_blank')">
-        <div class="project-header">
-          <div>
-            <div class="project-meta-row">
-              <span class="project-num">03</span>
-              <span class="project-year">2025</span>
-              <span class="status-live">● Live</span>
-            </div>
-            <h2 class="project-title">AllinOneTools_Bot</h2>
-          </div>
-          <span class="project-ext-link">↗</span>
+      <article class="project">
+        <div class="project-meta">
+          <span class="status-live">● Live</span>
+          <span>2025</span>
         </div>
-        <p class="project-tagline">Telegram Bot</p>
-        <p class="project-body">A multi-tool assistant on Telegram. AI chat, crypto tracking, BIN tools, temp email, link shortening, and identity generation — all in one bot.</p>
-        <p class="project-detail">Built with Telegraf, deployed serverless on Vercel Edge Functions. Designed to feel fast and instant, no cold-start lag.</p>
+        <h2 class="project-title">
+          <a href="https://t.me/AllinOneTools_Bot" target="_blank">AllinOneTools_Bot<span class="project-link">↗</span></a>
+        </h2>
+        <p class="project-tagline">Telegram bot</p>
+        <p class="project-body">A multi-tool assistant on Telegram. AI chat, crypto tracking, BIN tools, temp email, link shortening, and identity generation, all in one bot.</p>
+        <p class="project-detail">Built with Telegraf, deployed serverless on Vercel Edge Functions. No cold-start lag.</p>
         <div class="project-tags">
           <span class="tag">Telegraf</span>
           <span class="tag">Vercel Edge</span>
@@ -445,18 +225,13 @@
         </div>
       </article>
 
-      <article class="project fade-in">
-        <div class="project-header">
-          <div>
-            <div class="project-meta-row">
-              <span class="project-num">04</span>
-              <span class="project-year">Upcoming</span>
-              <span class="status-wip">○ In development</span>
-            </div>
-            <h2 class="project-title">lxwis Bot</h2>
-          </div>
+      <article class="project">
+        <div class="project-meta">
+          <span class="status-wip">○ Building</span>
+          <span>Upcoming</span>
         </div>
-        <p class="project-tagline">Messenger Bot</p>
+        <h2 class="project-title">lxwis Bot</h2>
+        <p class="project-tagline">Messenger bot</p>
         <p class="project-body">Same toolset as AllinOneTools_Bot, rebuilt for Facebook Messenger using the Meta Graph API.</p>
         <p class="project-detail">Zero-dependency Node.js backend. Converts text commands into native interactive button templates for a cleaner mobile experience.</p>
         <div class="project-tags">
@@ -467,29 +242,24 @@
       </article>
     </section>
 
-    <div class="cta-section fade-in">
-      <p class="cta-text">Want to<br><em>work together?</em></p>
-      <a href="https://t.me/iamlxwis" target="_blank" class="cta-btn">
-        Get in touch →
-      </a>
+    <div class="cta-section">
+      <p class="cta-text">Got something <em>to build?</em></p>
+      <a href="https://t.me/iamlxwis" target="_blank" class="cta-btn">Message me →</a>
     </div>
 
-    <footer class="fade-in">
-      <span class="footer-copy">lxwis.site © 2025</span>
-      <a href="/" class="footer-home">← Home</a>
+    <footer>
+      <span>© 2025 lxwis</span>
+      <span>General Santos, PH · <span id="clock">--:--</span></span>
     </footer>
   </div>
 
   <script>
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.08 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    function tick() {
+      const el = document.getElementById('clock');
+      el.textContent = new Intl.DateTimeFormat('en-PH', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Manila' }).format(new Date());
+    }
+    tick();
+    setInterval(tick, 15000);
   </script>
 </body>
 </html>
