@@ -4,33 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lxwis</title>
-  <meta name="description" content="lxwis — Student developer from General Santos, PH." />
-  <meta name="theme-color" content="#0E0E0E" />
+  <meta name="description" content="lxwis. Solo developer based in General Santos City, Philippines." />
+  <meta name="theme-color" content="#14110D" />
   <meta property="og:title" content="lxwis" />
-  <meta property="og:description" content="Student developer. Building real things on the web." />
+  <meta property="og:description" content="Solo developer. Firebase, vanilla JS, and whatever else gets it shipped." />
   <meta property="og:image" content="https://i.imgur.com/9jrzHF1_d.webp?maxwidth=760&fidelity=grand" />
   <meta property="og:url" content="https://lxwis.site/" />
   <link rel="icon" type="image/webp" href="https://i.imgur.com/9jrzHF1_d.webp?maxwidth=64&fidelity=grand" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink:    #0E0E0E;
-      --paper:  #EDE8DE;
-      --warm:   #C8A97E;
-      --muted:  #6B6257;
-      --dim:    #3A3530;
-      --serif:  'Playfair Display', Georgia, serif;
-      --mono:   'DM Mono', monospace;
+      --noir:    #14110D;
+      --bone:    #ECE6D6;
+      --moss:    #7E9B79;
+      --ash:     #7A7165;
+      --line:    #2C2720;
+      --display: 'Fraunces', Georgia, serif;
+      --mono:    'JetBrains Mono', monospace;
     }
 
-    html { font-size: 16px; scroll-behavior: smooth; }
+    html { font-size: 16px; }
     body {
-      background: var(--ink);
-      color: var(--paper);
+      background: var(--noir);
+      color: var(--bone);
       font-family: var(--mono);
       min-height: 100vh;
       overflow-x: hidden;
@@ -38,313 +38,183 @@
     a { text-decoration: none; color: inherit; }
 
     ::-webkit-scrollbar { width: 2px; }
-    ::-webkit-scrollbar-thumb { background: var(--warm); }
+    ::-webkit-scrollbar-thumb { background: var(--moss); }
 
-    .wrap {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 2rem; }
 
     header {
-      padding: 2.5rem 0 0;
+      padding: 2.25rem 0 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .logo {
-      font-family: var(--serif);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--paper);
-      letter-spacing: -0.01em;
-    }
-    .logo em { color: var(--warm); font-style: italic; }
-    .header-links {
-      display: flex;
-      gap: 2rem;
-    }
+    .logo { font-family: var(--display); font-size: 1.05rem; font-weight: 700; }
+    .logo em { color: var(--moss); font-style: italic; }
+    .header-links { display: flex; gap: 1.75rem; }
     .header-links a {
-      font-size: 0.72rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
+      font-size: 0.7rem;
+      color: var(--ash);
+      letter-spacing: 0.06em;
       transition: color .2s;
     }
-    .header-links a:hover { color: var(--paper); }
+    .header-links a:hover { color: var(--bone); }
 
-    .hero {
-      padding: 7rem 0 5rem;
-      border-bottom: 1px solid var(--dim);
-    }
+    .hero { padding: 6rem 0 4.5rem; border-bottom: 1px solid var(--line); }
     .hero-eyebrow {
-      font-size: 0.68rem;
-      color: var(--warm);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 1.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .hero-eyebrow::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--warm);
+      font-size: 0.7rem;
+      color: var(--moss);
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
     }
     .hero-name {
-      font-family: var(--serif);
-      font-size: clamp(4.5rem, 14vw, 9rem);
+      font-family: var(--display);
+      font-size: clamp(3.6rem, 13vw, 7.5rem);
       font-weight: 900;
-      line-height: 0.9;
-      letter-spacing: -0.04em;
-      color: var(--paper);
-      margin-bottom: 2rem;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.75rem;
+      animation: rise .6s ease both;
     }
-    .hero-name em {
-      font-style: italic;
-      color: var(--warm);
-    }
+    .hero-name em { font-style: italic; color: var(--moss); }
     .hero-bio {
-      max-width: 460px;
+      max-width: 480px;
       font-size: 0.88rem;
-      color: var(--muted);
+      color: #B7AE9D;
       line-height: 1.85;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2.25rem;
+      animation: rise .6s .08s ease both;
     }
     .hero-cta {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.55rem;
       font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      color: var(--ink);
-      background: var(--paper);
-      padding: 0.75rem 1.5rem;
-      border-radius: 2px;
-      transition: background .2s, color .2s;
+      letter-spacing: 0.05em;
+      color: var(--noir);
+      background: var(--bone);
+      padding: 0.7rem 1.4rem;
+      border-radius: 3px;
+      transition: background .2s;
+      animation: rise .6s .14s ease both;
     }
-    .hero-cta:hover { background: var(--warm); }
-    .hero-cta .arrow { transition: transform .2s; }
-    .hero-cta:hover .arrow { transform: translateX(4px); }
+    .hero-cta:hover { background: var(--moss); }
 
-    .work {
-      padding: 5rem 0;
-      border-bottom: 1px solid var(--dim);
-    }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    .work { padding: 4.5rem 0; border-bottom: 1px solid var(--line); }
     .section-label {
       font-size: 0.65rem;
-      color: var(--muted);
-      letter-spacing: 0.2em;
+      color: var(--ash);
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      margin-bottom: 3rem;
+      margin-bottom: 2.25rem;
     }
     .project {
       display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: start;
-      gap: 1rem;
-      padding: 2rem 0;
-      border-top: 1px solid var(--dim);
+      grid-template-columns: 90px 1fr;
+      gap: 1.25rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--line);
       cursor: pointer;
-      transition: border-color .25s;
     }
-    .project:hover { border-color: var(--warm); }
-    .project:last-child { border-bottom: 1px solid var(--dim); }
-    .project:hover:last-child { border-bottom-color: var(--warm); }
-
-    .project-num {
-      font-size: 0.6rem;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      margin-bottom: 0.6rem;
-    }
-    .project-title {
-      font-family: var(--serif);
-      font-size: clamp(1.5rem, 4vw, 2.2rem);
-      font-weight: 700;
-      color: var(--paper);
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      margin-bottom: 0.6rem;
-      transition: color .2s;
-    }
-    .project:hover .project-title { color: var(--warm); }
-    .project-desc {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 440px;
-      margin-bottom: 0.9rem;
-    }
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-    .tag {
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      border: 1px solid var(--dim);
-      padding: 0.2rem 0.55rem;
-      border-radius: 2px;
-      transition: border-color .2s, color .2s;
-    }
-    .project:hover .tag { border-color: rgba(200,169,126,0.3); color: var(--warm); }
+    .project:last-child { border-bottom: 1px solid var(--line); }
     .project-status {
       font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      color: var(--warm);
-      margin-top: 0.25rem;
+      letter-spacing: 0.08em;
+      padding-top: 0.2rem;
     }
-    .project-arrow {
-      font-size: 1.2rem;
-      color: var(--muted);
-      transition: color .2s, transform .2s;
-      padding-top: 0.25rem;
+    .project-status.live { color: var(--moss); }
+    .project-status.wip { color: var(--ash); }
+    .project-title {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.45rem;
+      transition: color .2s;
     }
-    .project:hover .project-arrow {
-      color: var(--warm);
-      transform: translate(3px, -3px);
+    .project:hover .project-title { color: var(--moss); }
+    .project-desc {
+      font-size: 0.78rem;
+      color: var(--ash);
+      line-height: 1.65;
+      max-width: 420px;
+      margin-bottom: 0.7rem;
+    }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.04em;
+      color: var(--ash);
+      border: 1px solid var(--line);
+      padding: 0.18rem 0.5rem;
+      border-radius: 2px;
     }
 
-    .galleries {
-      padding: 5rem 0;
-      border-bottom: 1px solid var(--dim);
-    }
+    .galleries { padding: 4.5rem 0; border-bottom: 1px solid var(--line); }
     .gallery-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1px;
-      background: var(--dim);
-      border: 1px solid var(--dim);
-      margin-top: 2.5rem;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 2rem;
     }
-    .gallery-card {
-      background: var(--ink);
-      padding: 2rem 1.75rem;
-      display: block;
-      transition: background .25s;
-    }
-    .gallery-card:hover { background: #181510; }
-    .gallery-icon {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-      display: block;
-      transition: transform .3s;
-    }
-    .gallery-card:hover .gallery-icon { transform: scale(1.15); }
-    .gallery-name {
-      font-family: var(--serif);
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--paper);
-      margin-bottom: 0.4rem;
-      letter-spacing: -0.01em;
-    }
-    .gallery-sub {
-      font-size: 0.7rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-    }
-    .gallery-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.65rem;
-      color: var(--warm);
-      letter-spacing: 0.1em;
-      margin-top: 1.2rem;
-      transition: gap .2s;
-    }
-    .gallery-card:hover .gallery-link { gap: 0.75rem; }
+    .gallery-card { background: var(--noir); padding: 1.75rem 1.5rem; transition: background .2s; }
+    .gallery-card:hover { background: #1A1611; }
+    .gallery-name { font-family: var(--display); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .gallery-sub { font-size: 0.7rem; color: var(--ash); }
+    .gallery-link { display: inline-block; font-size: 0.65rem; color: var(--moss); margin-top: 1rem; }
 
-    .contact {
-      padding: 5rem 0;
-    }
+    .contact { padding: 4.5rem 0; }
     .contact-heading {
-      font-family: var(--serif);
-      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-family: var(--display);
+      font-size: clamp(1.9rem, 5.5vw, 3rem);
       font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      color: var(--paper);
-      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
     }
-    .contact-heading em { font-style: italic; color: var(--warm); }
-    .contact-sub {
-      font-size: 0.8rem;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 380px;
-      margin-bottom: 2.5rem;
-    }
-    .contact-links {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
+    .contact-heading em { font-style: italic; color: var(--moss); }
+    .contact-sub { font-size: 0.8rem; color: var(--ash); line-height: 1.7; max-width: 380px; margin-bottom: 2rem; }
     .contact-link {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.1rem 0;
-      border-top: 1px solid var(--dim);
+      padding: 0.95rem 0;
+      border-top: 1px solid var(--line);
       font-size: 0.8rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      transition: color .2s, border-color .2s;
+      color: var(--ash);
+      transition: color .2s;
     }
-    .contact-link:last-child { border-bottom: 1px solid var(--dim); }
-    .contact-link:hover { color: var(--paper); border-color: var(--warm); }
-    .contact-link:hover:last-child { border-bottom-color: var(--warm); }
-    .contact-link span { font-size: 0.75rem; color: var(--warm); }
+    .contact-link:last-child { border-bottom: 1px solid var(--line); }
+    .contact-link:hover { color: var(--bone); }
+    .contact-link span { font-size: 0.72rem; color: var(--moss); }
 
     footer {
-      padding: 2.5rem 0;
-      border-top: 1px solid var(--dim);
+      padding: 2rem 0;
+      border-top: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-    .footer-copy {
       font-size: 0.62rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
+      color: var(--ash);
+      letter-spacing: 0.04em;
     }
-    .footer-back {
-      font-size: 0.62rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      transition: color .2s;
-    }
-    .footer-back:hover { color: var(--warm); }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity .6s ease, transform .6s ease;
-    }
-    .fade-in.visible { opacity: 1; transform: none; }
-    .d1 { transition-delay: .05s; }
-    .d2 { transition-delay: .12s; }
-    .d3 { transition-delay: .19s; }
-    .d4 { transition-delay: .26s; }
-    .d5 { transition-delay: .33s; }
+    footer a { transition: color .2s; }
+    footer a:hover { color: var(--moss); }
+    #clock { color: var(--moss); }
 
     @media (max-width: 560px) {
-      .hero-name { font-size: clamp(3.5rem, 18vw, 5rem); }
-      .gallery-row { grid-template-columns: 1fr; }
       .header-links { display: none; }
-      footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+      .project { grid-template-columns: 1fr; gap: 0.4rem; }
+      .gallery-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.6rem; text-align: center; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header class="fade-in d1">
+    <header>
       <span class="logo">lx<em>wis</em></span>
       <nav class="header-links">
         <a href="/portfolio">Work</a>
@@ -354,22 +224,21 @@
     </header>
 
     <section class="hero">
-      <p class="hero-eyebrow fade-in d1">Student Developer · GenSan, PH</p>
-      <h1 class="hero-name fade-in d2">lx<em>wis</em></h1>
-      <p class="hero-bio fade-in d3">
-        Student dev from GenSan. I build with vanilla JS, Firebase, Node.js — and ship most of it solo.
+      <p class="hero-eyebrow">Student developer · General Santos, PH</p>
+      <h1 class="hero-name">lx<em>wis</em></h1>
+      <p class="hero-bio">
+        I build things mostly alone. A library system that's actually running at my college, a couple of bots
+        people send weird commands to at 2am, and this site. Vanilla JS, Firebase, and just enough Node to get by.
       </p>
-      <a href="/portfolio" class="hero-cta fade-in d4">
-        See my work <span class="arrow">→</span>
-      </a>
+      <a href="/portfolio" class="hero-cta">See what I've built →</a>
     </section>
 
     <section class="work">
-      <p class="section-label fade-in">Selected Work</p>
+      <p class="section-label">Selected work</p>
 
-      <div class="project fade-in" onclick="window.open('https://libnav.lxwis.site','_blank')">
+      <div class="project" onclick="window.open('https://libnav.lxwis.site','_blank')">
+        <p class="project-status live">● Live</p>
         <div>
-          <p class="project-num">01</p>
           <h2 class="project-title">LibNav</h2>
           <p class="project-desc">Library navigation for Notre Dame-Siena College. Students find books, admins manage content.</p>
           <div class="project-tags">
@@ -378,29 +247,25 @@
             <span class="tag">Vercel</span>
             <span class="tag">PWA</span>
           </div>
-          <p class="project-status">● Live</p>
         </div>
-        <span class="project-arrow">↗</span>
       </div>
 
-      <div class="project fade-in" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+      <div class="project" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <p class="project-status live">● Here</p>
         <div>
-          <p class="project-num">02</p>
           <h2 class="project-title">lxwis.site</h2>
-          <p class="project-desc">This site. Built from scratch — no frameworks, just HTML, CSS, and JavaScript.</p>
+          <p class="project-desc">This site. No framework, just HTML, CSS, and JavaScript written by hand.</p>
           <div class="project-tags">
             <span class="tag">HTML</span>
             <span class="tag">CSS</span>
             <span class="tag">JavaScript</span>
           </div>
-          <p class="project-status">● You are here</p>
         </div>
-        <span class="project-arrow">↗</span>
       </div>
 
-      <div class="project fade-in" onclick="window.open('https://t.me/AllinOneTools_Bot','_blank')">
+      <div class="project" onclick="window.open('https://t.me/AllinOneTools_Bot','_blank')">
+        <p class="project-status live">● Live</p>
         <div>
-          <p class="project-num">03</p>
           <h2 class="project-title">AllinOneTools_Bot</h2>
           <p class="project-desc">Telegram bot with AI chat, crypto tracking, BIN tools, temp mail, and more. Serverless on Vercel.</p>
           <div class="project-tags">
@@ -408,14 +273,12 @@
             <span class="tag">Vercel Edge</span>
             <span class="tag">Node.js</span>
           </div>
-          <p class="project-status">● Live</p>
         </div>
-        <span class="project-arrow">↗</span>
       </div>
 
-      <div class="project fade-in">
+      <div class="project">
+        <p class="project-status wip">○ Building</p>
         <div>
-          <p class="project-num">04</p>
           <h2 class="project-title">lxwis Bot</h2>
           <p class="project-desc">Same toolset, built for Messenger. Interactive button UI on the Meta Graph API.</p>
           <div class="project-tags">
@@ -423,61 +286,49 @@
             <span class="tag">Meta Graph API</span>
             <span class="tag">Vercel</span>
           </div>
-          <p class="project-status" style="color: var(--muted)">○ In development</p>
         </div>
       </div>
     </section>
 
     <section class="galleries">
-      <p class="section-label fade-in">Galleries</p>
-      <div class="gallery-row fade-in">
+      <p class="section-label">Galleries</p>
+      <div class="gallery-row">
         <a href="/meow" class="gallery-card">
-          <span class="gallery-icon">🐱</span>
-          <p class="gallery-name">Meow</p>
+          <p class="gallery-name">🐱 Meow</p>
           <p class="gallery-sub">Random cat gallery</p>
-          <span class="gallery-link">Open → </span>
+          <span class="gallery-link">Open →</span>
         </a>
         <a href="/arf" class="gallery-card">
-          <span class="gallery-icon">🐶</span>
-          <p class="gallery-name">Arf</p>
+          <p class="gallery-name">🐶 Arf</p>
           <p class="gallery-sub">Random dog gallery</p>
-          <span class="gallery-link">Open → </span>
+          <span class="gallery-link">Open →</span>
         </a>
       </div>
     </section>
 
     <section class="contact">
-      <h2 class="contact-heading fade-in">Let's<br><em>connect.</em></h2>
-      <p class="contact-sub fade-in">Open to collabs, freelance, or just a good conversation. Find me here.</p>
-      <div class="contact-links">
-        <a href="https://github.com/iamlxwis" target="_blank" class="contact-link fade-in">
-          GitHub <span>github.com/iamlxwis ↗</span>
-        </a>
-        <a href="https://facebook.com/iamlxwis" target="_blank" class="contact-link fade-in">
-          Facebook <span>facebook.com/iamlxwis ↗</span>
-        </a>
-        <a href="https://t.me/iamlxwis" target="_blank" class="contact-link fade-in">
-          Telegram <span>t.me/iamlxwis ↗</span>
-        </a>
+      <h2 class="contact-heading">Say <em>hi.</em></h2>
+      <p class="contact-sub">Open to collabs and freelance work. Easiest way to reach me is Telegram.</p>
+      <div>
+        <a href="https://github.com/iamlxwis" target="_blank" class="contact-link">GitHub <span>github.com/iamlxwis ↗</span></a>
+        <a href="https://facebook.com/iamlxwis" target="_blank" class="contact-link">Facebook <span>facebook.com/iamlxwis ↗</span></a>
+        <a href="https://t.me/iamlxwis" target="_blank" class="contact-link">Telegram <span>t.me/iamlxwis ↗</span></a>
       </div>
     </section>
 
-    <footer class="fade-in">
-      <span class="footer-copy">lxwis.site © 2025</span>
-      <a href="https://github.com/iamlxwis" target="_blank" class="footer-back">GitHub ↗</a>
+    <footer>
+      <span>© 2025 lxwis</span>
+      <span>General Santos, PH · <span id="clock">--:--</span></span>
     </footer>
   </div>
 
   <script>
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.08 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    function tick() {
+      const el = document.getElementById('clock');
+      el.textContent = new Intl.DateTimeFormat('en-PH', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Manila' }).format(new Date());
+    }
+    tick();
+    setInterval(tick, 15000);
   </script>
 </body>
 </html>
