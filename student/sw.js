@@ -1,4 +1,4 @@
-const CACHE_NAME = "lxwis-student-v1";
+const CACHE_NAME = "lxwis-student-v2";
 const APP_SHELL = ["/student", "/student/"];
 
 self.addEventListener("install", event => {
