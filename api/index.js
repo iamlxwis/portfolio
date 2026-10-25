@@ -96,7 +96,7 @@ module.exports = async (req, res) => {
         if (req.method !== "POST") throw Object.assign(new Error("Use POST with JSON body { \"prompt\": \"...\" }."), { status: 405 });
         const key = process.env.GEMINI_API_KEY;
         if (!key) throw Object.assign(new Error("Set GEMINI_API_KEY in Vercel Environment Variables."), { status: 503 });
-        const data = await jsonFetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + encodeURIComponent(key), {
+        const data = await jsonFetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=" + encodeURIComponent(key), {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ contents: [{ parts: [{ text: required("prompt") }] }] })
         });
@@ -111,7 +111,7 @@ module.exports = async (req, res) => {
         const match = image.match(/^data:(image\/(?:png|jpeg|jpg|webp));base64,/i);
         if (match) { mime = match[1].replace("jpg", "jpeg"); image = image.slice(match[0].length); }
         if (image.length > 6_000_000) throw Object.assign(new Error("Image is too large; keep the base64 data under 6 MB."), { status: 413 });
-        const data = await jsonFetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + encodeURIComponent(key), {
+        const data = await jsonFetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=" + encodeURIComponent(key), {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ contents: [{ parts: [{ text: input.prompt || "Analyze this image and extract visible text." }, { inline_data: { mime_type: mime, data: image } }] }] })
         });
