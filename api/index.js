@@ -39,12 +39,12 @@ module.exports = async (req, res) => {
     let result;
     switch (tool) {
       case "whois": {
-        const domain = required("domain").toLowerCase().replace(/^https?:\\/\\//, "").split("/")[0];
-        if (!/^[a-z0-9.-]+\\.[a-z]{2,}$/i.test(domain)) throw Object.assign(new Error("Enter a valid domain."), { status: 400 });
+        const domain = required("domain").toLowerCase().replace(/^https?:\/\//, "").split("/")[0];
+        if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domain)) throw Object.assign(new Error("Enter a valid domain."), { status: 400 });
         const boot = await jsonFetch("https://data.iana.org/rdap/dns.json");
         const service = boot.services.find(s => s[0].includes(domain.split(".").pop()));
         if (!service) throw Object.assign(new Error("No RDAP service found for this domain extension."), { status: 404 });
-        const response = await fetch(service[1][0].replace(/\\/$/, "") + "/domain/" + encodeURIComponent(domain));
+        const response = await fetch(service[1][0].replace(/\/$/, "") + "/domain/" + encodeURIComponent(domain));
         if (!response.ok) throw Object.assign(new Error("Domain record not found."), { status: 404 });
         result = await response.json(); break;
       }
@@ -63,13 +63,13 @@ module.exports = async (req, res) => {
         result = await jsonFetch("https://api.guerrillamail.com/ajax.php?f=get_email_list&offset=0&sid_token=" + encodeURIComponent(required("token")) + "&ip=127.0.0.1&agent=API"); break;
       case "shorten": {
         const url = required("url");
-        if (!/^https?:\\/\\//i.test(url)) throw Object.assign(new Error("URL must start with http:// or https://."), { status: 400 });
+        if (!/^https?:\/\//i.test(url)) throw Object.assign(new Error("URL must start with http:// or https://."), { status: 400 });
         const response = await fetch("https://tinyurl.com/api-create.php?url=" + encodeURIComponent(url));
         result = await response.text();
         if (!response.ok) throw new Error("URL shortener service failed."); break;
       }
       case "bin": {
-        const bin = required("bin").replace(/\\D/g, "").slice(0, 8);
+        const bin = required("bin").replace(/\D/g, "").slice(0, 8);
         if (bin.length < 6) throw Object.assign(new Error("Enter at least 6 digits."), { status: 400 });
         result = await jsonFetch("https://lookup.binlist.net/" + bin, { headers: { "Accept-Version": "3", "User-Agent": "lxwis.site API" } }); break;
       }
@@ -85,7 +85,7 @@ module.exports = async (req, res) => {
       }
       case "webstatus": {
         let url = required("url");
-        if (!/^https?:\\/\\//i.test(url)) url = "https://" + url;
+        if (!/^https?:\/\//i.test(url)) url = "https://" + url;
         const parsed = new URL(url);
         if (!["http:", "https:"].includes(parsed.protocol)) throw Object.assign(new Error("Only HTTP and HTTPS URLs are allowed."), { status: 400 });
         const started = Date.now();
@@ -108,7 +108,7 @@ module.exports = async (req, res) => {
         if (!key) throw Object.assign(new Error("Set GEMINI_API_KEY in Vercel Environment Variables."), { status: 503 });
         let image = required("image");
         let mime = "image/jpeg";
-        const match = image.match(/^data:(image\\/(?:png|jpeg|jpg|webp));base64,/i);
+        const match = image.match(/^data:(image\/(?:png|jpeg|jpg|webp));base64,/i);
         if (match) { mime = match[1].replace("jpg", "jpeg"); image = image.slice(match[0].length); }
         if (image.length > 6_000_000) throw Object.assign(new Error("Image is too large; keep the base64 data under 6 MB."), { status: 413 });
         const data = await jsonFetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + encodeURIComponent(key), {
@@ -121,7 +121,7 @@ module.exports = async (req, res) => {
         if (req.method !== "POST") throw Object.assign(new Error("Use POST with JSON body containing image as base64 or data URL."), { status: 405 });
         const key = process.env.FREEIMAGE_API_KEY;
         if (!key) throw Object.assign(new Error("Set FREEIMAGE_API_KEY in Vercel Environment Variables."), { status: 503 });
-        const image = required("image").replace(/^data:image\\/(?:png|jpeg|jpg|webp);base64,/i, "");
+        const image = required("image").replace(/^data:image\/(?:png|jpeg|jpg|webp);base64,/i, "");
         const form = new URLSearchParams({ source: image });
         result = await jsonFetch("https://freeimage.host/api/1/upload?key=" + encodeURIComponent(key), { method: "POST", body: form }); break;
       }
@@ -139,7 +139,7 @@ module.exports = async (req, res) => {
         const title = input.title || "Untitled";
         const content = required("content");
         const account = await jsonFetch("https://api.telegra.ph/createAccount?short_name=LXWISAPI&author_name=LXWIS");
-        const nodes = content.split("\\n").map(line => ({ tag: "p", children: [line || " "] }));
+        const nodes = content.split("\n").map(line => ({ tag: "p", children: [line || " "] }));
         result = await jsonFetch("https://api.telegra.ph/createPage", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ access_token: account.result.access_token, title, content: JSON.stringify(nodes), return_content: "false" }) });
         break;
       }
