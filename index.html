@@ -130,26 +130,23 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 @keyframes grid-drift{from{background-position:0 0,0 0}to{background-position:36px 36px,-36px 36px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 
-/* Floating, more realistic vinyl record */
-.vinyl-widget{position:fixed;left:22px;bottom:22px;z-index:9000;display:flex;align-items:flex-end;gap:12px}
-.vinyl-toggle{position:relative;width:92px;height:92px;flex:0 0 92px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;filter:drop-shadow(0 9px 12px rgba(0,0,0,.65));transition:transform .2s ease}
-.vinyl-toggle:hover{transform:translateY(-3px) scale(1.03)}
-.vinyl-disc{position:absolute;inset:0;border-radius:50%;overflow:hidden;border:1px solid #555;background:radial-gradient(circle at 34% 26%,rgba(255,255,255,.13),transparent 24%),repeating-radial-gradient(circle at center,#171717 0 1px,#2b2b2b 1.5px 2px,#111 2.5px 3.5px,#242424 4px 4.5px,#101010 5px 6px);box-shadow:inset 0 0 0 1px #090909,inset 0 0 0 3px #303030,inset 0 0 0 4px #090909,inset 0 0 0 6px #292929,inset 0 0 0 7px #101010,inset 0 0 0 9px #383838,inset 0 0 0 10px #111,inset 0 0 0 12px #292929}
-.vinyl-disc:before{content:"";position:absolute;inset:2px;border-radius:50%;background:conic-gradient(from 25deg,transparent 0 20deg,rgba(255,255,255,.08) 42deg,transparent 65deg,rgba(0,0,0,.45) 120deg,transparent 155deg,rgba(255,255,255,.06) 225deg,transparent 270deg);pointer-events:none}
-.vinyl-label{position:absolute;inset:9%;border-radius:50%;overflow:hidden;border:2px solid #090909;background:#222;box-shadow:0 0 0 1px rgba(255,255,255,.12),inset 0 0 0 1px rgba(0,0,0,.5)}
+/* Floating turntable-style vinyl player */
+.vinyl-widget{position:fixed;left:22px;bottom:22px;z-index:9000;width:112px;height:112px;filter:drop-shadow(0 9px 12px rgba(0,0,0,.7))}
+.vinyl-toggle{position:absolute;left:0;bottom:0;width:100px;height:100px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;transition:transform .2s ease}
+.vinyl-toggle:hover{transform:translateY(-2px) scale(1.02)}
+.vinyl-disc{position:absolute;inset:0;border-radius:50%;overflow:hidden;border:1px solid #565656;background:radial-gradient(circle at 33% 25%,rgba(255,255,255,.12),transparent 24%),repeating-radial-gradient(circle at center,#101010 0 1px,#292929 1.4px 1.8px,#111 2.2px 3px,#202020 3.4px 4px,#0b0b0b 4.4px 5px);box-shadow:inset 0 0 0 1px #080808,inset 0 0 0 3px #303030,inset 0 0 0 4px #0a0a0a,inset 0 0 0 6px #2b2b2b,inset 0 0 0 7px #111,inset 0 0 0 9px #383838,inset 0 0 0 10px #111,inset 0 0 0 12px #292929}
+.vinyl-disc:before{content:"";position:absolute;inset:1px;border-radius:50%;background:conic-gradient(from 25deg,transparent 0 18deg,rgba(255,255,255,.12) 42deg,transparent 63deg,rgba(0,0,0,.55) 120deg,transparent 155deg,rgba(255,255,255,.07) 220deg,transparent 275deg);pointer-events:none}
+.vinyl-label{position:absolute;inset:29%;border-radius:50%;overflow:hidden;border:2px solid #090909;background:#222;box-shadow:0 0 0 1px rgba(255,255,255,.15),inset 0 0 0 1px rgba(0,0,0,.6)}
 .vinyl-label img{width:100%;height:100%;object-fit:cover;display:block}
 .vinyl-label:after{content:"";position:absolute;width:5px;height:5px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#eee;border:1px solid #111;box-shadow:0 0 0 2px rgba(0,0,0,.45)}
-/* Turntable tonearm resting over the outer groove */
-.vinyl-tonearm{position:absolute;z-index:3;right:-3px;top:2px;width:7px;height:43px;border-radius:5px;background:linear-gradient(90deg,#555,#d5d5d5 38%,#777 70%,#333);transform:rotate(-27deg);transform-origin:top center;box-shadow:1px 2px 3px rgba(0,0,0,.7);pointer-events:none;transition:transform .25s ease}
-.vinyl-tonearm:before{content:"";position:absolute;top:-3px;left:-3px;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#eee,#777 50%,#222 75%);border:1px solid #111;box-shadow:0 1px 3px #000}
-.vinyl-tonearm:after{content:"";position:absolute;bottom:-2px;left:0;width:7px;height:10px;border-radius:1px 1px 3px 3px;background:linear-gradient(90deg,#333,#aaa,#444);box-shadow:0 1px 2px #000}
-.vinyl-widget.is-playing .vinyl-tonearm{transform:rotate(-13deg)}
+.vinyl-tonearm{position:absolute;z-index:4;right:0;top:0;width:48px;height:60px;overflow:visible;pointer-events:none;transform-origin:42px 8px;transform:rotate(0deg);transition:transform .35s ease}
+.vinyl-tonearm svg{width:100%;height:100%;overflow:visible;display:block;filter:drop-shadow(1px 2px 2px rgba(0,0,0,.8))}
+.vinyl-widget.is-playing .vinyl-tonearm{transform:rotate(-7deg)}
 .vinyl-widget.is-playing .vinyl-disc{animation:vinyl-spin 3s linear infinite}
-.vinyl-player{position:absolute;left:0;bottom:104px;width:92px;height:92px;display:none}
-.vinyl-widget.is-open .vinyl-player{display:block}
+.vinyl-player{position:absolute;left:0;bottom:110px;width:1px;height:1px;overflow:hidden}
 .vinyl-player iframe{position:absolute;width:1px;height:1px;opacity:.01;pointer-events:none;border:0}
 @keyframes vinyl-spin{to{transform:rotate(360deg)}}
-@media(max-width:600px){.vinyl-widget{left:14px;bottom:14px}.vinyl-toggle{width:82px;height:82px;flex-basis:82px}.vinyl-label{inset:9%}.vinyl-player{bottom:94px}}
+@media(max-width:600px){.vinyl-widget{left:14px;bottom:14px;width:96px;height:96px}.vinyl-toggle{width:86px;height:86px}.vinyl-label{inset:29%}.vinyl-tonearm{width:42px;height:54px}}
 @media(prefers-reduced-motion:reduce){.vinyl-widget.is-playing .vinyl-disc{animation:none}}
 </style>
 </head>
@@ -189,7 +186,7 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 
 <div class="vinyl-widget" id="vinyl-widget">
 <button class="vinyl-toggle" id="vinyl-toggle" type="button" aria-label="Play music" aria-pressed="false">
-<span class="vinyl-disc" aria-hidden="true"><span class="vinyl-label"><img src="https://cdn-images.dzcdn.net/images/cover/0d571082af7c78114321031d7f84d331/1200x1200-000000-81-0-0.webp" alt=""></span></span><span class="vinyl-tonearm" aria-hidden="true"></span>
+<span class="vinyl-disc" aria-hidden="true"><span class="vinyl-label"><img src="https://cdn-images.dzcdn.net/images/cover/0d571082af7c78114321031d7f84d331/1200x1200-000000-81-0-0.webp" alt=""></span></span><span class="vinyl-tonearm" aria-hidden="true"><svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="arm-metal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#333"/><stop offset=".22" stop-color="#eee"/><stop offset=".48" stop-color="#888"/><stop offset=".68" stop-color="#f7f7f7"/><stop offset="1" stop-color="#3b3b3b"/></linearGradient><radialGradient id="arm-pivot" cx=".3" cy=".25"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#aaa"/><stop offset="1" stop-color="#252525"/></radialGradient></defs><circle cx="42" cy="8" r="7" fill="url(#arm-pivot)" stroke="#080808" stroke-width="1.5"/><circle cx="42" cy="8" r="2" fill="#444"/><path d="M39 12 L35 18 Q33 20 31 23 L18 44" fill="none" stroke="#090909" stroke-width="7" stroke-linecap="round"/><path d="M39 12 L35 18 Q33 20 31 23 L18 44" fill="none" stroke="url(#arm-metal)" stroke-width="4.2" stroke-linecap="round"/><path d="M19 41 L12 48 L17 53 L23 46 Z" fill="url(#arm-metal)" stroke="#111" stroke-width="1"/><path d="M15 51 L12 56 L15 58 L18 53 Z" fill="#171717" stroke="#aaa" stroke-width=".6"/><path d="M13 56 L11 60" stroke="#ddd" stroke-width="1"/></svg></span>
 </button>
 <div class="vinyl-player" id="vinyl-player" aria-hidden="true"><div id="vinyl-embed"></div></div>
 </div>
