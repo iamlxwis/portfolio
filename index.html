@@ -30,7 +30,7 @@ header{display:flex;justify-content:space-between;align-items:center;padding:25p
 .logo{font-size:1rem;font-weight:700;letter-spacing:-.04em}
 .header-side{display:flex;align-items:center;gap:16px}
 .header-note{font-size:.72rem;color:var(--muted)}
-.api-nav{font-size:.78rem;color:var(--soft);text-decoration:underline;text-decoration-color:#555;text-underline-offset:4px}.api-nav:hover{color:#fff}.terminal-trigger{display:inline-flex;align-items:center;gap:10px;border:1px solid #484848;background:#181818;color:var(--fg);padding:9px 12px;font:inherit;font-size:.78rem;cursor:pointer;transition:background .2s,border-color .2s}
+.terminal-trigger{display:inline-flex;align-items:center;gap:10px;border:1px solid #484848;background:#181818;color:var(--fg);padding:9px 12px;font:inherit;font-size:.78rem;cursor:pointer;transition:background .2s,border-color .2s}
 .terminal-trigger:hover,.terminal-trigger:focus-visible{background:#222;border-color:#777;outline:none;color:#fff}
 .terminal-mark{font-family:'JetBrains Mono',monospace;color:#c8c8c8;animation:terminal-blink 1.2s steps(2,start) infinite}
 .terminal-trigger kbd{font:inherit;font-size:.65rem;color:var(--muted);border:1px solid #444;padding:1px 5px}
@@ -163,7 +163,7 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 <div class="wrap">
 <header>
 <a class="logo" href="/">lxwis</a>
-<div class="header-side"><span class="header-note">personal site / 2026</span><a class="api-nav" href="/api">API</a><button class="terminal-trigger" id="terminal-trigger" type="button" aria-haspopup="dialog" aria-controls="terminal-modal"><span class="terminal-mark">&gt;_</span><span>Terminal</span><kbd>Ctrl K</kbd></button></div>
+<div class="header-side"><span class="header-note">personal site / 2026</span><button class="terminal-trigger" id="terminal-trigger" type="button" aria-haspopup="dialog" aria-controls="terminal-modal"><span class="terminal-mark">&gt;_</span><span>Terminal</span><kbd>Ctrl K</kbd></button></div>
 </header>
 <main>
 <section class="hero">
