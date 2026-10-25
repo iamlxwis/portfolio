@@ -15,6 +15,10 @@
     {
       "source": "/arf",
       "destination": "/arf/index.html"
+    },
+    {
+      "source": "/api-docs",
+      "destination": "/api-docs.html"
     }
   ]
 }
