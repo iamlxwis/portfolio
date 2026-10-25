@@ -130,26 +130,24 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 @keyframes grid-drift{from{background-position:0 0,0 0}to{background-position:36px 36px,-36px 36px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 
-/* Floating vinyl music player */
-.vinyl-widget{position:fixed;left:22px;bottom:22px;z-index:9000;display:flex;align-items:flex-end;gap:13px}
-.vinyl-toggle{position:relative;width:68px;height:68px;flex:0 0 68px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5));transition:transform .2s ease}
+/* Floating cover-art vinyl music player */
+.vinyl-widget{position:fixed;left:22px;bottom:22px;z-index:9000;display:flex;align-items:flex-end;gap:12px}
+.vinyl-toggle{position:relative;width:76px;height:76px;flex:0 0 76px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55));transition:transform .2s ease}
 .vinyl-toggle:hover{transform:translateY(-3px) scale(1.03)}
-.vinyl-disc{position:absolute;inset:0;border-radius:50%;border:1px solid #555;background:repeating-radial-gradient(circle at center,#171717 0 2px,#252525 3px 4px,#101010 5px 6px);box-shadow:inset 0 0 0 5px #161616,inset 0 0 0 6px #343434,inset 0 0 0 10px #171717,inset 0 0 0 11px #333,inset 0 0 0 15px #171717}
-.vinyl-disc:after{content:"";position:absolute;width:22px;height:22px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#dedede;border:3px solid #aaa;box-shadow:inset 0 0 0 5px #222}
+.vinyl-disc{position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle at center,#151515 0 2px,#292929 3px 4px,#101010 5px 6px);border:1px solid #454545;box-shadow:inset 0 0 0 5px #151515,inset 0 0 0 6px #3a3a3a,inset 0 0 0 11px #171717,inset 0 0 0 12px #333}
+.vinyl-label{position:absolute;inset:24%;border-radius:50%;overflow:hidden;border:2px solid #111;background:#222}
+.vinyl-label img{width:100%;height:100%;object-fit:cover;display:block}
+.vinyl-label:after{content:"";position:absolute;width:5px;height:5px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#eee;border:1px solid #111}
 .vinyl-widget.is-playing .vinyl-disc{animation:vinyl-spin 3s linear infinite}
-.vinyl-player{width:min(290px,calc(100vw - 118px));padding:12px;background:rgba(20,20,20,.97);border:1px solid #383838;box-shadow:0 12px 40px rgba(0,0,0,.5);backdrop-filter:blur(14px);margin-bottom:2px;display:none}
-.vinyl-widget.is-open .vinyl-player{display:block;animation:vinyl-pop .18s ease-out both}
-.vinyl-player-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
-.vinyl-player-label{font:10px/1.5 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#aaa}
-.vinyl-player-close{border:1px solid #444;background:transparent;color:#aaa;font-size:16px;line-height:1;padding:3px 7px;cursor:pointer}
-.vinyl-embed{position:relative;width:100%;aspect-ratio:16/9;background:#080808}
-.vinyl-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.vinyl-open-link{display:inline-block;margin-top:9px;color:#aaa;font-size:11px;text-decoration:underline;text-underline-offset:3px}
+.vinyl-player{position:absolute;left:0;bottom:88px;width:76px;height:76px;display:none}
+.vinyl-widget.is-open .vinyl-player{display:block}
+.vinyl-player iframe{position:absolute;width:1px;height:1px;opacity:.01;pointer-events:none;border:0}
+.vinyl-player-status{position:absolute;left:0;bottom:-25px;white-space:nowrap;padding:3px 7px;background:rgba(20,20,20,.94);border:1px solid #333;color:#aaa;font:10px/1.4 'JetBrains Mono',monospace}
+.vinyl-open-link{position:absolute;left:0;bottom:-48px;white-space:nowrap;color:#aaa;font-size:10px;text-decoration:underline;text-underline-offset:3px}
 .vinyl-open-link:hover{color:#fff}
 @keyframes vinyl-spin{to{transform:rotate(360deg)}}
-@keyframes vinyl-pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:600px){.vinyl-widget{left:14px;bottom:14px;gap:10px}.vinyl-toggle{width:58px;height:58px;flex-basis:58px}.vinyl-player{width:min(270px,calc(100vw - 100px));padding:10px}}
-@media(prefers-reduced-motion:reduce){.vinyl-widget.is-playing .vinyl-disc{animation:none}.vinyl-player{animation:none!important}}
+@media(max-width:600px){.vinyl-widget{left:14px;bottom:14px}.vinyl-toggle{width:66px;height:66px;flex-basis:66px}.vinyl-player{bottom:76px}}
+@media(prefers-reduced-motion:reduce){.vinyl-widget.is-playing .vinyl-disc{animation:none}}
 </style>
 </head>
 <body>
@@ -187,12 +185,12 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 </div>
 
 <div class="vinyl-widget" id="vinyl-widget">
-<button class="vinyl-toggle" id="vinyl-toggle" type="button" aria-label="Open music player" aria-expanded="false" aria-controls="vinyl-player">
-<span class="vinyl-disc" aria-hidden="true"></span>
+<button class="vinyl-toggle" id="vinyl-toggle" type="button" aria-label="Play music" aria-pressed="false">
+<span class="vinyl-disc" aria-hidden="true"><span class="vinyl-label"><img src="https://cdn-images.dzcdn.net/images/cover/0d571082af7c78114321031d7f84d331/1200x1200-000000-81-0-0.webp" alt=""></span></span>
 </button>
-<div class="vinyl-player" id="vinyl-player" aria-label="Music player">
-<div class="vinyl-player-top"><span class="vinyl-player-label">Now playing</span><button class="vinyl-player-close" id="vinyl-player-close" type="button" aria-label="Close music player">×</button></div>
-<div class="vinyl-embed" id="vinyl-embed"></div>
+<div class="vinyl-player" id="vinyl-player" aria-hidden="true">
+<div id="vinyl-embed"></div>
+<span class="vinyl-player-status" id="vinyl-player-status">tap to play</span>
 <a class="vinyl-open-link" href="https://music.youtube.com/watch?v=RaaccfAJiOo" target="_blank" rel="noopener noreferrer">Open in YouTube Music ↗</a>
 </div>
 </div>
@@ -200,36 +198,42 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 (function(){
 var widget=document.getElementById('vinyl-widget');
 var toggle=document.getElementById('vinyl-toggle');
-var player=document.getElementById('vinyl-player');
+var playerBox=document.getElementById('vinyl-player');
 var embed=document.getElementById('vinyl-embed');
-var close=document.getElementById('vinyl-player-close');
+var status=document.getElementById('vinyl-player-status');
 var videoId='RaaccfAJiOo';
-function openPlayer(){
-widget.classList.add('is-open');
-widget.classList.add('is-playing');
-toggle.setAttribute('aria-expanded','true');
-toggle.setAttribute('aria-label','Close music player');
-if(!embed.querySelector('iframe')){
-var frame=document.createElement('iframe');
-frame.src='https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1';
-frame.title='YouTube music player';
-frame.loading='lazy';
-frame.referrerPolicy='strict-origin-when-cross-origin';
-frame.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-frame.allowFullscreen=true;
-embed.appendChild(frame);
+var iframe=null;
+var playing=false;
+function makePlayer(){
+ if(iframe)return;
+ iframe=document.createElement('iframe');
+ iframe.src='https://www.youtube-nocookie.com/embed/'+videoId+'?enablejsapi=1&autoplay=1&controls=0&playsinline=1&rel=0';
+ iframe.title='Background music player';
+ iframe.allow='autoplay; encrypted-media; picture-in-picture';
+ iframe.referrerPolicy='strict-origin-when-cross-origin';
+ iframe.tabIndex=-1;
+ embed.appendChild(iframe);
 }
+function play(){
+ widget.classList.add('is-open','is-playing');
+ playerBox.setAttribute('aria-hidden','false');
+ toggle.setAttribute('aria-pressed','true');
+ toggle.setAttribute('aria-label','Pause music');
+ status.textContent='playing';
+ makePlayer();
+ if(iframe&&iframe.contentWindow)iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'playVideo',args:[]}), '*');
+ playing=true;
 }
-function closePlayer(){
-widget.classList.remove('is-open');
-widget.classList.remove('is-playing');
-toggle.setAttribute('aria-expanded','false');
-toggle.setAttribute('aria-label','Open music player');
-embed.innerHTML='';
+function pause(){
+ widget.classList.remove('is-playing');
+ toggle.setAttribute('aria-pressed','false');
+ toggle.setAttribute('aria-label','Play music');
+ status.textContent='paused';
+ if(iframe&&iframe.contentWindow)iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'pauseVideo',args:[]}), '*');
+ playing=false;
 }
-toggle.addEventListener('click',function(){if(widget.classList.contains('is-open'))closePlayer();else openPlayer();});
-close.addEventListener('click',closePlayer);
-document.addEventListener('keydown',function(event){if(event.key==='Escape'&&widget.classList.contains('is-open'))closePlayer();});
+toggle.addEventListener('click',function(){if(playing)pause();else play();});
+document.addEventListener('keydown',function(event){if(event.key==='Escape'&&playing)pause();});
 })();
 </script>
 
