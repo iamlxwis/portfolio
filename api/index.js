@@ -2,6 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const { rateLimit } = require("express-rate-limit");
 const crypto = require("crypto");
+const path = require("path");
 const QRCode = require("qrcode");
 
 const app = express();
@@ -21,11 +22,16 @@ app.use((req, res, next) => {
     delete query.path;
     const search = new URLSearchParams(query).toString();
     req.url = requestedPath + (search ? "?" + search : "");
-  } else if (req.path.startsWith("/api/")) {
+  } else if (req.path.startsWith("/api/v1/") || req.path === "/api/health") {
     req.url = req.url.slice(4) || "/";
   }
   next();
 });
+
+app.use("/api-assets", express.static(path.join(__dirname, "../api-assets")));
+app.get("/api", (req, res) => res.sendFile(path.join(__dirname, "../api-docs.html")));
+app.get("/api/docs", (req, res) => res.sendFile(path.join(__dirname, "../api-docs.html")));
+app.get("/api/playground", (req, res) => res.sendFile(path.join(__dirname, "../api-docs.html")));
 
 app.use(rateLimit({
   windowMs: 60 * 1000,
