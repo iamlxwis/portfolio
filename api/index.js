@@ -101,7 +101,10 @@ module.exports = async (req, res) => {
 
         // Same request structure as the ai_chat command in the Telegram bot.
         const body = JSON.stringify({
-          contents: [{ parts: [{ text: "Answer concisely.\\n\\n" + prompt }] }]
+          contents: [{ parts: [{ text: "Answer concisely.\\n\\n" + prompt }] }],
+          ...(input.json === true || input.json === "true" ? {
+            generationConfig: { responseMimeType: "application/json", temperature: 0.25 }
+          } : {})
         });
 
         let data;
@@ -116,8 +119,8 @@ module.exports = async (req, res) => {
             const payload = await response.json().catch(() => ({}));
             if (!response.ok) {
               const message = payload.error?.message || "Gemini returned HTTP " + response.status;
-              if ([429, 500, 502, 503, 504].includes(response.status)) {
-                lastError = new Error(message);
+              if ([400, 404, 429, 500, 502, 503, 504].includes(response.status)) {
+                lastError = new Error("Model " + model + ": " + message);
                 continue;
               }
               throw Object.assign(new Error(message), { status: response.status });
@@ -132,8 +135,8 @@ module.exports = async (req, res) => {
 
         if (!data) {
           throw Object.assign(
-            new Error("Gemini models are temporarily busy or unavailable. Please retry in a minute. " +
-              (lastError?.message || "")),
+            new Error("Gemini could not generate a response. Check that GEMINI_API_KEY is valid and that the Gemini API is enabled for your Google project. " +
+              (lastError?.message || "Please try again.")),
             { status: 503 }
           );
         }
