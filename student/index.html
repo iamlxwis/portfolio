@@ -131,6 +131,35 @@ $('cf').addEventListener('change',()=>{$('cfName').textContent=$('cf').files[0]?
 const zone=$('dropCf');['dragenter','dragover'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.add('drag')}));['dragleave','drop'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.remove('drag')}));zone.addEventListener('drop',e=>{const file=e.dataTransfer.files[0];if(file){const dt=new DataTransfer();dt.items.add(file);$('cf').files=dt.files;$('cfName').textContent=file.name}});
 renderDecks();$('reviewStats').textContent=reviewSummary();
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab))});
-try{if('serviceWorker' in navigator)navigator.serviceWorker.register('/student/sw.js').catch(()=>{})}catch(e){}
+try{if('serviceWorker' in navigator)navigator.serviceWorker.register('/student/sw.js?v=2').catch(()=>{})}catch(e){}
 ;
 </script></body></html>
+<style>
+/* Mobile fixes: roomy review area and dependable file selection */
+@media(max-width:760px){
+  .workspace-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+  #sourceCard{padding:20px}
+  #flashcardPanel{padding:22px 20px;min-height:280px;margin-top:0}
+  #flashcardPanel>.section-top{margin-bottom:18px;align-items:center}
+  #flashcardPanel .empty-state{min-height:145px;display:flex;align-items:center;justify-content:center;padding:28px 22px;line-height:1.8}
+  #flashcardPanel #cv{padding-top:6px}
+  #flashcardPanel .face{min-height:250px;padding:30px 20px}
+  #flashcardPanel .action-row{gap:8px}
+  #flashcardPanel .action-row button{min-width:0;padding:10px 8px;font-size:13px}
+  .tabs{width:100%;display:flex;gap:6px;padding:5px}
+  .tabs .tab{display:block;flex:1;min-width:0;padding:11px 8px}
+  .panel#saved{min-height:60vh;padding-bottom:76px}
+  #saved .section-top{gap:10px}
+  #saved .deck-item{padding:15px;gap:12px}
+  #saved .deck-item>div:first-child{min-width:0;flex:1}
+  #saved .deck-item .action-row{display:flex;width:100%;margin-top:8px}
+  #saved .field{margin:26px 0 18px}
+  #saved input[type=file]{position:static;inset:auto;width:100%;height:auto;opacity:1;pointer-events:auto;z-index:auto;background:#111;border:1px solid #333;padding:12px;border-radius:9px}
+  footer{padding:24px 0 36px;line-height:1.9}
+}
+@media(min-width:761px){
+  #flashcardPanel{padding:26px}
+  #flashcardPanel .empty-state{min-height:190px;display:flex;align-items:center;justify-content:center;padding:28px}
+}
+.upload-zone input[type=file]{display:block;position:absolute;inset:0;width:100%;height:100%;max-width:100%;opacity:0;cursor:pointer;pointer-events:auto;padding:0;margin:0;z-index:5}
+</style>
