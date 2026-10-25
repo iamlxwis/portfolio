@@ -1,26 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/api/v1/(.*)",
-      "destination": "/api/index.js?path=/v1/$1"
-    },
-    {
-      "source": "/api/health",
-      "destination": "/api/index.js?path=/health"
-    },
-    {
-      "source": "/api",
-      "destination": "/api-docs.html"
-    },
-    {
-      "source": "/api/docs",
-      "destination": "/api-docs.html"
-    },
-    {
-      "source": "/api/playground",
-      "destination": "/api-docs.html"
-    },
-    {
       "source": "/log",
       "destination": "/log/index.html"
     },
