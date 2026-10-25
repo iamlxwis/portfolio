@@ -130,11 +130,26 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 @keyframes grid-drift{from{background-position:0 0,0 0}to{background-position:36px 36px,-36px 36px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 
-.now-playing{max-width:560px}
-.now-playing-frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line);background:#171717}
-.now-playing-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.now-playing-link{display:inline-block;margin-top:12px;font-size:.78rem;color:var(--muted);text-decoration:underline;text-decoration-color:#555;text-underline-offset:4px}
-.now-playing-link:hover{color:var(--fg)}
+/* Floating vinyl music player */
+.vinyl-widget{position:fixed;left:22px;bottom:22px;z-index:9000;display:flex;align-items:flex-end;gap:13px}
+.vinyl-toggle{position:relative;width:68px;height:68px;flex:0 0 68px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5));transition:transform .2s ease}
+.vinyl-toggle:hover{transform:translateY(-3px) scale(1.03)}
+.vinyl-disc{position:absolute;inset:0;border-radius:50%;border:1px solid #555;background:repeating-radial-gradient(circle at center,#171717 0 2px,#252525 3px 4px,#101010 5px 6px);box-shadow:inset 0 0 0 5px #161616,inset 0 0 0 6px #343434,inset 0 0 0 10px #171717,inset 0 0 0 11px #333,inset 0 0 0 15px #171717}
+.vinyl-disc:after{content:"";position:absolute;width:22px;height:22px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#dedede;border:3px solid #aaa;box-shadow:inset 0 0 0 5px #222}
+.vinyl-widget.is-playing .vinyl-disc{animation:vinyl-spin 3s linear infinite}
+.vinyl-player{width:min(290px,calc(100vw - 118px));padding:12px;background:rgba(20,20,20,.97);border:1px solid #383838;box-shadow:0 12px 40px rgba(0,0,0,.5);backdrop-filter:blur(14px);margin-bottom:2px;display:none}
+.vinyl-widget.is-open .vinyl-player{display:block;animation:vinyl-pop .18s ease-out both}
+.vinyl-player-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.vinyl-player-label{font:10px/1.5 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#aaa}
+.vinyl-player-close{border:1px solid #444;background:transparent;color:#aaa;font-size:16px;line-height:1;padding:3px 7px;cursor:pointer}
+.vinyl-embed{position:relative;width:100%;aspect-ratio:16/9;background:#080808}
+.vinyl-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vinyl-open-link{display:inline-block;margin-top:9px;color:#aaa;font-size:11px;text-decoration:underline;text-underline-offset:3px}
+.vinyl-open-link:hover{color:#fff}
+@keyframes vinyl-spin{to{transform:rotate(360deg)}}
+@keyframes vinyl-pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.vinyl-widget{left:14px;bottom:14px;gap:10px}.vinyl-toggle{width:58px;height:58px;flex-basis:58px}.vinyl-player{width:min(270px,calc(100vw - 100px));padding:10px}}
+@media(prefers-reduced-motion:reduce){.vinyl-widget.is-playing .vinyl-disc{animation:none}.vinyl-player{animation:none!important}}
 </style>
 </head>
 <body>
@@ -147,16 +162,6 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 <section class="hero">
 <h1>lxwis</h1>
 <p class="intro">I'm a student</p>
-</section>
-
-<section class="content-section" aria-labelledby="now-playing-heading">
-<div class="section-head"><h2 class="section-title" id="now-playing-heading">Now playing</h2><span class="section-index">ON YOUTUBE</span></div>
-<div class="now-playing">
-<div class="now-playing-frame">
-<iframe src="https://www.youtube-nocookie.com/embed/RaaccfAJiOo" title="Now playing on YouTube" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
-<a class="now-playing-link" href="https://music.youtube.com/watch?v=RaaccfAJiOo" target="_blank" rel="noopener noreferrer">Open in YouTube Music ↗</a>
-</div>
 </section>
 <section class="content-section" id="work">
 <div class="section-head"><h2 class="section-title">Selected work</h2><span class="section-index">01 — 04</span></div>
@@ -180,6 +185,54 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 </main>
 <footer><span>© 2026 lxwis</span><span><a href="/log">log ↗</a></span></footer>
 </div>
+
+<div class="vinyl-widget" id="vinyl-widget">
+<button class="vinyl-toggle" id="vinyl-toggle" type="button" aria-label="Open music player" aria-expanded="false" aria-controls="vinyl-player">
+<span class="vinyl-disc" aria-hidden="true"></span>
+</button>
+<div class="vinyl-player" id="vinyl-player" aria-label="Music player">
+<div class="vinyl-player-top"><span class="vinyl-player-label">Now playing</span><button class="vinyl-player-close" id="vinyl-player-close" type="button" aria-label="Close music player">×</button></div>
+<div class="vinyl-embed" id="vinyl-embed"></div>
+<a class="vinyl-open-link" href="https://music.youtube.com/watch?v=RaaccfAJiOo" target="_blank" rel="noopener noreferrer">Open in YouTube Music ↗</a>
+</div>
+</div>
+<script>
+(function(){
+var widget=document.getElementById('vinyl-widget');
+var toggle=document.getElementById('vinyl-toggle');
+var player=document.getElementById('vinyl-player');
+var embed=document.getElementById('vinyl-embed');
+var close=document.getElementById('vinyl-player-close');
+var videoId='RaaccfAJiOo';
+function openPlayer(){
+widget.classList.add('is-open');
+widget.classList.add('is-playing');
+toggle.setAttribute('aria-expanded','true');
+toggle.setAttribute('aria-label','Close music player');
+if(!embed.querySelector('iframe')){
+var frame=document.createElement('iframe');
+frame.src='https://www.youtube-nocookie.com/embed/'+videoId+'?autoplay=1';
+frame.title='YouTube music player';
+frame.loading='lazy';
+frame.referrerPolicy='strict-origin-when-cross-origin';
+frame.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+frame.allowFullscreen=true;
+embed.appendChild(frame);
+}
+}
+function closePlayer(){
+widget.classList.remove('is-open');
+widget.classList.remove('is-playing');
+toggle.setAttribute('aria-expanded','false');
+toggle.setAttribute('aria-label','Open music player');
+embed.innerHTML='';
+}
+toggle.addEventListener('click',function(){if(widget.classList.contains('is-open'))closePlayer();else openPlayer();});
+close.addEventListener('click',closePlayer);
+document.addEventListener('keydown',function(event){if(event.key==='Escape'&&widget.classList.contains('is-open'))closePlayer();});
+})();
+</script>
+
 <div class="terminal-overlay" id="terminal-modal" aria-hidden="true">
 <section class="terminal-window" role="dialog" aria-modal="true" aria-labelledby="terminal-heading">
 <div class="terminal-bar"><p class="terminal-title" id="terminal-heading"><span>lxwis@site</span>: ~</p><button class="terminal-close" id="terminal-close" type="button">Esc / Close</button></div>
