@@ -21,6 +21,8 @@ app.use((req, res, next) => {
     delete query.path;
     const search = new URLSearchParams(query).toString();
     req.url = requestedPath + (search ? "?" + search : "");
+  } else if (req.path.startsWith("/api/")) {
+    req.url = req.url.slice(4) || "/";
   }
   next();
 });
