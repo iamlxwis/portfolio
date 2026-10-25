@@ -132,18 +132,18 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 
 /* Floating cover-art vinyl music player */
 .vinyl-widget{position:fixed;left:22px;bottom:22px;z-index:9000;display:flex;align-items:flex-end;gap:12px}
-.vinyl-toggle{position:relative;width:76px;height:76px;flex:0 0 76px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55));transition:transform .2s ease}
+.vinyl-toggle{position:relative;width:92px;height:92px;flex:0 0 92px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55));transition:transform .2s ease}
 .vinyl-toggle:hover{transform:translateY(-3px) scale(1.03)}
 .vinyl-disc{position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle at center,#151515 0 2px,#292929 3px 4px,#101010 5px 6px);border:1px solid #454545;box-shadow:inset 0 0 0 5px #151515,inset 0 0 0 6px #3a3a3a,inset 0 0 0 11px #171717,inset 0 0 0 12px #333}
-.vinyl-label{position:absolute;inset:24%;border-radius:50%;overflow:hidden;border:2px solid #111;background:#222}
+.vinyl-label{position:absolute;inset:8%;border-radius:50%;overflow:hidden;border:2px solid #111;background:#222}
 .vinyl-label img{width:100%;height:100%;object-fit:cover;display:block}
 .vinyl-label:after{content:"";position:absolute;width:5px;height:5px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#eee;border:1px solid #111}
 .vinyl-widget.is-playing .vinyl-disc{animation:vinyl-spin 3s linear infinite}
-.vinyl-player{position:absolute;left:0;bottom:88px;width:76px;height:76px;display:none}
+.vinyl-player{position:absolute;left:0;bottom:104px;width:92px;height:92px;display:none}
 .vinyl-widget.is-open .vinyl-player{display:block}
 .vinyl-player iframe{position:absolute;width:1px;height:1px;opacity:.01;pointer-events:none;border:0}
 @keyframes vinyl-spin{to{transform:rotate(360deg)}}
-@media(max-width:600px){.vinyl-widget{left:14px;bottom:14px}.vinyl-toggle{width:66px;height:66px;flex-basis:66px}.vinyl-player{bottom:76px}}
+@media(max-width:600px){.vinyl-widget{left:14px;bottom:14px}.vinyl-toggle{width:82px;height:82px;flex-basis:82px}.vinyl-label{inset:8%}.vinyl-player{bottom:94px}}
 @media(prefers-reduced-motion:reduce){.vinyl-widget.is-playing .vinyl-disc{animation:none}}
 </style>
 </head>
