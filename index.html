@@ -270,6 +270,16 @@ document.addEventListener('keydown',function(event){if(event.key==='Escape'&&ove
     loader.classList.add('is-active');
     loader.setAttribute('aria-hidden','false');
   });
+  // Restore the page when returning with the browser Back/Forward buttons.
+  window.addEventListener('pageshow',function(){
+    loader.classList.remove('is-active');
+    loader.setAttribute('aria-hidden','true');
+  });
+  window.addEventListener('pagehide',function(){
+    // Keep the current page state clean if the browser caches this document.
+    loader.classList.remove('is-active');
+    loader.setAttribute('aria-hidden','true');
+  });
   var saved=false;
   try{saved=window.localStorage.getItem('lxwis-privacy-note')==='seen'}catch(e){}
   if(!saved){window.setTimeout(function(){banner.classList.add('is-visible')},700)}
