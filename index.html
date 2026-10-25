@@ -130,20 +130,21 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 @keyframes grid-drift{from{background-position:0 0,0 0}to{background-position:36px 36px,-36px 36px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 
-/* Floating cover-art vinyl music player */
+/* Floating, more realistic vinyl record */
 .vinyl-widget{position:fixed;left:22px;bottom:22px;z-index:9000;display:flex;align-items:flex-end;gap:12px}
-.vinyl-toggle{position:relative;width:92px;height:92px;flex:0 0 92px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55));transition:transform .2s ease}
+.vinyl-toggle{position:relative;width:92px;height:92px;flex:0 0 92px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;filter:drop-shadow(0 9px 12px rgba(0,0,0,.65));transition:transform .2s ease}
 .vinyl-toggle:hover{transform:translateY(-3px) scale(1.03)}
-.vinyl-disc{position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle at center,#151515 0 2px,#292929 3px 4px,#101010 5px 6px);border:1px solid #454545;box-shadow:inset 0 0 0 5px #151515,inset 0 0 0 6px #3a3a3a,inset 0 0 0 11px #171717,inset 0 0 0 12px #333}
-.vinyl-label{position:absolute;inset:8%;border-radius:50%;overflow:hidden;border:2px solid #111;background:#222}
+.vinyl-disc{position:absolute;inset:0;border-radius:50%;overflow:hidden;border:1px solid #555;background:radial-gradient(circle at 34% 26%,rgba(255,255,255,.13),transparent 24%),repeating-radial-gradient(circle at center,#171717 0 1px,#2b2b2b 1.5px 2px,#111 2.5px 3.5px,#242424 4px 4.5px,#101010 5px 6px);box-shadow:inset 0 0 0 1px #090909,inset 0 0 0 3px #303030,inset 0 0 0 4px #090909,inset 0 0 0 6px #292929,inset 0 0 0 7px #101010,inset 0 0 0 9px #383838,inset 0 0 0 10px #111,inset 0 0 0 12px #292929}
+.vinyl-disc:before{content:"";position:absolute;inset:2px;border-radius:50%;background:conic-gradient(from 25deg,transparent 0 20deg,rgba(255,255,255,.08) 42deg,transparent 65deg,rgba(0,0,0,.45) 120deg,transparent 155deg,rgba(255,255,255,.06) 225deg,transparent 270deg);pointer-events:none}
+.vinyl-label{position:absolute;inset:9%;border-radius:50%;overflow:hidden;border:2px solid #090909;background:#222;box-shadow:0 0 0 1px rgba(255,255,255,.12),inset 0 0 0 1px rgba(0,0,0,.5)}
 .vinyl-label img{width:100%;height:100%;object-fit:cover;display:block}
-.vinyl-label:after{content:"";position:absolute;width:5px;height:5px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#eee;border:1px solid #111}
+.vinyl-label:after{content:"";position:absolute;width:5px;height:5px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#eee;border:1px solid #111;box-shadow:0 0 0 2px rgba(0,0,0,.45)}
 .vinyl-widget.is-playing .vinyl-disc{animation:vinyl-spin 3s linear infinite}
 .vinyl-player{position:absolute;left:0;bottom:104px;width:92px;height:92px;display:none}
 .vinyl-widget.is-open .vinyl-player{display:block}
 .vinyl-player iframe{position:absolute;width:1px;height:1px;opacity:.01;pointer-events:none;border:0}
 @keyframes vinyl-spin{to{transform:rotate(360deg)}}
-@media(max-width:600px){.vinyl-widget{left:14px;bottom:14px}.vinyl-toggle{width:82px;height:82px;flex-basis:82px}.vinyl-label{inset:8%}.vinyl-player{bottom:94px}}
+@media(max-width:600px){.vinyl-widget{left:14px;bottom:14px}.vinyl-toggle{width:82px;height:82px;flex-basis:82px}.vinyl-label{inset:9%}.vinyl-player{bottom:94px}}
 @media(prefers-reduced-motion:reduce){.vinyl-widget.is-playing .vinyl-disc{animation:none}}
 </style>
 </head>
