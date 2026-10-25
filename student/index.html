@@ -327,7 +327,7 @@ $('cf').addEventListener('change',()=>{$('cfName').textContent=$('cf').files[0]?
 const zone=$('dropCf');['dragenter','dragover'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.add('drag')}));['dragleave','drop'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.remove('drag')}));zone.addEventListener('drop',e=>{const file=e.dataTransfer.files[0];if(file){const dt=new DataTransfer();dt.items.add(file);$('cf').files=dt.files;$('cfName').textContent=file.name}});
 
 
-try{if('serviceWorker' in navigator)navigator.serviceWorker.register('/student/sw.js?v=6').catch(()=>{})}catch(e){}
+try{if('serviceWorker' in navigator)navigator.serviceWorker.register('/student/sw.js?v=7').catch(()=>{})}catch(e){}
 })();</script>
 <script>
 /* Defensive startup: keep tab controls and file selection responsive on mobile. */
