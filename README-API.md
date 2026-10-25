@@ -14,7 +14,7 @@ A free developer API built into the lxwis.site portfolio repository.
 1. Install Node.js 20 or newer.
 2. Run `npm install`.
 3. Run `npm start`.
-4. Open `http://localhost:3000` after adding the local server entry point, or test the Express app with Vercel's local development tools.
+4. Open `http://localhost:3000/api` for the docs, or `http://localhost:3000/api/health` to check the API.
 
 ## Current API routes
 
