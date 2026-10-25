@@ -1,8 +1,6 @@
 {
   "rewrites": [
-    { "source": "/portfolio", "destination": "/portfolio/index.html" },
-    { "source": "/meow",      "destination": "/meow/index.html" },
-    { "source": "/arf",       "destination": "/arf/index.html" },
-    { "source": "/uts",       "destination": "/review/uts.html" }
+    { "source": "/meow", "destination": "/meow/index.html" },
+    { "source": "/arf", "destination": "/arf/index.html" }
   ]
 }
