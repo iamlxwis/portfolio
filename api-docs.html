@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111111">
+<meta name="description" content="LXWIS API — free developer tools, utilities, and text APIs.">
+<title>LXWIS API — Developer Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/api-assets/api.css">
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+<a class="brand" href="/">lxwis<span> / api</span></a>
+<nav><a href="/">Portfolio</a><a href="#endpoints">Endpoints</a><a href="#playground">Playground</a></nav>
+</header>
+<main>
+<section class="hero">
+<p class="eyebrow"><span class="dot"></span> FREE DEVELOPER TOOLKIT <span class="mono">/ V1</span></p>
+<h1>Small tools.<br><span>Useful APIs.</span></h1>
+<p class="lead">A growing collection of simple endpoints for everyday development. Explore the docs, send a request, and copy an example into your project.</p>
+<div class="hero-actions"><a class="button primary" href="#endpoints">Explore endpoints <span>↘</span></a><a class="button" href="#playground">Open playground</a></div>
+<div class="stats"><div><strong id="endpoint-count">18</strong><span>planned routes</span></div><div><strong>06</strong><span>categories</span></div><div><strong>Free</strong><span>public access</span></div></div>
+</section>
+<section class="section" id="endpoints">
+<div class="section-heading"><div><p class="eyebrow">01 / DIRECTORY</p><h2>Browse endpoints</h2></div><span class="muted small">Select one to inspect it</span></div>
+<div class="search-wrap"><span>⌕</span><input id="search" type="search" placeholder="Search endpoints..." autocomplete="off"><kbd>/</kbd></div>
+<div class="filters" id="filters">
+<button class="filter active" data-category="all">All</button>
+<button class="filter" data-category="utilities">Utilities</button>
+<button class="filter" data-category="text">Text</button>
+<button class="filter" data-category="developer">Developer</button>
+<button class="filter" data-category="fun">Fun</button>
+<button class="filter" data-category="images">Images</button>
+<button class="filter" data-category="ai">AI</button>
+</div>
+<div class="endpoint-layout">
+<div class="endpoint-list" id="endpoint-list" aria-live="polite"></div>
+<aside class="endpoint-detail" id="endpoint-detail"><p class="eyebrow">ENDPOINT DETAILS</p><h3>Select an endpoint</h3><p class="muted">Choose an item from the list to view its method, path, parameters, and example.</p></aside>
+</div>
+</section>
+<section class="section" id="playground">
+<div class="section-heading"><div><p class="eyebrow">02 / PLAYGROUND</p><h2>Try a request</h2></div><span class="muted small">Live API response</span></div>
+<div class="playground">
+<div class="playground-form">
+<label for="play-endpoint">Endpoint</label><select id="play-endpoint"></select>
+<div id="request-fields"></div>
+<button class="button primary run-button" id="run-request">Send request <span>↗</span></button>
+<p class="muted tiny">Requests are sent to this site's API. Some planned categories are not enabled yet.</p>
+</div>
+<div class="response-panel">
+<div class="response-head"><span>RESPONSE</span><span id="response-status">WAITING</span><button id="copy-response" class="text-button" type="button">Copy JSON</button></div>
+<pre id="response-output"><code>Choose an endpoint and send a request.</code></pre>
+</div>
+</div>
+</section>
+<section class="section quickstart">
+<div><p class="eyebrow">03 / QUICK START</p><h2>Use it in your project.</h2><p class="muted">Example request using JavaScript's built-in fetch API.</p></div>
+<div class="code-card"><div class="code-head"><span>JavaScript</span><button id="copy-example" class="text-button" type="button">Copy code</button></div><pre><code id="example-code">fetch("https://lxwis.site/api/v1/utils/uuid")
+  .then(response => response.json())
+  .then(result => console.log(result));</code></pre></div>
+</section>
+</main>
+<footer><a class="brand" href="/">lxwis<span> / api</span></a><p>Built for learning and making things.</p><a href="/">Back to portfolio ↑</a></footer>
+</div>
+<script src="/api-assets/api.js" defer></script>
+</body>
+</html>
