@@ -172,13 +172,13 @@ help:`Available commands:
   home        close terminal and go to the top
   clear       clear terminal output`,
 about:'I\'m a student',
-projects:'Selected work:
+projects:`Selected work:
   LibNav             library website
   lxwis.site         personal website
   AllinOneTools_Bot  Telegram utility bot
   lxwis Bot          Messenger bot in progress
 
-Try “open libnav” or “open bot”.',
+Try "open libnav" or "open bot".`,
 skills:`Tools I use:
   HTML / CSS / JavaScript
   Node.js
@@ -188,7 +188,7 @@ skills:`Tools I use:
 contact:`GitHub   github.com/iamlxwis
 Facebook facebook.com/iamlxwis
 Telegram t.me/iamlxwis`,
-time:'General Santos local time: '+new Intl.DateTimeFormat('en-PH',{dateStyle:'medium',timeStyle:'medium',timeZone:'Asia/Manila'}).format(new Date())
+time:'Local time: '+new Intl.DateTimeFormat('en-PH',{dateStyle:'medium',timeStyle:'medium',timeZone:'Asia/Manila'}).format(new Date())
 };
 if(command==='open libnav'){window.open('https://libnav.lxwis.site','_blank','noopener,noreferrer');addLine(raw,'Opening <a href="https://libnav.lxwis.site" target="_blank" rel="noopener noreferrer">LibNav</a>');return;}
 if(command==='open bot'){window.open('https://t.me/AllinOneTools_Bot','_blank','noopener,noreferrer');addLine(raw,'Opening <a href="https://t.me/AllinOneTools_Bot" target="_blank" rel="noopener noreferrer">AllinOneTools Bot</a>');return;}
