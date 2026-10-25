@@ -139,6 +139,11 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 .vinyl-label{position:absolute;inset:9%;border-radius:50%;overflow:hidden;border:2px solid #090909;background:#222;box-shadow:0 0 0 1px rgba(255,255,255,.12),inset 0 0 0 1px rgba(0,0,0,.5)}
 .vinyl-label img{width:100%;height:100%;object-fit:cover;display:block}
 .vinyl-label:after{content:"";position:absolute;width:5px;height:5px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:#eee;border:1px solid #111;box-shadow:0 0 0 2px rgba(0,0,0,.45)}
+/* Turntable tonearm resting over the outer groove */
+.vinyl-tonearm{position:absolute;z-index:3;right:-3px;top:2px;width:7px;height:43px;border-radius:5px;background:linear-gradient(90deg,#555,#d5d5d5 38%,#777 70%,#333);transform:rotate(-27deg);transform-origin:top center;box-shadow:1px 2px 3px rgba(0,0,0,.7);pointer-events:none;transition:transform .25s ease}
+.vinyl-tonearm:before{content:"";position:absolute;top:-3px;left:-3px;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#eee,#777 50%,#222 75%);border:1px solid #111;box-shadow:0 1px 3px #000}
+.vinyl-tonearm:after{content:"";position:absolute;bottom:-2px;left:0;width:7px;height:10px;border-radius:1px 1px 3px 3px;background:linear-gradient(90deg,#333,#aaa,#444);box-shadow:0 1px 2px #000}
+.vinyl-widget.is-playing .vinyl-tonearm{transform:rotate(-13deg)}
 .vinyl-widget.is-playing .vinyl-disc{animation:vinyl-spin 3s linear infinite}
 .vinyl-player{position:absolute;left:0;bottom:104px;width:92px;height:92px;display:none}
 .vinyl-widget.is-open .vinyl-player{display:block}
@@ -184,7 +189,7 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 
 <div class="vinyl-widget" id="vinyl-widget">
 <button class="vinyl-toggle" id="vinyl-toggle" type="button" aria-label="Play music" aria-pressed="false">
-<span class="vinyl-disc" aria-hidden="true"><span class="vinyl-label"><img src="https://cdn-images.dzcdn.net/images/cover/0d571082af7c78114321031d7f84d331/1200x1200-000000-81-0-0.webp" alt=""></span></span>
+<span class="vinyl-disc" aria-hidden="true"><span class="vinyl-label"><img src="https://cdn-images.dzcdn.net/images/cover/0d571082af7c78114321031d7f84d331/1200x1200-000000-81-0-0.webp" alt=""></span></span><span class="vinyl-tonearm" aria-hidden="true"></span>
 </button>
 <div class="vinyl-player" id="vinyl-player" aria-hidden="true"><div id="vinyl-embed"></div></div>
 </div>
