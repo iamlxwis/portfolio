@@ -224,6 +224,34 @@ footer{border-top-color:#262626;padding:26px 0 36px;line-height:1.9;color:#888}
 @media(max-width:600px){#dropCf{min-height:210px!important;padding:20px 13px!important;border-radius:15px!important}#dropCf input[type=file]{font-size:11px!important}#dropCf input[type=file]::file-selector-button{padding:10px 11px;margin-right:6px}}
 @media(prefers-reduced-motion:reduce){#makeCards:disabled:before{animation:none!important}}
 
+</style><style>
+
+/* Real custom upload UI; native file input stays invisible and tappable. */
+#dropCf{position:relative!important;isolation:isolate;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:11px!important;min-height:230px!important;padding:24px 18px!important;border:1px dashed #454545!important;border-radius:18px!important;background:#0e0e0e!important;text-align:center!important;overflow:hidden!important;cursor:pointer!important;transition:border-color .18s ease,background .18s ease!important}
+#dropCf:hover,#dropCf:focus-within,#dropCf.drag{border-color:#e7e7e7!important;background:#151515!important}
+#dropCf:before{content:"";position:absolute;inset:8px;border:1px solid #222;border-radius:12px;pointer-events:none;z-index:0}
+#dropCf .upload-icon,#dropCf .upload-title,#dropCf .upload-sub,#dropCf .upload-browse,#dropCf .file-name{position:relative;z-index:1;pointer-events:none}
+#dropCf .upload-icon{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 2px;border:1px solid #373737;border-radius:16px;background:#1b1b1b;color:#eee;font-size:28px}
+#dropCf .upload-title{font-size:15px;font-weight:750;letter-spacing:-.02em}
+#dropCf .upload-sub{font-size:12px;color:#8d8d8d}
+#dropCf .upload-browse{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:4px;padding:11px 16px;border:1px solid #f0f0f0;border-radius:10px;background:#f0f0f0;color:#111;font-size:12px;font-weight:800;box-shadow:none}
+#dropCf .upload-browse span{font-size:15px;line-height:1}
+#dropCf .file-name{display:block;max-width:100%;overflow-wrap:anywhere;color:#b9b9b9;font-size:12px;line-height:1.5;min-height:18px}
+#dropCf input[type=file]{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;opacity:0!important;z-index:5!important;pointer-events:auto!important;margin:0!important;padding:0!important;border:0!important;border-radius:18px!important;cursor:pointer!important;background:transparent!important;font-size:1px!important}
+#dropCf input[type=file]::file-selector-button{opacity:0!important;width:1px!important;height:1px!important;padding:0!important;margin:0!important;border:0!important}
+#makeCards{min-height:52px;border-radius:12px;font-weight:800;position:relative;overflow:hidden}
+#makeCards:disabled{opacity:1;background:#e2e2e2;color:#111}
+#makeCards .button-loader:not(.hidden){display:inline-block}
+.generation-overlay{position:fixed!important;inset:0!important;z-index:2147483000!important;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.9)!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.generation-overlay.hidden{display:none!important}
+.generation-dialog{width:min(100%,430px);padding:28px 22px;background:#111;border:1px solid #333;border-radius:20px;text-align:center;box-shadow:0 25px 80px #000b}
+#cardLoading:not(.hidden){display:flex!important;min-height:180px;justify-content:center}
+#cardLoading .loading-track{width:100%}
+#cs{white-space:pre-wrap;line-height:1.7}
+#cs.error{padding:12px;border:1px solid #633;border-radius:10px;background:#211010;color:#ffd5d5}
+@media(max-width:600px){#dropCf{min-height:215px!important;padding:20px 13px!important;border-radius:15px!important}#dropCf .upload-browse{padding:10px 15px}}
+@media(prefers-reduced-motion:reduce){#makeCards:disabled:before,.generation-orbit,.generation-spark,.generation-progress span{animation:none!important}}
+
 </style></head><body><div class="wrap"><header><a href="/"><b>lxwis</b></a><a href="/" class="muted">← Portfolio</a></header><section class="hero"><div class="muted">LXWIS / STUDENT TOOLS</div><h1>Student Hub.</h1><p class="muted">Turn your lessons into flashcards, then test what you remember.</p></section><nav class="tabs"><button class="tab active" data-tab="cards">Study workspace</button></nav>
 <section class="panel active" id="cards">
   <div class="workspace-head"><div><h2>Make your lesson stick.</h2><p class="muted">Upload your lesson and AI will build a flashcard deck. Then turn those cards into a practice quiz.</p></div></div>
@@ -281,7 +309,7 @@ function show(){if(!cards.length)return;$('cr').classList.add('hidden');$('cv').
 function reviewSummary(){let r=getReviews(),known=0,learning=0;Object.keys(r).forEach(k=>{if(r[k]==='known')known++;else if(r[k]==='learning')learning++});return known+' marked known · '+learning+' still learning in this session.'}
 function markCard(state){if(!cards.length)return;let r=getReviews();r[currentDeckTitle+'::'+cards[index].question]=state;storeReviews(r);toast(state==='known'?'Marked as known':'Marked for another review');if(state==='known'&&cards.length>1){index=(index+1)%cards.length;flipped=false;show()}else {}}
 function downloadJson(data,name){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name.replace(/[^a-z0-9-_]+/gi,'-').toLowerCase()+'.json';a.click();URL.revokeObjectURL(url)}
-$('makeCards').onclick=async()=>{let b=$('makeCards');setBusy(b,true);$('cs').textContent='';$('cardLoading').classList.remove('hidden');window.lxwisGeneration?.show('Preparing your lesson','Starting up and checking your uploaded file...',0);$('loadingTitle').textContent='Reading your lesson';$('loadingText').textContent='Finding key ideas, definitions, and important details.';window.lxwisGeneration?.show('Reading your lesson','Checking the file and extracting the lesson text...',0);try{let t=await source('cf','ct','cs');currentDeckTitle=($('cf').files[0]?.name||'Lesson flashcards').replace(/\.(pdf|docx|txt)$/i,'');$('loadingTitle').textContent='Building your flashcards';$('loadingText').textContent='Organizing the lesson into clear question and answer cards.';window.lxwisGeneration?.show('Building your flashcards','Finding key ideas and turning them into useful question-and-answer cards...',1);let d=await ai('You are a careful study assistant. Create a comprehensive flashcard deck based ONLY on the lesson below. Decide the number of cards yourself based on how much meaningful material the lesson contains. Do not ask the user how many cards they want. Cover important topics, definitions, key terms, examples, processes, comparisons, and details. Avoid duplicate or vague cards. Keep questions clear and answers useful for studying. Use the word "and" instead of the contraction "n’t" or "n\'t"; avoid contractions that use apostrophes where possible. Return only valid JSON in this shape: {"title":"short useful deck title","cards":[{"question":"...","answer":"..."}]}. No markdown fences.\nLESSON:\n'+t);cards=(d.cards||[]).filter(x=>x&&x.question&&x.answer).map(x=>({question:cleanLanguage(x.question),answer:cleanLanguage(x.answer)}));if(!cards.length)throw Error('No cards were returned. Try a shorter lesson or try again.');if(d.title)currentDeckTitle=String(d.title).replace(/\bwon't\b/gi,'will not').replace(/\bdon't\b/gi,'do not').replace(/\bcan't\b/gi,'cannot');index=0;flipped=false;show();window.lxwisGeneration?.show('Your deck is ready','Created '+cards.length+' flashcards. Opening your study deck...',2);$('cs').textContent='Created '+cards.length+' flashcards. You can review them or make a quiz from this deck.';toast('Flashcards ready');$('flashcardPanel').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){showError(e.message,'cs');$('sourceCard').classList.remove('error-shake');void $('sourceCard').offsetWidth;$('sourceCard').classList.add('error-shake');setTimeout(()=>$('sourceCard').classList.remove('error-shake'),500)}finally{setTimeout(()=>window.lxwisGeneration?.hide(),900);$('cardLoading').classList.add('hidden');setBusy(b,false)}};
+$('makeCards').onclick=async()=>{let b=$('makeCards');setBusy(b,true);$('cs').textContent='';$('cardLoading').classList.remove('hidden');window.lxwisGeneration?.show('Preparing your lesson','Starting up and checking your uploaded file...',0);$('loadingTitle').textContent='Preparing your lesson';$('loadingText').textContent='Starting up and checking your uploaded file...';$('loadingTitle').textContent='Reading your lesson';$('loadingText').textContent='Finding key ideas, definitions, and important details.';window.lxwisGeneration?.show('Reading your lesson','Checking the file and extracting the lesson text...',0);try{let t=await source('cf','ct','cs');currentDeckTitle=($('cf').files[0]?.name||'Lesson flashcards').replace(/\.(pdf|docx|txt)$/i,'');$('loadingTitle').textContent='Building your flashcards';$('loadingText').textContent='Organizing the lesson into clear question and answer cards.';window.lxwisGeneration?.show('Building your flashcards','Finding key ideas and turning them into useful question-and-answer cards...',1);let d=await ai('You are a careful study assistant. Create a comprehensive flashcard deck based ONLY on the lesson below. Decide the number of cards yourself based on how much meaningful material the lesson contains. Do not ask the user how many cards they want. Cover important topics, definitions, key terms, examples, processes, comparisons, and details. Avoid duplicate or vague cards. Keep questions clear and answers useful for studying. Use the word "and" instead of the contraction "n’t" or "n\'t"; avoid contractions that use apostrophes where possible. Return only valid JSON in this shape: {"title":"short useful deck title","cards":[{"question":"...","answer":"..."}]}. No markdown fences.\nLESSON:\n'+t);cards=(d.cards||[]).filter(x=>x&&x.question&&x.answer).map(x=>({question:cleanLanguage(x.question),answer:cleanLanguage(x.answer)}));if(!cards.length)throw Error('No cards were returned. Try a shorter lesson or try again.');if(d.title)currentDeckTitle=String(d.title).replace(/\bwon't\b/gi,'will not').replace(/\bdon't\b/gi,'do not').replace(/\bcan't\b/gi,'cannot');index=0;flipped=false;show();window.lxwisGeneration?.show('Your deck is ready','Created '+cards.length+' flashcards. Opening your study deck...',2);$('cs').textContent='Created '+cards.length+' flashcards. You can review them or make a quiz from this deck.';toast('Flashcards ready');$('flashcardPanel').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){showError(e.message,'cs');$('sourceCard').classList.remove('error-shake');void $('sourceCard').offsetWidth;$('sourceCard').classList.add('error-shake');setTimeout(()=>$('sourceCard').classList.remove('error-shake'),500)}finally{setTimeout(()=>window.lxwisGeneration?.hide(),900);$('cardLoading').classList.add('hidden');setBusy(b,false)}};
 $('flip').onclick=$('face').onclick=()=>{if(!cards.length)return;flipped=!flipped;show()};
 $('face').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(cards.length){flipped=!flipped;show()}}};
 $('next').onclick=()=>{if(!cards.length)return;index=(index+1)%cards.length;flipped=false;show()};
@@ -300,9 +328,8 @@ const zone=$('dropCf');['dragenter','dragover'].forEach(ev=>zone.addEventListene
 
 
 try{if('serviceWorker' in navigator)navigator.serviceWorker.register('/student/sw.js?v=6').catch(()=>{})}catch(e){}
-})();
-
-
+})();</script>
+<script>
 /* Defensive startup: keep tab controls and file selection responsive on mobile. */
 (function(){
  const file=document.getElementById('cf'),name=document.getElementById('cfName'),zone=document.getElementById('dropCf');
@@ -332,32 +359,5 @@ try{if('serviceWorker' in navigator)navigator.serviceWorker.register('/student/s
   hide:function(){if(overlay)overlay.classList.add('hidden');document.body.style.overflow=''}
  };
 })();
-
+</script>
 </body></html>
-<style>
-/* Real custom upload UI; native file input stays invisible and tappable. */
-#dropCf{position:relative!important;isolation:isolate;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:11px!important;min-height:230px!important;padding:24px 18px!important;border:1px dashed #454545!important;border-radius:18px!important;background:#0e0e0e!important;text-align:center!important;overflow:hidden!important;cursor:pointer!important;transition:border-color .18s ease,background .18s ease!important}
-#dropCf:hover,#dropCf:focus-within,#dropCf.drag{border-color:#e7e7e7!important;background:#151515!important}
-#dropCf:before{content:"";position:absolute;inset:8px;border:1px solid #222;border-radius:12px;pointer-events:none;z-index:0}
-#dropCf .upload-icon,#dropCf .upload-title,#dropCf .upload-sub,#dropCf .upload-browse,#dropCf .file-name{position:relative;z-index:1;pointer-events:none}
-#dropCf .upload-icon{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 2px;border:1px solid #373737;border-radius:16px;background:#1b1b1b;color:#eee;font-size:28px}
-#dropCf .upload-title{font-size:15px;font-weight:750;letter-spacing:-.02em}
-#dropCf .upload-sub{font-size:12px;color:#8d8d8d}
-#dropCf .upload-browse{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin-top:4px;padding:11px 16px;border:1px solid #f0f0f0;border-radius:10px;background:#f0f0f0;color:#111;font-size:12px;font-weight:800;box-shadow:none}
-#dropCf .upload-browse span{font-size:15px;line-height:1}
-#dropCf .file-name{display:block;max-width:100%;overflow-wrap:anywhere;color:#b9b9b9;font-size:12px;line-height:1.5;min-height:18px}
-#dropCf input[type=file]{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;opacity:0!important;z-index:5!important;pointer-events:auto!important;margin:0!important;padding:0!important;border:0!important;border-radius:18px!important;cursor:pointer!important;background:transparent!important;font-size:1px!important}
-#dropCf input[type=file]::file-selector-button{opacity:0!important;width:1px!important;height:1px!important;padding:0!important;margin:0!important;border:0!important}
-#makeCards{min-height:52px;border-radius:12px;font-weight:800;position:relative;overflow:hidden}
-#makeCards:disabled{opacity:1;background:#e2e2e2;color:#111}
-#makeCards .button-loader:not(.hidden){display:inline-block}
-.generation-overlay{position:fixed!important;inset:0!important;z-index:2147483000!important;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.9)!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.generation-overlay.hidden{display:none!important}
-.generation-dialog{width:min(100%,430px);padding:28px 22px;background:#111;border:1px solid #333;border-radius:20px;text-align:center;box-shadow:0 25px 80px #000b}
-#cardLoading:not(.hidden){display:flex!important;min-height:180px;justify-content:center}
-#cardLoading .loading-track{width:100%}
-#cs{white-space:pre-wrap;line-height:1.7}
-#cs.error{padding:12px;border:1px solid #633;border-radius:10px;background:#211010;color:#ffd5d5}
-@media(max-width:600px){#dropCf{min-height:215px!important;padding:20px 13px!important;border-radius:15px!important}#dropCf .upload-browse{padding:10px 15px}}
-@media(prefers-reduced-motion:reduce){#makeCards:disabled:before,.generation-orbit,.generation-spark,.generation-progress span{animation:none!important}}
-</style>
