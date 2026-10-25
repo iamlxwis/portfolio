@@ -93,18 +93,26 @@ module.exports = async (req, res) => {
         result = { url, status: response.status, ok: response.ok, ms: Date.now() - started }; break;
       }
       case "ai_chat": {
-        if (req.method !== "POST") throw Object.assign(new Error("Use POST with JSON body { \"prompt\": \"...\" }."), { status: 405 });
+        if (req.method !== "POST") throw Object.assign(new Error("Use POST with JSON body { \"prompt\": \"...\" }."),
+          { status: 405 });
         const key = process.env.GEMINI_API_KEY;
         if (!key) throw Object.assign(new Error("Set GEMINI_API_KEY in Vercel Environment Variables."), { status: 503 });
         const prompt = required("prompt");
-        const body = JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] });
+
+        // Same request structure as the ai_chat command in the Telegram bot.
+        const body = JSON.stringify({
+          contents: [{ parts: [{ text: "Answer concisely.\\n\\n" + prompt }] }]
+        });
+
         let data;
         let lastError;
         for (const model of ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"]) {
           try {
-            const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + encodeURIComponent(key), {
-              method: "POST", headers: { "Content-Type": "application/json" }, body
-            });
+            const response = await fetch(
+              "https://generativelanguage.googleapis.com/v1beta/models/" + model +
+              ":generateContent?key=" + encodeURIComponent(key),
+              { method: "POST", headers: { "Content-Type": "application/json" }, body }
+            );
             const payload = await response.json().catch(() => ({}));
             if (!response.ok) {
               const message = payload.error?.message || "Gemini returned HTTP " + response.status;
@@ -121,8 +129,30 @@ module.exports = async (req, res) => {
             lastError = error;
           }
         }
-        if (!data) throw Object.assign(new Error("Gemini models are temporarily busy or unavailable. Please retry in a minute. " + (lastError?.message || "")), { status: 503 });
-        result = data.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || data; break;
+
+        if (!data) {
+          throw Object.assign(
+            new Error("Gemini models are temporarily busy or unavailable. Please retry in a minute. " +
+              (lastError?.message || "")),
+            { status: 503 }
+          );
+        }
+
+        // Read the same candidates/content/parts/text path used by the bot,
+        // but handle missing or blocked responses without crashing the API.
+        const answer = data.candidates?.[0]?.content?.parts
+          ?.map(part => part.text || "")
+          .join("")
+          .trim();
+        if (!answer) {
+          const reason = data.promptFeedback?.blockReason;
+          throw Object.assign(
+            new Error(reason ? "Gemini blocked this prompt: " + reason : "Gemini returned an empty answer. Please try again."),
+            { status: 502 }
+          );
+        }
+        result = answer;
+        break;
       }
       case "vision": {
         if (req.method !== "POST") throw Object.assign(new Error("Use POST with JSON body containing image as base64 or a data URL."), { status: 405 });
