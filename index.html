@@ -142,9 +142,6 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 .vinyl-player{position:absolute;left:0;bottom:88px;width:76px;height:76px;display:none}
 .vinyl-widget.is-open .vinyl-player{display:block}
 .vinyl-player iframe{position:absolute;width:1px;height:1px;opacity:.01;pointer-events:none;border:0}
-.vinyl-player-status{position:absolute;left:0;bottom:-25px;white-space:nowrap;padding:3px 7px;background:rgba(20,20,20,.94);border:1px solid #333;color:#aaa;font:10px/1.4 'JetBrains Mono',monospace}
-.vinyl-open-link{position:absolute;left:0;bottom:-48px;white-space:nowrap;color:#aaa;font-size:10px;text-decoration:underline;text-underline-offset:3px}
-.vinyl-open-link:hover{color:#fff}
 @keyframes vinyl-spin{to{transform:rotate(360deg)}}
 @media(max-width:600px){.vinyl-widget{left:14px;bottom:14px}.vinyl-toggle{width:66px;height:66px;flex-basis:66px}.vinyl-player{bottom:76px}}
 @media(prefers-reduced-motion:reduce){.vinyl-widget.is-playing .vinyl-disc{animation:none}}
@@ -188,11 +185,7 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 <button class="vinyl-toggle" id="vinyl-toggle" type="button" aria-label="Play music" aria-pressed="false">
 <span class="vinyl-disc" aria-hidden="true"><span class="vinyl-label"><img src="https://cdn-images.dzcdn.net/images/cover/0d571082af7c78114321031d7f84d331/1200x1200-000000-81-0-0.webp" alt=""></span></span>
 </button>
-<div class="vinyl-player" id="vinyl-player" aria-hidden="true">
-<div id="vinyl-embed"></div>
-<span class="vinyl-player-status" id="vinyl-player-status">tap to play</span>
-<a class="vinyl-open-link" href="https://music.youtube.com/watch?v=RaaccfAJiOo" target="_blank" rel="noopener noreferrer">Open in YouTube Music ↗</a>
-</div>
+<div class="vinyl-player" id="vinyl-player" aria-hidden="true"><div id="vinyl-embed"></div></div>
 </div>
 <script>
 (function(){
@@ -200,7 +193,6 @@ var widget=document.getElementById('vinyl-widget');
 var toggle=document.getElementById('vinyl-toggle');
 var playerBox=document.getElementById('vinyl-player');
 var embed=document.getElementById('vinyl-embed');
-var status=document.getElementById('vinyl-player-status');
 var videoId='RaaccfAJiOo';
 var iframe=null;
 var playing=false;
@@ -219,7 +211,6 @@ function play(){
  playerBox.setAttribute('aria-hidden','false');
  toggle.setAttribute('aria-pressed','true');
  toggle.setAttribute('aria-label','Pause music');
- status.textContent='playing';
  makePlayer();
  if(iframe&&iframe.contentWindow)iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'playVideo',args:[]}), '*');
  playing=true;
@@ -228,7 +219,6 @@ function pause(){
  widget.classList.remove('is-playing');
  toggle.setAttribute('aria-pressed','false');
  toggle.setAttribute('aria-label','Play music');
- status.textContent='paused';
  if(iframe&&iframe.contentWindow)iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'pauseVideo',args:[]}), '*');
  playing=false;
 }
