@@ -1,4 +1,4 @@
-const CACHE_NAME = "lxwis-student-v6";
+const CACHE_NAME = "lxwis-student-v7";
 
 self.addEventListener("install", event => {
   event.waitUntil(self.skipWaiting());
@@ -14,4 +14,5 @@ self.addEventListener("activate", event => {
   );
 });
 
-// No fetch handler: all requests use the network, with no stale app-shell cache.
+// No fetch handler: always let the browser request the latest deployed page.
+// API calls and uploaded lesson data are never cached by this worker.
