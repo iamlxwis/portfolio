@@ -10,11 +10,14 @@
 <meta property="og:description" content="I'm a student">
 <meta property="og:url" content="https://lxwis.site/">
 <link rel="icon" href="https://i.imgur.com/9jrzHF1_d.webp?maxwidth=64&fidelity=grand" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{color-scheme:dark;--bg:#111;--panel:#171717;--fg:#f2f2f2;--muted:#929292;--line:#333;--soft:#c7c7c7}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--fg);font:16px/1.65 Arial,Helvetica,sans-serif;min-height:100vh}
+body{background:var(--bg);color:var(--fg);font:16px/1.65 'Inter',Arial,Helvetica,sans-serif;min-height:100vh}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(to bottom,black,transparent 70%);z-index:-1}
 a{color:inherit;text-decoration:none}
 a:hover{color:#aaa}
@@ -25,7 +28,7 @@ header{display:flex;justify-content:space-between;align-items:center;padding:25p
 .header-note{font-size:.72rem;color:var(--muted)}
 .terminal-trigger{display:inline-flex;align-items:center;gap:10px;border:1px solid #484848;background:#181818;color:var(--fg);padding:9px 12px;font:inherit;font-size:.78rem;cursor:pointer;transition:background .2s,border-color .2s}
 .terminal-trigger:hover,.terminal-trigger:focus-visible{background:#222;border-color:#777;outline:none;color:#fff}
-.terminal-mark{font-family:monospace;color:#c8c8c8;animation:terminal-blink 1.2s steps(2,start) infinite}
+.terminal-mark{font-family:'JetBrains Mono',monospace;color:#c8c8c8;animation:terminal-blink 1.2s steps(2,start) infinite}
 .terminal-trigger kbd{font:inherit;font-size:.65rem;color:var(--muted);border:1px solid #444;padding:1px 5px}
 .hero{padding:105px 0 85px;border-bottom:1px solid var(--line);position:relative}
 .hero-meta{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.72rem;margin-bottom:25px}
@@ -37,10 +40,10 @@ h1{font-size:clamp(4rem,15vw,8.5rem);line-height:.85;letter-spacing:-.095em;font
 section.content-section{padding:58px 0;border-bottom:1px solid var(--line)}
 .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:23px}
 .section-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:500}
-.section-index{font-size:.72rem;color:#666;font-family:monospace}
+.section-index{font-size:.72rem;color:#666;font-family:'JetBrains Mono',monospace}
 .project{display:grid;grid-template-columns:52px 210px minmax(0,1fr);gap:24px;padding:24px 0;border-top:1px solid var(--line);align-items:start}
 .project:last-child{border-bottom:1px solid var(--line)}
-.project-number{font: .72rem/1.7 monospace;color:#666}
+.project-number{font: .72rem/1.7 'JetBrains Mono',monospace;color:#666}
 .project h3{font-size:1rem;font-weight:600;letter-spacing:-.02em}
 .project h3 a:hover{text-decoration:underline;text-decoration-color:#666;text-underline-offset:4px}
 .project p{font-size:.9rem;color:var(--muted);margin-top:2px;max-width:560px}
@@ -58,21 +61,21 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:25px 0 32px;f
 .terminal-overlay.open{display:flex}
 .terminal-window{width:min(100%,620px);max-height:76vh;display:flex;flex-direction:column;background:#111;border:1px solid #454545;box-shadow:0 24px 90px rgba(0,0,0,.6)}
 .terminal-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid #333;background:#171717}
-.terminal-title{font: .78rem monospace;color:#ddd}
+.terminal-title{font: .78rem 'JetBrains Mono',monospace;color:#ddd}
 .terminal-title span{color:#888}
-.terminal-close{border:1px solid #444;background:transparent;color:#aaa;padding:4px 8px;font: .72rem monospace;cursor:pointer}
+.terminal-close{border:1px solid #444;background:transparent;color:#aaa;padding:4px 8px;font: .72rem 'JetBrains Mono',monospace;cursor:pointer}
 .terminal-close:hover{color:#fff;border-color:#777}
-.terminal-output{padding:17px 16px;overflow:auto;min-height:210px;flex:1;color:#bdbdbd;font: .8rem/1.8 monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.terminal-output{padding:17px 16px;overflow:auto;min-height:210px;flex:1;color:#bdbdbd;font: .8rem/1.8 'JetBrains Mono',monospace;white-space:pre-wrap;overflow-wrap:anywhere}
 .terminal-line{margin-bottom:10px}
 .terminal-prompt{color:#f2f2f2}
 .terminal-command{color:#fff}
 .terminal-result a{color:#fff;text-decoration:underline;text-underline-offset:3px}
 .terminal-form{display:flex;align-items:center;gap:10px;padding:13px 15px;border-top:1px solid #333}
-.terminal-form label{font: .8rem monospace;color:#ddd;white-space:nowrap}
-.terminal-input{min-width:0;flex:1;border:0;outline:none;background:transparent;color:#fff;font:16px monospace;caret-color:#fff}
+.terminal-form label{font: .8rem 'JetBrains Mono',monospace;color:#ddd;white-space:nowrap}
+.terminal-input{min-width:0;flex:1;border:0;outline:none;background:transparent;color:#fff;font:16px 'JetBrains Mono',monospace;caret-color:#fff}
 .terminal-input::placeholder{color:#666}
 .terminal-hints{display:flex;flex-wrap:wrap;gap:7px;padding:0 15px 15px}
-.terminal-hint{border:1px solid #393939;background:transparent;color:#999;padding:5px 8px;font: .68rem monospace;cursor:pointer}
+.terminal-hint{border:1px solid #393939;background:transparent;color:#999;padding:5px 8px;font: .68rem 'JetBrains Mono',monospace;cursor:pointer}
 .terminal-hint:hover,.terminal-hint:focus-visible{border-color:#777;color:#fff;outline:none}
 @media(min-width:1200px){.hero{padding:132px 0 100px}.intro{font-size:1.2rem}.section-head{margin-bottom:30px}}
 @media(max-width:800px){.wrap{width:min(100% - 48px,760px)}.header-note{display:none}.project{grid-template-columns:30px minmax(0,1fr);gap:6px 14px}.project-number{grid-column:1;grid-row:1 / span 3}.project h3{grid-column:2}.project>div{grid-column:2}.project p{max-width:100%}}
