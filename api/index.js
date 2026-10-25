@@ -96,10 +96,32 @@ module.exports = async (req, res) => {
         if (req.method !== "POST") throw Object.assign(new Error("Use POST with JSON body { \"prompt\": \"...\" }."), { status: 405 });
         const key = process.env.GEMINI_API_KEY;
         if (!key) throw Object.assign(new Error("Set GEMINI_API_KEY in Vercel Environment Variables."), { status: 503 });
-        const data = await jsonFetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=" + encodeURIComponent(key), {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: required("prompt") }] }] })
-        });
+        const prompt = required("prompt");
+        const body = JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] });
+        let data;
+        let lastError;
+        for (const model of ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"]) {
+          try {
+            const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + encodeURIComponent(key), {
+              method: "POST", headers: { "Content-Type": "application/json" }, body
+            });
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) {
+              const message = payload.error?.message || "Gemini returned HTTP " + response.status;
+              if ([429, 500, 502, 503, 504].includes(response.status)) {
+                lastError = new Error(message);
+                continue;
+              }
+              throw Object.assign(new Error(message), { status: response.status });
+            }
+            data = payload;
+            break;
+          } catch (error) {
+            if (error.status) throw error;
+            lastError = error;
+          }
+        }
+        if (!data) throw Object.assign(new Error("Gemini models are temporarily busy or unavailable. Please retry in a minute. " + (lastError?.message || "")), { status: 503 });
         result = data.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || data; break;
       }
       case "vision": {
