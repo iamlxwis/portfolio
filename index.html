@@ -94,8 +94,10 @@ section.content-section{padding:40px 0}
 .project>div{grid-column:2;min-width:0}
 .project p{font-size:.86rem;line-height:1.6;overflow-wrap:anywhere}
 .project .type{font-size:.7rem;margin-top:7px}
-.small-links{flex-direction:column;gap:13px}
-.small-links a{border:0;padding:0;margin:0}
+.small-links{flex-direction:row;align-items:center;gap:0}
+.small-links a{border-right:1px solid #444;padding:0 12px;margin:0}
+.small-links a:first-child{padding-left:0}
+.small-links a:last-child{border-right:0;padding-right:0}
 .contact-list a{align-items:flex-start;gap:12px}
 .contact-list span{max-width:60%;text-align:right;overflow-wrap:anywhere}
 footer{flex-direction:row;justify-content:space-between;gap:12px;padding:22px 0 28px}
@@ -107,6 +109,18 @@ footer{flex-direction:row;justify-content:space-between;gap:12px;padding:22px 0 
 .terminal-hints{padding:0 16px 16px}
 .terminal-trigger kbd{display:none}
 }
+/* Subtle motion: hover, loading, depth, entrance, microinteractions, background, pointer */
+body:before{animation:grid-drift 28s linear infinite}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;background:radial-gradient(280px circle at var(--pointer-x,50%) var(--pointer-y,35%),rgba(255,255,255,.075),transparent 70%);transition:opacity .25s}
+@media(hover:hover) and (pointer:fine){body:after{opacity:1}.project{transition:transform .25s ease,border-color .25s ease}.project:hover{transform:translateX(4px)}.project h3 a{transition:color .2s ease}.terminal-trigger:hover,.terminal-hint:hover,.terminal-close:hover{transform:translateY(-1px)}}
+.hero h1{animation:rise-in .75s cubic-bezier(.2,.7,.2,1) both}
+.hero .intro{animation:rise-in .75s .1s cubic-bezier(.2,.7,.2,1) both}
+.content-section{animation:rise-in .65s both}
+.terminal-window{animation:terminal-in .22s ease-out both}
+.terminal-trigger:active,.terminal-hint:active{transform:scale(.98)}
+@keyframes rise-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes terminal-in{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes grid-drift{from{background-position:0 0,0 0}to{background-position:36px 36px,-36px 36px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -192,8 +206,7 @@ time:'Local time: '+new Intl.DateTimeFormat('en-PH',{dateStyle:'medium',timeStyl
 };
 if(command==='open libnav'){window.open('https://libnav.lxwis.site','_blank','noopener,noreferrer');addLine(raw,'Opening <a href="https://libnav.lxwis.site" target="_blank" rel="noopener noreferrer">LibNav</a>');return;}
 if(command==='open bot'){window.open('https://t.me/AllinOneTools_Bot','_blank','noopener,noreferrer');addLine(raw,'Opening <a href="https://t.me/AllinOneTools_Bot" target="_blank" rel="noopener noreferrer">AllinOneTools Bot</a>');return;}
-if(Object.prototype.hasOwnProperty.call(responses,command)){addLine(raw,safeText(responses[command]).replace(/
-/g,'<br>'));return;}
+if(Object.prototype.hasOwnProperty.call(responses,command)){addLine(raw,safeText(responses[command]).replace(/\\n/g,'<br>'));return;}
 addLine(raw,'Command not found: <span class="terminal-prompt">'+safeText(command)+'</span>. Type <span class="terminal-prompt">help</span> to see available commands.');
 }
 trigger.addEventListener('click',openTerminal);closeButton.addEventListener('click',closeTerminal);
