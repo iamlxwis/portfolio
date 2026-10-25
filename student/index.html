@@ -92,6 +92,17 @@ footer{margin-top:18px}
 </section>
 <section class="panel" id="saved"><div class="section-top"><div><h2>My decks</h2><p class="muted">Your saved flashcards are stored in this browser.</p></div><span class="pill" id="deckCount">0 decks</span></div><div id="savedDecks" class="deck-list"><div class="empty-state">No saved decks yet.</div></div><div class="field"><label>Import a deck backup (.json)</label><input id="importDeck" type="file" accept=".json,application/json"></div><p id="reviewStats" class="muted" style="font-size:12px"></p></section>
 <footer>© 2026 lxwis <span style="float:right">Study smarter.</span><p class="muted">Your saved decks stay in this browser. Export a deck to back it up or move it to another device.</p></footer></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="generation-overlay hidden" id="generationOverlay" role="dialog" aria-modal="true" aria-labelledby="generationHeading" aria-describedby="generationMessage">
+  <div class="generation-dialog">
+    <div class="generation-mark"><span class="generation-orbit"></span><span class="generation-spark">✳</span></div>
+    <div class="generation-kicker">LXWIS STUDY AI</div>
+    <h2 id="generationHeading">Making your study deck</h2>
+    <p id="generationMessage">Getting your lesson ready...</p>
+    <div class="generation-progress"><span></span></div>
+    <div class="generation-steps"><span class="generation-step active" id="genStep1"><i>1</i> Read lesson</span><span class="generation-step" id="genStep2"><i>2</i> Build cards</span><span class="generation-step" id="genStep3"><i>3</i> Finish deck</span></div>
+    <p class="generation-note">Keep this page open while your cards are being generated.</p>
+  </div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script><script>
 (()=>{const $=x=>document.getElementById(x);function activateTab(name){document.querySelectorAll('.tab[data-tab]').forEach(b=>{const active=b.dataset.tab===name;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))});document.querySelectorAll('.panel[id]').forEach(p=>p.classList.toggle('active',p.id===name));}
 document.querySelectorAll('.tab[data-tab]').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));if(window.pdfjsLib)pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -112,7 +123,7 @@ function reviewSummary(){let r=getReviews(),known=0,learning=0;Object.keys(r).fo
 function markCard(state){if(!cards.length)return;let r=getReviews();r[currentDeckTitle+'::'+cards[index].question]=state;storeReviews(r);toast(state==='known'?'Marked as known':'Marked for another review');if(state==='known'&&cards.length>1){index=(index+1)%cards.length;flipped=false;show()}else $('reviewStats').textContent=reviewSummary()}
 function renderDecks(){let decks=getDecks();$('deckCount').textContent=decks.length+' deck'+(decks.length===1?'':'s');$('savedDecks').innerHTML='';if(!decks.length){$('savedDecks').innerHTML='<div class="empty-state">No saved decks yet. Generate cards and save your first deck.</div>';return}decks.forEach(deck=>{let row=document.createElement('div');row.className='deck-item';let info=document.createElement('div'),title=document.createElement('strong'),meta=document.createElement('small');title.textContent=deck.title;meta.textContent=(deck.cards||[]).length+' cards · '+new Date(deck.savedAt).toLocaleDateString();info.append(title,meta);let actions=document.createElement('div');actions.className='action-row';let open=document.createElement('button');open.textContent='Open deck';open.onclick=()=>{cards=deck.cards||[];index=0;flipped=false;currentDeckTitle=deck.title;show();toast('Deck opened');activateTab('cards')};let del=document.createElement('button');del.textContent='Delete';del.className='secondary';del.onclick=()=>{if(confirm('Delete “'+deck.title+'”?')){storeDecks(getDecks().filter(d=>d.id!==deck.id));renderDecks();toast('Deck deleted')}};actions.append(open,del);row.append(info,actions);$('savedDecks').appendChild(row)})}
 function downloadJson(data,name){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name.replace(/[^a-z0-9-_]+/gi,'-').toLowerCase()+'.json';a.click();URL.revokeObjectURL(url)}
-$('makeCards').onclick=async()=>{let b=$('makeCards');setBusy(b,true);$('cs').textContent='';$('cardLoading').classList.remove('hidden');$('loadingTitle').textContent='Reading your lesson';$('loadingText').textContent='Finding key ideas, definitions, and important details.';try{let t=await source('cf','ct','cs');currentDeckTitle=($('cf').files[0]?.name||'Lesson flashcards').replace(/\.(pdf|docx|txt)$/i,'');$('loadingTitle').textContent='Building your flashcards';$('loadingText').textContent='Organizing the lesson into clear question and answer cards.';let d=await ai('You are a careful study assistant. Create a comprehensive flashcard deck based ONLY on the lesson below. Decide the number of cards yourself based on how much meaningful material the lesson contains. Do not ask the user how many cards they want. Cover important topics, definitions, key terms, examples, processes, comparisons, and details. Avoid duplicate or vague cards. Keep questions clear and answers useful for studying. Use the word "and" instead of the contraction "n’t" or "n\'t"; avoid contractions that use apostrophes where possible. Return only valid JSON in this shape: {"title":"short useful deck title","cards":[{"question":"...","answer":"..."}]}. No markdown fences.\nLESSON:\n'+t);cards=(d.cards||[]).filter(x=>x&&x.question&&x.answer).map(x=>({question:cleanLanguage(x.question),answer:cleanLanguage(x.answer)}));if(!cards.length)throw Error('No cards were returned. Try a shorter lesson or try again.');if(d.title)currentDeckTitle=String(d.title).replace(/\bwon't\b/gi,'will not').replace(/\bdon't\b/gi,'do not').replace(/\bcan't\b/gi,'cannot');index=0;flipped=false;show();$('cs').textContent='Created '+cards.length+' flashcards. You can review them or make a quiz from this deck.';toast('Flashcards ready');$('flashcardPanel').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){showError(e.message,'cs');$('sourceCard').classList.remove('error-shake');void $('sourceCard').offsetWidth;$('sourceCard').classList.add('error-shake');setTimeout(()=>$('sourceCard').classList.remove('error-shake'),500)}finally{$('cardLoading').classList.add('hidden');setBusy(b,false)}};
+$('makeCards').onclick=async()=>{let b=$('makeCards');setBusy(b,true);$('cs').textContent='';$('cardLoading').classList.remove('hidden');$('loadingTitle').textContent='Reading your lesson';$('loadingText').textContent='Finding key ideas, definitions, and important details.';window.lxwisGeneration?.show('Reading your lesson','Checking the file and extracting the lesson text...',0);try{let t=await source('cf','ct','cs');currentDeckTitle=($('cf').files[0]?.name||'Lesson flashcards').replace(/\.(pdf|docx|txt)$/i,'');$('loadingTitle').textContent='Building your flashcards';$('loadingText').textContent='Organizing the lesson into clear question and answer cards.';window.lxwisGeneration?.show('Building your flashcards','Finding key ideas and turning them into useful question-and-answer cards...',1);let d=await ai('You are a careful study assistant. Create a comprehensive flashcard deck based ONLY on the lesson below. Decide the number of cards yourself based on how much meaningful material the lesson contains. Do not ask the user how many cards they want. Cover important topics, definitions, key terms, examples, processes, comparisons, and details. Avoid duplicate or vague cards. Keep questions clear and answers useful for studying. Use the word "and" instead of the contraction "n’t" or "n\'t"; avoid contractions that use apostrophes where possible. Return only valid JSON in this shape: {"title":"short useful deck title","cards":[{"question":"...","answer":"..."}]}. No markdown fences.\nLESSON:\n'+t);cards=(d.cards||[]).filter(x=>x&&x.question&&x.answer).map(x=>({question:cleanLanguage(x.question),answer:cleanLanguage(x.answer)}));if(!cards.length)throw Error('No cards were returned. Try a shorter lesson or try again.');if(d.title)currentDeckTitle=String(d.title).replace(/\bwon't\b/gi,'will not').replace(/\bdon't\b/gi,'do not').replace(/\bcan't\b/gi,'cannot');index=0;flipped=false;show();window.lxwisGeneration?.show('Your deck is ready','Created '+cards.length+' flashcards. Opening your study deck...',2);$('cs').textContent='Created '+cards.length+' flashcards. You can review them or make a quiz from this deck.';toast('Flashcards ready');$('flashcardPanel').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){showError(e.message,'cs');$('sourceCard').classList.remove('error-shake');void $('sourceCard').offsetWidth;$('sourceCard').classList.add('error-shake');setTimeout(()=>$('sourceCard').classList.remove('error-shake'),500)}finally{setTimeout(()=>window.lxwisGeneration?.hide(),350);$('cardLoading').classList.add('hidden');setBusy(b,false)}};
 $('flip').onclick=$('face').onclick=()=>{if(!cards.length)return;flipped=!flipped;show()};
 $('face').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(cards.length){flipped=!flipped;show()}}};
 $('next').onclick=()=>{if(!cards.length)return;index=(index+1)%cards.length;flipped=false;show()};
@@ -132,7 +143,7 @@ $('cf').addEventListener('change',()=>{$('cfName').textContent=$('cf').files[0]?
 const zone=$('dropCf');['dragenter','dragover'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.add('drag')}));['dragleave','drop'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.remove('drag')}));zone.addEventListener('drop',e=>{const file=e.dataTransfer.files[0];if(file){const dt=new DataTransfer();dt.items.add(file);$('cf').files=dt.files;$('cfName').textContent=file.name}});
 renderDecks();$('reviewStats').textContent=reviewSummary();
 
-try{if('serviceWorker' in navigator)navigator.serviceWorker.register('/student/sw.js?v=3').catch(()=>{})}catch(e){}
+try{if('serviceWorker' in navigator)navigator.serviceWorker.register('/student/sw.js?v=4').catch(()=>{})}catch(e){}
 ;
 </script></body></html>
 <style>
@@ -189,5 +200,100 @@ try{if('serviceWorker' in navigator)navigator.serviceWorker.register('/student/s
   document.querySelectorAll('.tab[data-tab]').forEach(b=>{const on=b===btn;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on));});
   document.querySelectorAll('.panel[id]').forEach(panel=>panel.classList.toggle('active',panel.id===target));
  }));
+})();
+</script>
+
+<style>
+/* Modern study dashboard refresh */
+:root{color-scheme:dark}
+body{background:#090909;color:#f5f5f5}
+.wrap{max-width:1080px;width:min(100% - 36px,1080px)}
+header{border-bottom-color:#252525;padding:18px 0}
+header>a:first-child{font-size:18px;letter-spacing:-.04em}
+header>a:last-child{font-size:13px}
+.hero{padding:58px 0 38px}
+.hero>div:first-child{color:#a3a3a3;font-weight:700}
+.hero h1{font-size:clamp(46px,9vw,84px);letter-spacing:-.085em;margin:14px 0 18px}
+.hero p{font-size:16px;max-width:520px;line-height:1.8}
+.tabs{border:1px solid #262626;background:#101010!important;border-radius:14px;padding:5px;margin-bottom:20px}
+.tab{padding:12px 16px;font-size:13px}
+.panel{padding:22px 0 40px}
+.workspace-head h2{font-size:clamp(27px,4vw,38px);line-height:1.15}
+.workspace-head p{line-height:1.8;color:#a3a3a3}
+.workspace-grid{gap:20px;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)}
+.card{background:#101010;border-color:#272727;border-radius:18px;padding:24px;box-shadow:none}
+.card h3{font-size:16px;letter-spacing:-.025em}
+#sourceCard h3{font-size:18px;margin:0 0 20px}
+.field{gap:9px;margin:18px 0}
+.field>label:first-child{font-size:13px;color:#c4c4c4;font-weight:600}
+#dropCf{background:#0c0c0c!important;border:1px dashed #454545;border-radius:14px;min-height:190px;padding:20px;gap:12px}
+#dropCf .upload-icon{width:46px;height:46px;border-radius:14px;background:#181818;border-color:#383838}
+#dropCf .upload-title{font-size:15px}
+#dropCf .upload-sub{font-size:12px}
+#dropCf input[type=file]{max-width:100%;font-size:12px}
+textarea{min-height:150px!important;padding:14px!important;line-height:1.7!important;border-color:#333!important;background:#0b0b0b!important}
+.primary-action{min-height:50px;font-size:14px;border-radius:11px;background:#f3f3f3;color:#111;border-color:#f3f3f3}
+#flashcardPanel{min-width:0;min-height:320px}
+#flashcardPanel>.section-top{margin-bottom:20px}
+#flashcardPanel .section-top h3{font-size:17px}
+#flashcardPanel .pill{white-space:nowrap}
+#flashcardPanel .empty-state{min-height:210px;display:flex;align-items:center;justify-content:center;padding:28px;border:1px dashed #333;border-radius:14px;line-height:1.9;background:#0c0c0c}
+#flashcardPanel .face{min-height:260px;border-radius:14px;background:#0b0b0b!important;border-color:#303030;padding:32px 22px}
+#flashcardPanel .action-row{gap:8px}
+#flashcardPanel .action-row button{border-radius:10px;min-height:44px}
+#quizWorkspace{margin-top:20px}
+#saved{min-height:58vh;padding-bottom:56px}
+#saved .section-top{margin-bottom:24px}
+#saved .section-top h2{font-size:30px}
+#saved .deck-item{background:#0d0d0d;border-color:#292929;border-radius:12px;padding:16px}
+#saved .field{margin-top:28px}
+footer{border-top-color:#262626;padding:26px 0 36px;line-height:1.9;color:#888}
+.generation-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:1;transition:opacity .2s ease}
+.generation-overlay.hidden{display:none!important}
+.generation-dialog{width:min(100%,430px);padding:30px 25px 24px;background:#111;border:1px solid #303030;border-radius:22px;text-align:center;animation:genDialogIn .28s ease both}
+.generation-mark{position:relative;width:68px;height:68px;margin:0 auto 18px;border:1px solid #333;border-radius:22px;display:grid;place-items:center;background:#171717;overflow:hidden}
+.generation-orbit{position:absolute;inset:8px;border:2px solid transparent;border-top-color:#f5f5f5;border-right-color:#777;border-radius:50%;animation:spin .9s linear infinite}
+.generation-spark{font-size:25px;animation:sparkPulse 1.3s ease-in-out infinite}
+.generation-kicker{font-size:10px;font-weight:800;letter-spacing:.2em;color:#888}
+.generation-dialog h2{font-size:25px;letter-spacing:-.05em;line-height:1.2;margin:9px 0}
+.generation-dialog>p{color:#aaa;font-size:13px;line-height:1.7}
+.generation-progress{height:4px;overflow:hidden;border-radius:9px;background:#292929;margin:22px 0 18px}
+.generation-progress span{display:block;width:35%;height:100%;background:#f2f2f2;border-radius:9px;animation:genProgress 1.2s ease-in-out infinite alternate}
+.generation-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;text-align:left}
+.generation-step{font-size:10px;color:#666;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.generation-step i{font-style:normal;display:grid;place-items:center;width:20px;height:20px;border:1px solid #383838;border-radius:50%;font-size:10px}
+.generation-step.active{color:#eee}
+.generation-step.active i{background:#eee;color:#111;border-color:#eee}
+.generation-step.done{color:#aaa}
+.generation-step.done i{border-color:#888;color:#eee}
+.generation-note{margin:20px 0 0!important;font-size:11px!important;color:#777!important}
+@keyframes genProgress{from{transform:translateX(-30%)}to{transform:translateX(230%)}}
+@keyframes sparkPulse{0%,100%{transform:scale(.9) rotate(0);opacity:.7}50%{transform:scale(1.08) rotate(45deg);opacity:1}}
+@keyframes genDialogIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:760px){
+ .wrap{width:calc(100% - 28px)}
+ .hero{padding:42px 0 28px}
+ .workspace-grid{grid-template-columns:minmax(0,1fr);gap:16px}
+ #sourceCard{padding:20px}
+ #flashcardPanel{padding:22px 18px!important;min-height:330px!important}
+ #flashcardPanel .empty-state{min-height:180px!important;padding:28px 20px!important}
+ #flashcardPanel .face{min-height:240px}
+ .generation-dialog{padding:27px 19px 22px;border-radius:18px}
+ .generation-dialog h2{font-size:23px}
+ .generation-step{font-size:9px;gap:4px}
+ .generation-step i{width:18px;height:18px}
+}
+@media(prefers-reduced-motion:reduce){.generation-orbit,.generation-spark,.generation-progress span,.generation-dialog{animation:none!important}}
+</style>
+<script>
+(function(){
+ const overlay=document.getElementById('generationOverlay');
+ const heading=document.getElementById('generationHeading');
+ const message=document.getElementById('generationMessage');
+ const steps=[document.getElementById('genStep1'),document.getElementById('genStep2'),document.getElementById('genStep3')];
+ window.lxwisGeneration={
+  show:function(title,text,stage){if(!overlay)return;heading.textContent=title||'Making your study deck';message.textContent=text||'Working on your lesson...';steps.forEach((step,i)=>{step.classList.toggle('active',i===stage);step.classList.toggle('done',i<stage);step.querySelector('i').textContent=i<stage?'✓':String(i+1)});overlay.classList.remove('hidden');document.body.style.overflow='hidden'},
+  hide:function(){if(overlay)overlay.classList.add('hidden');document.body.style.overflow=''}
+ };
 })();
 </script>
