@@ -60,7 +60,7 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:25px 0 32px;b
 var list=document.getElementById('entries');
 var updated=document.getElementById('updated');
 var refresh=document.getElementById('refresh');
-var endpoint='https://api.github.com/repos/iamlxwis/portfolio/commits?per_page=30';
+var endpoint='/api/log';
 function make(tag,className,text){var el=document.createElement(tag);if(className)el.className=className;if(text!==undefined)el.textContent=text;return el;}
 function showState(message){list.replaceChildren(make('li','state',message));}
 function formatDate(value){var date=new Date(value);if(Number.isNaN(date.getTime()))return 'Date unavailable';return new Intl.DateTimeFormat('en',{year:'numeric',month:'short',day:'2-digit',timeZone:'UTC'}).format(date);}
