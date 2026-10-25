@@ -74,7 +74,9 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:25px 0 32px;f
 .terminal-hints{display:flex;flex-wrap:wrap;gap:7px;padding:0 15px 15px}
 .terminal-hint{border:1px solid #393939;background:transparent;color:#999;padding:5px 8px;font: .68rem monospace;cursor:pointer}
 .terminal-hint:hover,.terminal-hint:focus-visible{border-color:#777;color:#fff;outline:none}
-@media(min-width:1200px){.hero{padding:132px 0 100px}.intro{font-size:1.2rem}.section-head{margin-bottom:30px}}\n@media(max-width:800px){.wrap{width:min(100% - 48px,760px)}.header-note{display:none}.project{grid-template-columns:30px minmax(0,1fr);gap:6px 14px}.project-number{grid-column:1;grid-row:1 / span 3}.project h3{grid-column:2}.project>div{grid-column:2}.project p{max-width:100%}}\n@media(max-width:600px){.wrap{width:min(100% - 32px,760px)}.header-note{display:none}.hero{padding:78px 0 60px}.hero-foot{align-items:flex-start;flex-direction:column;gap:8px;margin-top:38px}.project{grid-template-columns:26px 1fr;gap:6px 12px}.project>div{grid-column:2}.project h3{grid-column:2}.project-number{grid-row:1 / span 2}.small-links{flex-direction:column;gap:13px}.small-links a{border:0;padding:0;margin:0}footer{flex-direction:column;gap:4px}.terminal-overlay{padding:0}.terminal-window{height:100%;max-height:100%;width:100%;border:0}.terminal-output{min-height:0}.terminal-trigger kbd{display:none}}
+@media(min-width:1200px){.hero{padding:132px 0 100px}.intro{font-size:1.2rem}.section-head{margin-bottom:30px}}
+@media(max-width:800px){.wrap{width:min(100% - 48px,760px)}.header-note{display:none}.project{grid-template-columns:30px minmax(0,1fr);gap:6px 14px}.project-number{grid-column:1;grid-row:1 / span 3}.project h3{grid-column:2}.project>div{grid-column:2}.project p{max-width:100%}}
+@media(max-width:600px){.wrap{width:min(100% - 32px,760px)}.header-note{display:none}.hero{padding:78px 0 60px}.hero-foot{align-items:flex-start;flex-direction:column;gap:8px;margin-top:38px}.project{grid-template-columns:26px 1fr;gap:6px 12px}.project>div{grid-column:2}.project h3{grid-column:2}.project-number{grid-row:1 / span 2}.small-links{flex-direction:column;gap:13px}.small-links a{border:0;padding:0;margin:0}footer{flex-direction:column;gap:4px}.terminal-overlay{padding:0}.terminal-window{height:100%;max-height:100%;width:100%;border:0}.terminal-output{min-height:0}.terminal-trigger kbd{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -129,16 +131,39 @@ function addLine(command,result){var line=document.createElement('div');line.cla
 function safeText(value){return value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function runCommand(raw){var command=raw.trim().toLowerCase();if(!command)return;history.push(raw.trim());historyIndex=history.length;input.value='';if(command==='clear'){output.innerHTML='';return;}if(command==='home'){closeTerminal();window.scrollTo({top:0,behavior:'smooth'});return;}
 var responses={
-help:'Available commands:\n  about       a little about me\n  projects    view selected work\n  skills      tools I use\n  contact     social links\n  time        current local time\n  open libnav  open the LibNav project\n  open bot     open the Telegram bot\n  home        close terminal and go to the top\n  clear       clear terminal output',
+help:'Available commands:
+  about       a little about me
+  projects    view selected work
+  skills      tools I use
+  contact     social links
+  time        current local time
+  open libnav  open the LibNav project
+  open bot     open the Telegram bot
+  home        close terminal and go to the top
+  clear       clear terminal output',
 about:'I\'m a student',
-projects:'Selected work:\n  LibNav             library website\n  lxwis.site         personal website\n  AllinOneTools_Bot  Telegram utility bot\n  lxwis Bot          Messenger bot in progress\n\nTry “open libnav” or “open bot”.',
-skills:'Tools I use:\n  HTML / CSS / JavaScript\n  Node.js\n  Firebase\n  Git and GitHub\n  Vercel',
-contact:'GitHub   github.com/iamlxwis\nFacebook facebook.com/iamlxwis\nTelegram t.me/iamlxwis',
+projects:'Selected work:
+  LibNav             library website
+  lxwis.site         personal website
+  AllinOneTools_Bot  Telegram utility bot
+  lxwis Bot          Messenger bot in progress
+
+Try “open libnav” or “open bot”.',
+skills:'Tools I use:
+  HTML / CSS / JavaScript
+  Node.js
+  Firebase
+  Git and GitHub
+  Vercel',
+contact:'GitHub   github.com/iamlxwis
+Facebook facebook.com/iamlxwis
+Telegram t.me/iamlxwis',
 time:'General Santos local time: '+new Intl.DateTimeFormat('en-PH',{dateStyle:'medium',timeStyle:'medium',timeZone:'Asia/Manila'}).format(new Date())
 };
 if(command==='open libnav'){window.open('https://libnav.lxwis.site','_blank','noopener,noreferrer');addLine(raw,'Opening <a href="https://libnav.lxwis.site" target="_blank" rel="noopener noreferrer">LibNav</a>');return;}
 if(command==='open bot'){window.open('https://t.me/AllinOneTools_Bot','_blank','noopener,noreferrer');addLine(raw,'Opening <a href="https://t.me/AllinOneTools_Bot" target="_blank" rel="noopener noreferrer">AllinOneTools Bot</a>');return;}
-if(Object.prototype.hasOwnProperty.call(responses,command)){addLine(raw,safeText(responses[command]).replace(/\n/g,'<br>'));return;}
+if(Object.prototype.hasOwnProperty.call(responses,command)){addLine(raw,safeText(responses[command]).replace(/
+/g,'<br>'));return;}
 addLine(raw,'Command not found: <span class="terminal-prompt">'+safeText(command)+'</span>. Type <span class="terminal-prompt">help</span> to see available commands.');
 }
 trigger.addEventListener('click',openTerminal);closeButton.addEventListener('click',closeTerminal);
