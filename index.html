@@ -129,6 +129,12 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 @keyframes terminal-in{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes grid-drift{from{background-position:0 0,0 0}to{background-position:36px 36px,-36px 36px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+
+.now-playing{max-width:560px}
+.now-playing-frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line);background:#171717}
+.now-playing-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.now-playing-link{display:inline-block;margin-top:12px;font-size:.78rem;color:var(--muted);text-decoration:underline;text-decoration-color:#555;text-underline-offset:4px}
+.now-playing-link:hover{color:var(--fg)}
 </style>
 </head>
 <body>
@@ -141,6 +147,16 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 <section class="hero">
 <h1>lxwis</h1>
 <p class="intro">I'm a student</p>
+</section>
+
+<section class="content-section" aria-labelledby="now-playing-heading">
+<div class="section-head"><h2 class="section-title" id="now-playing-heading">Now playing</h2><span class="section-index">ON YOUTUBE</span></div>
+<div class="now-playing">
+<div class="now-playing-frame">
+<iframe src="https://www.youtube-nocookie.com/embed/RaaccfAJiOo" title="Now playing on YouTube" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+<a class="now-playing-link" href="https://music.youtube.com/watch?v=RaaccfAJiOo" target="_blank" rel="noopener noreferrer">Open in YouTube Music ↗</a>
+</div>
 </section>
 <section class="content-section" id="work">
 <div class="section-head"><h2 class="section-title">Selected work</h2><span class="section-index">01 — 04</span></div>
