@@ -18,14 +18,14 @@ body{background:var(--bg);color:var(--fg);font:16px/1.65 Arial,Helvetica,sans-se
 body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(to bottom,black,transparent 70%);z-index:-1}
 a{color:inherit;text-decoration:none}
 a:hover{color:#aaa}
-.wrap{width:min(100% - 80px,1080px);margin:0 auto}
+.wrap{width:min(100% - 80px,1080px);margin:0 auto;position:relative;z-index:1}
 header{display:flex;justify-content:space-between;align-items:center;padding:25px 0;border-bottom:1px solid var(--line)}
 .logo{font-size:1rem;font-weight:700;letter-spacing:-.04em}
 .header-side{display:flex;align-items:center;gap:16px}
 .header-note{font-size:.72rem;color:var(--muted)}
 .terminal-trigger{display:inline-flex;align-items:center;gap:10px;border:1px solid #484848;background:#181818;color:var(--fg);padding:9px 12px;font:inherit;font-size:.78rem;cursor:pointer;transition:background .2s,border-color .2s}
 .terminal-trigger:hover,.terminal-trigger:focus-visible{background:#222;border-color:#777;outline:none;color:#fff}
-.terminal-mark{font-family:monospace;color:#c8c8c8}
+.terminal-mark{font-family:monospace;color:#c8c8c8;animation:terminal-blink 1.2s steps(2,start) infinite}
 .terminal-trigger kbd{font:inherit;font-size:.65rem;color:var(--muted);border:1px solid #444;padding:1px 5px}
 .hero{padding:105px 0 85px;border-bottom:1px solid var(--line);position:relative}
 .hero-meta{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.72rem;margin-bottom:25px}
@@ -111,14 +111,14 @@ footer{flex-direction:row;justify-content:space-between;gap:12px;padding:22px 0 
 }
 /* Subtle motion: hover, loading, depth, entrance, microinteractions, background, pointer */
 body:before{animation:grid-drift 28s linear infinite}
-body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;background:radial-gradient(280px circle at var(--pointer-x,50%) var(--pointer-y,35%),rgba(255,255,255,.075),transparent 70%);transition:opacity .25s}
-@media(hover:hover) and (pointer:fine){body:after{opacity:1}.project{transition:transform .25s ease,border-color .25s ease}.project:hover{transform:translateX(4px)}.project h3 a{transition:color .2s ease}.terminal-trigger:hover,.terminal-hint:hover,.terminal-close:hover{transform:translateY(-1px)}}
+body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;background:radial-gradient(280px circle at var(--pointer-x,50%) var(--pointer-y,35%),rgba(255,255,255,.075),transparent 70%);transition:opacity .25s}
+@media(hover:hover) and (pointer:fine){body:after{opacity:1}.project{transition:transform .25s ease,border-color .25s ease}.project:hover{transform:perspective(900px) rotateY(-1deg) translateX(4px)}.project h3 a{transition:color .2s ease}.terminal-trigger:hover,.terminal-hint:hover,.terminal-close:hover{transform:translateY(-1px)}}
 .hero h1{animation:rise-in .75s cubic-bezier(.2,.7,.2,1) both}
 .hero .intro{animation:rise-in .75s .1s cubic-bezier(.2,.7,.2,1) both}
 .content-section{animation:rise-in .65s both}
 .terminal-window{animation:terminal-in .22s ease-out both}
 .terminal-trigger:active,.terminal-hint:active{transform:scale(.98)}
-@keyframes rise-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes terminal-blink{to{opacity:.35}}\n@keyframes rise-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes terminal-in{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes grid-drift{from{background-position:0 0,0 0}to{background-position:36px 36px,-36px 36px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
