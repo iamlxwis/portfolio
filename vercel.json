@@ -1,6 +1,16 @@
 {
   "rewrites": [
-    { "source": "/meow", "destination": "/meow/index.html" },
-    { "source": "/arf", "destination": "/arf/index.html" }
+    {
+      "source": "/log",
+      "destination": "/log/index.html"
+    },
+    {
+      "source": "/meow",
+      "destination": "/meow/index.html"
+    },
+    {
+      "source": "/arf",
+      "destination": "/arf/index.html"
+    }
   ]
 }
