@@ -86,10 +86,8 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:25px 0 32px;f
 </header>
 <main>
 <section class="hero">
-<p class="hero-meta">General Santos City, Philippines</p>
 <h1>lxwis</h1>
 <p class="intro">I'm a student</p>
-<div class="hero-foot"><span>Building small things on the internet.</span><a href="#work">Browse selected work</a></div>
 </section>
 <section class="content-section" id="work">
 <div class="section-head"><h2 class="section-title">Selected work</h2><span class="section-index">01 — 04</span></div>
@@ -100,7 +98,7 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:25px 0 32px;f
 </section>
 <section class="content-section">
 <div class="section-head"><h2 class="section-title">Other things</h2><span class="section-index">SIDE PROJECTS</span></div>
-<div class="small-links"><a href="/meow">Meow — cat photos</a><a href="/arf">Arf — dog photos</a></div>
+<div class="small-links"><a href="/meow">Meow</a><a href="/arf">Arf</a></div>
 </section>
 <section class="content-section">
 <div class="section-head"><h2 class="section-title">Contact</h2><span class="section-index">SAY HELLO</span></div>
@@ -111,7 +109,7 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:25px 0 32px;f
 </ul>
 </section>
 </main>
-<footer><span>© 2026 lxwis</span><span>Made by me, in General Santos.</span></footer>
+<footer><span>© 2026 lxwis</span></footer>
 </div>
 <div class="terminal-overlay" id="terminal-modal" aria-hidden="true">
 <section class="terminal-window" role="dialog" aria-modal="true" aria-labelledby="terminal-heading">
@@ -132,7 +130,7 @@ function safeText(value){return value.replace(/&/g,'&amp;').replace(/</g,'&lt;')
 function runCommand(raw){var command=raw.trim().toLowerCase();if(!command)return;history.push(raw.trim());historyIndex=history.length;input.value='';if(command==='clear'){output.innerHTML='';return;}if(command==='home'){closeTerminal();window.scrollTo({top:0,behavior:'smooth'});return;}
 var responses={
 help:'Available commands:\n  about       a little about me\n  projects    view selected work\n  skills      tools I use\n  contact     social links\n  time        current local time\n  open libnav  open the LibNav project\n  open bot     open the Telegram bot\n  home        close terminal and go to the top\n  clear       clear terminal output',
-about:'I\'m a student based in General Santos City. I make websites, bots, and small tools while learning how things work.',
+about:'I\'m a student',
 projects:'Selected work:\n  LibNav             library website\n  lxwis.site         personal website\n  AllinOneTools_Bot  Telegram utility bot\n  lxwis Bot          Messenger bot in progress\n\nTry “open libnav” or “open bot”.',
 skills:'Tools I use:\n  HTML / CSS / JavaScript\n  Node.js\n  Firebase\n  Git and GitHub\n  Vercel',
 contact:'GitHub   github.com/iamlxwis\nFacebook facebook.com/iamlxwis\nTelegram t.me/iamlxwis',
