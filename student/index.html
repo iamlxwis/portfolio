@@ -50,6 +50,10 @@ button{border-radius:9px}
 #learnAgain{background:#171717;color:#eee;border-color:#393939}
 
 #downloadDeck{background:#171717;color:#eee;border-color:#393939}
+#deckJson{background:#111;border-color:#383838;color:#ddd;padding:12px}
+#deckJson::file-selector-button{border:0;border-radius:7px;padding:9px 12px;margin-right:9px;background:#eee;color:#111;font-weight:700;cursor:pointer}
+#sourceCard .field .hint{color:#999;font-size:12px;line-height:1.6}
+
 .status.error,.field-error{color:#ffb4b4}
 .error-shake{animation:errorShake .38s ease;border-color:#a64a4a!important}
 @keyframes errorShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
@@ -294,6 +298,11 @@ footer{border-top-color:#262626;padding:26px 0 36px;line-height:1.9;color:#888}
       <div class="field"><label for="cf">Upload a lesson</label><div class="upload-zone" id="dropCf"><span class="upload-icon" aria-hidden="true">↑</span><span class="upload-title">Drop your lesson here</span><span class="upload-sub">PDF, DOCX, or TXT · tap to browse</span><span class="upload-browse" aria-hidden="true">Browse files <span>↗</span></span><input id="cf" type="file" accept=".pdf,.docx,.txt" aria-label="Choose a lesson file"><span class="file-name" id="cfName">No file selected</span></div></div>
       <div class="field"><label>Or paste your notes</label><textarea id="ct" placeholder="Paste your lesson here..."></textarea></div>
       <button id="makeCards" class="primary-action"><span class="button-label">Generate flashcards</span><span class="button-loader hidden" aria-hidden="true"></span></button>
+      <div class="field">
+        <label for="deckJson">Already have a flashcard deck?</label>
+        <input id="deckJson" type="file" accept=".json,application/json" aria-label="Upload an existing flashcard JSON file">
+        <p class="hint">Upload a previously exported JSON deck to review it again or make a new quiz.</p>
+      </div>
       <div class="status" id="cs" role="status" aria-live="polite"></div>
       <div class="loading-panel hidden" id="cardLoading"><div class="loader-ring"></div><strong id="loadingTitle">Reading your lesson</strong><p id="loadingText" class="muted">Finding the key ideas and important details.</p><div class="loading-track"><div class="loading-bar"></div></div></div>
     </div>
@@ -359,6 +368,33 @@ function renderQuiz(checked,answers={}){$('qr').innerHTML='';quizQuestions.forEa
 $('check').onclick=()=>{let score=0,missing=0,answers={};quizQuestions.forEach((q,i)=>{let chosen=document.querySelector('input[name="quiz-'+i+'"]:checked');if(!chosen)missing++;else{answers[i]=chosen.value;if(Number(chosen.value)===q.answer)score++}});if(missing){showError('Answer all questions first. '+missing+' remaining.','score');return}renderQuiz(true,answers);$('score').classList.remove('error');$('score').textContent='Your score: '+score+'/'+quizQuestions.length+' ('+Math.round(score/quizQuestions.length*100)+'%)';};
 $('retryQuiz').onclick=()=>{$('score').textContent='';renderQuiz(false);$('quizWorkspace').scrollIntoView({behavior:'smooth',block:'start'})};
 $('cf').addEventListener('change',()=>{$('cfName').textContent=$('cf').files[0]?$('cf').files[0].name:'No file selected'});
+$('deckJson').addEventListener('change',async e=>{
+ const file=e.target.files&&e.target.files[0];
+ if(!file)return;
+ try{
+  const data=JSON.parse(await file.text());
+  const imported=Array.isArray(data)?data:data.cards;
+  if(!Array.isArray(imported)||!imported.length)throw Error('This JSON file does not contain a flashcard deck.');
+  const valid=imported.filter(card=>card&&typeof card.question==='string'&&card.question.trim()&&typeof card.answer==='string'&&card.answer.trim()).map(card=>({question:cleanLanguage(card.question.trim()),answer:cleanLanguage(card.answer.trim())}));
+  if(!valid.length)throw Error('No valid question-and-answer cards were found in this JSON file.');
+  cards=valid;
+  currentDeckTitle=typeof data.title==='string'&&data.title.trim()?data.title.trim():file.name.replace(/\.json$/i,'');
+  index=0;
+  flipped=false;
+  quizQuestions=[];
+  $('quizWorkspace').classList.add('hidden');
+  $('score').textContent='';
+  $('cs').textContent='Imported '+cards.length+' flashcards. Your deck is ready to review.';
+  show();
+  toast('Flashcard deck imported');
+  $('flashcardPanel').scrollIntoView({behavior:'smooth',block:'start'});
+ }catch(err){
+  showError(err.message||'Could not import this JSON file.','cs');
+ }finally{
+  e.target.value='';
+ }
+});
+
 const zone=$('dropCf');['dragenter','dragover'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.add('drag')}));['dragleave','drop'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.remove('drag')}));zone.addEventListener('drop',e=>{const file=e.dataTransfer.files[0];if(file){const dt=new DataTransfer();dt.items.add(file);$('cf').files=dt.files;$('cfName').textContent=file.name}});
 
 
