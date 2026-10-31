@@ -157,7 +157,23 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 .vinyl-widget.is-minimized .vinyl-label{inset:20%}
 .vinyl-widget.is-minimized .vinyl-tonearm{display:none}
 .vinyl-widget.is-minimized .vinyl-minimize{right:-5px;top:-5px;width:18px;height:18px;font-size:13px}
-.work-hint{margin:-18px 0 22px;color:var(--muted);font-size:12px;letter-spacing:.01em}</style>
+.work-hint{margin:-18px 0 22px;color:var(--muted);font-size:12px;letter-spacing:.01em}
+.interaction-hint{margin:-12px 0 18px;color:#777;font-size:.72rem;letter-spacing:.015em}
+.small-links{gap:10px;align-items:center}
+.small-links a{display:inline-flex;align-items:center;gap:18px;padding:12px 15px;margin:0;border:1px solid #333;border-radius:8px;background:linear-gradient(145deg,#191919,#141414);font-size:.92rem;transition:transform .2s,border-color .2s,background .2s}
+.small-links a:hover,.small-links a:focus-visible{color:#fff;border-color:#777;background:#202020;transform:translateY(-2px);outline:none}
+.small-links .link-arrow{font-size:.75rem;color:#777;transition:transform .2s,color .2s}
+.small-links a:hover .link-arrow{color:#eee;transform:translate(2px,-2px)}
+.contact-list a{position:relative;padding:18px 14px;border-radius:7px;transition:background .2s,padding .2s,color .2s}
+.contact-list a:hover,.contact-list a:focus-visible{background:#191919;padding-left:19px;color:#fff;outline:none}
+.contact-list span{transition:color .2s}
+.contact-list a:hover span{color:#ddd}
+.contact-list a:after{content:"↗";font-size:.75rem;color:#777;opacity:0;transform:translate(-4px,4px);transition:opacity .2s,transform .2s}
+.contact-list a:hover:after,.contact-list a:focus-visible:after{opacity:1;transform:translate(0,0)}
+footer a{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border:1px solid #333;border-radius:999px;transition:border-color .2s,background .2s,color .2s}
+footer a:hover,footer a:focus-visible{border-color:#777;background:#1b1b1b;color:#fff;outline:none}
+@media(max-width:600px){.interaction-hint{margin:-8px 0 14px}.small-links{gap:8px}.small-links a{padding:10px 13px}.contact-list a{padding:15px 10px}.contact-list a:hover,.contact-list a:focus-visible{padding-left:14px}.contact-list span{font-size:.74rem}}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -181,10 +197,12 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 </section>
 <section class="content-section">
 <div class="section-head"><h2 class="section-title">Other things</h2><span class="section-index">SIDE PROJECTS</span></div>
-<div class="small-links"><a href="/meow">Meow</a><a href="/arf">Arf</a></div>
+<p class="interaction-hint">↳ Tap a name to explore</p>
+<div class="small-links"><a href="/meow"><span>Meow</span><span class="link-arrow">↗</span></a><a href="/arf"><span>Arf</span><span class="link-arrow">↗</span></a></div>
 </section>
 <section class="content-section">
 <div class="section-head"><h2 class="section-title">Contact</h2><span class="section-index">SAY HELLO</span></div>
+<p class="interaction-hint">↳ Tap a link to connect</p>
 <ul class="contact-list">
 <li><a href="https://github.com/iamlxwis" target="_blank" rel="noopener noreferrer">GitHub <span>github.com/iamlxwis</span></a></li>
 <li><a href="https://facebook.com/iamlxwis" target="_blank" rel="noopener noreferrer">Facebook <span>facebook.com/iamlxwis</span></a></li>
@@ -192,7 +210,7 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 </ul>
 </section>
 </main>
-<footer><span>© 2026 lxwis</span><span><a href="/log">log ↗</a></span></footer>
+<footer><span>© 2026 lxwis</span><span><a href="/log">Read the log ↗</a></span></footer>
 </div>
 
 <div class="vinyl-widget" id="vinyl-widget">
