@@ -50,7 +50,17 @@ button{border-radius:9px}
 #learnAgain{background:#171717;color:#eee;border-color:#393939}
 
 #downloadDeck{background:#171717;color:#eee;border-color:#393939}
-#deckJson{background:#111;border-color:#383838;color:#ddd;padding:12px}
+#deckJson{background:#111;border-color:#383838;color:#ddd;padding:12px}#deckJson{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.json-upload{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:166px;padding:22px 16px;border:1px dashed #454545;border-radius:16px;background:linear-gradient(145deg,#151515,#0d0d0d);text-align:center;cursor:pointer;overflow:hidden;transition:border-color .2s,background .2s,transform .2s}
+.json-upload:hover,.json-upload.drag{border-color:#b7c2ff;background:linear-gradient(145deg,#191d2b,#11131b);transform:translateY(-1px)}
+.json-upload:focus-within{outline:2px solid #a5b4fc;outline-offset:3px}
+.json-upload-icon{display:grid;place-items:center;width:42px;height:42px;border:1px solid #3b4260;border-radius:13px;background:#1c2030;color:#c7d2fe;font-size:25px;line-height:1}
+.json-upload-title{color:#f5f5f5;font-size:14px;font-weight:800}
+.json-upload-sub{color:#a1a1aa;font-size:12px}
+.json-upload-format{margin-top:3px;padding:4px 9px;border:1px solid #35394a;border-radius:999px;color:#c7d2fe;font-size:9px;font-weight:800;letter-spacing:.14em}
+#cardHint{transition:opacity .2s ease}
+#cardHint.hidden{display:none!important}
+
 #deckJson::file-selector-button{border:0;border-radius:7px;padding:9px 12px;margin-right:9px;background:#eee;color:#111;font-weight:700;cursor:pointer}
 #sourceCard .field .hint{color:#999;font-size:12px;line-height:1.6}
 
@@ -299,16 +309,22 @@ footer{border-top-color:#262626;padding:26px 0 36px;line-height:1.9;color:#888}
       <div class="field"><label>Or paste your notes</label><textarea id="ct" placeholder="Paste your lesson here..."></textarea></div>
       <button id="makeCards" class="primary-action"><span class="button-label">Generate flashcards</span><span class="button-loader hidden" aria-hidden="true"></span></button>
       <div class="field">
-        <label for="deckJson">Already have a flashcard deck?</label>
-        <input id="deckJson" type="file" accept=".json,application/json" aria-label="Upload an existing flashcard JSON file">
-        <p class="hint">Upload a previously exported JSON deck to review it again or make a new quiz.</p>
+        <label>Import an existing deck</label>
+        <label class="json-upload" id="jsonDropZone" for="deckJson">
+          <span class="json-upload-icon" aria-hidden="true">↥</span>
+          <span class="json-upload-title" id="jsonUploadTitle">Choose a JSON deck</span>
+          <span class="json-upload-sub" id="jsonUploadSub">Tap to browse or drop your file here</span>
+          <span class="json-upload-format">JSON FILE</span>
+          <input id="deckJson" type="file" accept=".json,application/json" aria-label="Upload an existing flashcard JSON file">
+        </label>
+        <p class="hint">Bring back a deck you exported earlier and continue studying.</p>
       </div>
       <div class="status" id="cs" role="status" aria-live="polite"></div>
       <div class="loading-panel hidden" id="cardLoading"><div class="loader-ring"></div><strong id="loadingTitle">Reading your lesson</strong><p id="loadingText" class="muted">Finding the key ideas and important details.</p><div class="loading-track"><div class="loading-bar"></div></div></div>
     </div>
     <div class="card" id="flashcardPanel"><div class="section-top"><h3>2. Review your cards</h3><span class="pill" id="cardCount">Not generated</span></div>
       <div id="cr" class="empty-state">Your flashcards will appear here after generation.</div>
-      <div id="cv" class="hidden"><div class="progress-track"><div class="progress-fill" id="cardProgress"></div></div><button id="face" class="face" type="button"><span class="side-label" id="sideLabel">QUESTION</span><span id="faceText"></span><span class="hint">Tap to reveal answer · Swipe to mark your progress</span></button><p id="cp" class="muted"></p>
+      <div id="cv" class="hidden"><div class="progress-track"><div class="progress-fill" id="cardProgress"></div></div><button id="face" class="face" type="button"><span class="side-label" id="sideLabel">QUESTION</span><span id="faceText"></span><span class="hint" id="cardHint">Tap to reveal answer · Swipe to mark your progress</span></button><p id="cp" class="muted"></p>
         <div class="action-row"><button id="prev" class="secondary">← Backward</button><button id="flip">Flip card</button><button id="next">Forward →</button></div>
         <div class="action-row"><button id="knowIt">✓ Know it</button><button id="learnAgain" class="secondary">Still learning</button></div>
         <div class="action-row"><button id="downloadDeck" class="secondary">Export flashcards (.json)</button></div>
@@ -341,7 +357,7 @@ document.querySelectorAll('.tab[data-tab]').forEach(b=>b.addEventListener('click
 async function read(f){if(!f)return '';let n=f.name.toLowerCase();if(n.endsWith('.txt'))return f.text();if(n.endsWith('.docx')){if(!window.mammoth)throw Error('The DOCX reader did not load. Refresh the page and try again, or use TXT.');return (await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value}if(n.endsWith('.pdf')){if(!window.pdfjsLib)throw Error('The PDF reader did not load. Refresh the page and try again, or use TXT.');let p=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise,t='';for(let i=1;i<=p.numPages;i++){let c=await(await p.getPage(i)).getTextContent();t+=c.items.map(x=>x.str).join(' ')+'\n';}return t;}throw Error('Choose PDF, DOCX, or TXT.');}
 async function source(file,text,status){$(status).textContent='Reading lesson...';let t=$(text).value.trim();if($(file).files[0])t=(await read($(file).files[0])).trim();if(!t.trim()||t.length<30)throw Error($(file).files[0]?'I could not extract enough readable text from this file. If it is a scanned PDF, try a text-based PDF or paste the lesson text.':'Upload a lesson file or paste at least a few lines of notes.');return t.slice(0,45000);}
 async function ai(prompt){let r;try{r=await fetch('/api?tool=ai_chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,json:true})});}catch(e){throw Error('Could not reach the AI server. Check your connection and try again.');}let raw=await r.text();let d;try{d=JSON.parse(raw)}catch(e){throw Error('The server returned a non-JSON response (HTTP '+r.status+'). This usually means the Vercel API deployment failed. Check Vercel → Deployments → Runtime Logs.');}if(!r.ok||d.success===false)throw Error(d.error||'Gemini request failed (HTTP '+r.status+'). Check Vercel Environment Variables and Runtime Logs.');let s=typeof d.result==='string'?d.result:JSON.stringify(d.result??d);s=s.replace(/^\u0060\u0060\u0060json\s*/i,'').replace(/\s*\u0060\u0060\u0060$/,'').trim();try{return JSON.parse(s)}catch(e){let m=s.match(/\{[\s\S]*\}/);if(m)return JSON.parse(m[0]);throw Error('Could not read the AI response. Try again.');}}
-let cards=[],index=0,flipped=false,currentDeckTitle='Untitled deck',generatedTitle='',quizQuestions=[];
+let cards=[],index=0,flipped=false,currentDeckTitle='Untitled deck',generatedTitle='',quizQuestions=[];let showCardHint=true;
 let reviewData={};
 function getReviews(){return reviewData}
 function storeReviews(data){reviewData=data}
@@ -349,15 +365,16 @@ function cleanLanguage(value){return String(value).replace(/\b(can|will|do|does|
 function toast(msg,isError=false){let el=$('toast');if(!el)return;el.textContent=msg;el.classList.toggle('error',isError);el.classList.add('show');clearTimeout(window.__lxToast);window.__lxToast=setTimeout(()=>el.classList.remove('show'),2400)}
 function showError(message,target='cs'){let el=$(target);if(el){el.textContent=message;el.classList.add('error','error-pulse');el.classList.remove('error-shake');void el.offsetWidth;el.classList.add('error-shake');setTimeout(()=>el.classList.remove('error-shake','error-pulse'),650)}toast(message,true)}
 function setBusy(button,busy){button.disabled=busy;let label=button.querySelector('.button-label'),loader=button.querySelector('.button-loader');if(label)label.textContent=busy?'Working...':'Generate flashcards';if(loader)loader.classList.toggle('hidden',!busy)}
-function show(){if(!cards.length)return;$('cr').classList.add('hidden');$('cv').classList.remove('hidden');$('faceText').textContent=flipped?cards[index].answer:cards[index].question;$('sideLabel').textContent=flipped?'ANSWER':'QUESTION';$('cp').textContent='Card '+(index+1)+' of '+cards.length+' · '+currentDeckTitle;$('cardProgress').style.width=((index+1)/cards.length*100)+'%';$('cardCount').textContent=cards.length+' cards';$('quizNextStep').classList.remove('hidden')}
+function show(){if(!cards.length)return;$('cr').classList.add('hidden');$('cv').classList.remove('hidden');$('faceText').textContent=flipped?cards[index].answer:cards[index].question;$('cardHint').classList.toggle('hidden',!showCardHint);$('sideLabel').textContent=flipped?'ANSWER':'QUESTION';$('cp').textContent='Card '+(index+1)+' of '+cards.length+' · '+currentDeckTitle;$('cardProgress').style.width=((index+1)/cards.length*100)+'%';$('cardCount').textContent=cards.length+' cards';$('quizNextStep').classList.remove('hidden')}
 function reviewSummary(){let r=getReviews(),known=0,learning=0;Object.keys(r).forEach(k=>{if(r[k]==='known')known++;else if(r[k]==='learning')learning++});return known+' marked known · '+learning+' still learning in this session.'}
-function markCard(state){if(!cards.length)return;let r=getReviews();r[currentDeckTitle+'::'+cards[index].question]=state;storeReviews(r);toast(state==='known'?'Marked as known':'Marked for another review');if(state==='known'&&cards.length>1){index=(index+1)%cards.length;flipped=false;show()}else {}}
+function dismissCardHint(){showCardHint=false;$('cardHint').classList.add('hidden')}
+function markCard(state){if(!cards.length)return;dismissCardHint();let r=getReviews();r[currentDeckTitle+'::'+cards[index].question]=state;storeReviews(r);toast(state==='known'?'Marked as known':'Marked for another review');if(state==='known'&&cards.length>1){index=(index+1)%cards.length;flipped=false;show()}else {}}
 function downloadJson(data,name){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name.replace(/[^a-z0-9-_]+/gi,'-').toLowerCase()+'.json';a.click();URL.revokeObjectURL(url)}
-$('makeCards').onclick=async()=>{let b=$('makeCards');setBusy(b,true);$('cs').textContent='';$('cardLoading').classList.remove('hidden');window.lxwisGeneration?.show('Preparing your lesson','Starting up and checking your uploaded file...',0);$('loadingTitle').textContent='Preparing your lesson';$('loadingText').textContent='Starting up and checking your uploaded file...';$('loadingTitle').textContent='Reading your lesson';$('loadingText').textContent='Finding key ideas, definitions, and important details.';window.lxwisGeneration?.show('Reading your lesson','Checking the file and extracting the lesson text...',0);try{let t=await source('cf','ct','cs');currentDeckTitle=($('cf').files[0]?.name||'Lesson flashcards').replace(/\.(pdf|docx|txt)$/i,'');$('loadingTitle').textContent='Building your flashcards';$('loadingText').textContent='Organizing the lesson into clear question and answer cards.';window.lxwisGeneration?.show('Building your flashcards','Finding key ideas and turning them into useful question-and-answer cards...',1);cards=[];generatedTitle='';window.lxwisGeneration?.updateCount(0,1,1);window.lxwisGeneration?.show('Building your flashcards','Generating your study deck in one AI request...',1);$('loadingText').textContent='Generating flashcards from your entire lesson. This may take a moment.';const d=await ai('You are a careful study assistant. Create a complete set of useful flashcards based ONLY on the entire lesson below. Cover all important topics, definitions, key terms, examples, processes, comparisons, and details. Do not skip sections. Avoid duplicates and vague questions. Create as many cards as needed to cover the material well, while keeping each question focused and each answer clear and useful for studying. Return only valid JSON in this shape: {"title":"short useful deck title","cards":[{"question":"...","answer":"..."}]}. No markdown fences.'+String.fromCharCode(10)+'ENTIRE LESSON:'+String.fromCharCode(10)+t);if(d.title)generatedTitle=String(d.title);cards=(d.cards||[]).filter(x=>x&&x.question&&x.answer).map(x=>({question:cleanLanguage(x.question),answer:cleanLanguage(x.answer)}));window.lxwisGeneration?.updateCount(cards.length,1,1);$('loadingText').textContent=cards.length+' flashcards generated.';if(!cards.length)throw Error('No cards were returned. Try a shorter lesson or try again.');if(generatedTitle)currentDeckTitle=generatedTitle.replace(/\bwon't\b/gi,'will not').replace(/\bdon't\b/gi,'do not').replace(/\bcan't\b/gi,'cannot');index=0;flipped=false;show();window.lxwisGeneration?.show('Your deck is ready','Created '+cards.length+' flashcards. Opening your study deck...',2);$('cs').textContent='Created '+cards.length+' flashcards. You can review them or make a quiz from this deck.';toast('Flashcards ready');$('flashcardPanel').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){showError(e.message,'cs');$('sourceCard').classList.remove('error-shake');void $('sourceCard').offsetWidth;$('sourceCard').classList.add('error-shake');setTimeout(()=>$('sourceCard').classList.remove('error-shake'),500)}finally{setTimeout(()=>window.lxwisGeneration?.hide(),900);$('cardLoading').classList.add('hidden');setBusy(b,false)}};
-$('flip').onclick=$('face').onclick=()=>{if(!cards.length)return;flipped=!flipped;show()};
-$('face').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(cards.length){flipped=!flipped;show()}}};
-$('next').onclick=()=>{if(!cards.length)return;index=(index+1)%cards.length;flipped=false;show()};
-$('prev').onclick=()=>{if(!cards.length)return;index=(index-1+cards.length)%cards.length;flipped=false;show()};
+$('makeCards').onclick=async()=>{let b=$('makeCards');setBusy(b,true);$('cs').textContent='';$('cardLoading').classList.remove('hidden');window.lxwisGeneration?.show('Preparing your lesson','Starting up and checking your uploaded file...',0);$('loadingTitle').textContent='Preparing your lesson';$('loadingText').textContent='Starting up and checking your uploaded file...';$('loadingTitle').textContent='Reading your lesson';$('loadingText').textContent='Finding key ideas, definitions, and important details.';window.lxwisGeneration?.show('Reading your lesson','Checking the file and extracting the lesson text...',0);try{let t=await source('cf','ct','cs');currentDeckTitle=($('cf').files[0]?.name||'Lesson flashcards').replace(/\.(pdf|docx|txt)$/i,'');$('loadingTitle').textContent='Building your flashcards';$('loadingText').textContent='Organizing the lesson into clear question and answer cards.';window.lxwisGeneration?.show('Building your flashcards','Finding key ideas and turning them into useful question-and-answer cards...',1);cards=[];generatedTitle='';window.lxwisGeneration?.updateCount(0,1,1);window.lxwisGeneration?.show('Building your flashcards','Generating your study deck in one AI request...',1);$('loadingText').textContent='Generating flashcards from your entire lesson. This may take a moment.';const d=await ai('You are a careful study assistant. Create a complete set of useful flashcards based ONLY on the entire lesson below. Cover all important topics, definitions, key terms, examples, processes, comparisons, and details. Do not skip sections. Avoid duplicates and vague questions. Create as many cards as needed to cover the material well, while keeping each question focused and each answer clear and useful for studying. Return only valid JSON in this shape: {"title":"short useful deck title","cards":[{"question":"...","answer":"..."}]}. No markdown fences.'+String.fromCharCode(10)+'ENTIRE LESSON:'+String.fromCharCode(10)+t);if(d.title)generatedTitle=String(d.title);cards=(d.cards||[]).filter(x=>x&&x.question&&x.answer).map(x=>({question:cleanLanguage(x.question),answer:cleanLanguage(x.answer)}));window.lxwisGeneration?.updateCount(cards.length,1,1);$('loadingText').textContent=cards.length+' flashcards generated.';if(!cards.length)throw Error('No cards were returned. Try a shorter lesson or try again.');if(generatedTitle)currentDeckTitle=generatedTitle.replace(/\bwon't\b/gi,'will not').replace(/\bdon't\b/gi,'do not').replace(/\bcan't\b/gi,'cannot');index=0;flipped=false;showCardHint=true;show();window.lxwisGeneration?.show('Your deck is ready','Created '+cards.length+' flashcards. Opening your study deck...',2);$('cs').textContent='Created '+cards.length+' flashcards. You can review them or make a quiz from this deck.';toast('Flashcards ready');$('flashcardPanel').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){showError(e.message,'cs');$('sourceCard').classList.remove('error-shake');void $('sourceCard').offsetWidth;$('sourceCard').classList.add('error-shake');setTimeout(()=>$('sourceCard').classList.remove('error-shake'),500)}finally{setTimeout(()=>window.lxwisGeneration?.hide(),900);$('cardLoading').classList.add('hidden');setBusy(b,false)}};
+$('flip').onclick=$('face').onclick=()=>{if(!cards.length)return;dismissCardHint();flipped=!flipped;show()};
+$('face').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(cards.length){dismissCardHint();flipped=!flipped;show()}}};
+$('next').onclick=()=>{if(!cards.length)return;dismissCardHint();index=(index+1)%cards.length;flipped=false;show()};
+$('prev').onclick=()=>{if(!cards.length)return;dismissCardHint();index=(index-1+cards.length)%cards.length;flipped=false;show()};
 $('knowIt').onclick=()=>markCard('known');$('learnAgain').onclick=()=>markCard('learning');
 let swipeStartX=0,swipeStartY=0;
 $('face').addEventListener('touchstart',e=>{if(!cards.length)return;swipeStartX=e.changedTouches[0].clientX;swipeStartY=e.changedTouches[0].clientY},{passive:true});
@@ -368,9 +385,16 @@ function renderQuiz(checked,answers={}){$('qr').innerHTML='';quizQuestions.forEa
 $('check').onclick=()=>{let score=0,missing=0,answers={};quizQuestions.forEach((q,i)=>{let chosen=document.querySelector('input[name="quiz-'+i+'"]:checked');if(!chosen)missing++;else{answers[i]=chosen.value;if(Number(chosen.value)===q.answer)score++}});if(missing){showError('Answer all questions first. '+missing+' remaining.','score');return}renderQuiz(true,answers);$('score').classList.remove('error');$('score').textContent='Your score: '+score+'/'+quizQuestions.length+' ('+Math.round(score/quizQuestions.length*100)+'%)';};
 $('retryQuiz').onclick=()=>{$('score').textContent='';renderQuiz(false);$('quizWorkspace').scrollIntoView({behavior:'smooth',block:'start'})};
 $('cf').addEventListener('change',()=>{$('cfName').textContent=$('cf').files[0]?$('cf').files[0].name:'No file selected'});
+const jsonZone=$('jsonDropZone');
+function setJsonFile(file){if(!file)return;if(!file.name.toLowerCase().endsWith('.json')){showError('Please choose a .json file.','cs');return}const dt=new DataTransfer();dt.items.add(file);$('deckJson').files=dt.files;$('deckJson').dispatchEvent(new Event('change',{bubbles:true}))}
+['dragenter','dragover'].forEach(type=>jsonZone.addEventListener(type,e=>{e.preventDefault();jsonZone.classList.add('drag')}));
+['dragleave','drop'].forEach(type=>jsonZone.addEventListener(type,e=>{e.preventDefault();jsonZone.classList.remove('drag')}));
+jsonZone.addEventListener('drop',e=>{const file=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(file)setJsonFile(file)});
 $('deckJson').addEventListener('change',async e=>{
  const file=e.target.files&&e.target.files[0];
  if(!file)return;
+ $('jsonUploadTitle').textContent=file.name;
+ $('jsonUploadSub').textContent='Loading your flashcard deck...';
  try{
   const data=JSON.parse(await file.text());
   const imported=Array.isArray(data)?data:data.cards;
@@ -381,6 +405,7 @@ $('deckJson').addEventListener('change',async e=>{
   currentDeckTitle=typeof data.title==='string'&&data.title.trim()?data.title.trim():file.name.replace(/\.json$/i,'');
   index=0;
   flipped=false;
+  showCardHint=true;
   quizQuestions=[];
   $('quizWorkspace').classList.add('hidden');
   $('score').textContent='';
@@ -391,6 +416,7 @@ $('deckJson').addEventListener('change',async e=>{
  }catch(err){
   showError(err.message||'Could not import this JSON file.','cs');
  }finally{
+  $('jsonUploadSub').textContent='Tap to browse or drop your file here';
   e.target.value='';
  }
 });
