@@ -99,7 +99,6 @@ module.exports = async (req, res) => {
         if (!key) throw Object.assign(new Error("Set GEMINI_API_KEY in Vercel Environment Variables."), { status: 503 });
         const prompt = required("prompt");
 
-        // Same request structure as the ai_chat command in the Telegram bot.
         const body = JSON.stringify({
           contents: [{ parts: [{ text: "Answer concisely.\\n\\n" + prompt }] }],
           ...(input.json === true || input.json === "true" ? {
@@ -141,8 +140,6 @@ module.exports = async (req, res) => {
           );
         }
 
-        // Read the same candidates/content/parts/text path used by the bot,
-        // but handle missing or blocked responses without crashing the API.
         const answer = data.candidates?.[0]?.content?.parts
           ?.map(part => part.text || "")
           .join("")
