@@ -16,7 +16,7 @@
 <link rel="icon" href="https://i.imgur.com/9jrzHF1_d.webp?maxwidth=64&fidelity=grand" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{color-scheme:dark;--bg:#111;--panel:#171717;--fg:#f2f2f2;--muted:#929292;--line:#333;--soft:#c7c7c7}
@@ -27,7 +27,7 @@ a{color:inherit;text-decoration:none}
 a:hover{color:#aaa}
 .wrap{width:min(100% - 80px,1080px);margin:0 auto;position:relative;z-index:1}
 header{display:flex;justify-content:space-between;align-items:center;padding:25px 0;border-bottom:1px solid var(--line)}
-.logo{font-size:1rem;font-weight:700;letter-spacing:-.04em}
+.logo{font-family:'Fraunces',Georgia,serif;font-size:1.12rem;font-weight:700;letter-spacing:-.055em}.logo em{color:#a0a0a0;font-style:italic;font-weight:500}
 .header-side{display:flex;align-items:center;gap:16px}
 .header-note{font-size:.72rem;color:var(--muted)}
 .terminal-trigger{display:inline-flex;align-items:center;gap:10px;border:1px solid #484848;background:#181818;color:var(--fg);padding:9px 12px;font:inherit;font-size:.78rem;cursor:pointer;transition:background .2s,border-color .2s}
@@ -213,7 +213,7 @@ footer{padding:20px 0 28px}
 <body>
 <div class="wrap">
 <header>
-<a class="logo" href="/">lxwis</a>
+<a class="logo" href="/">lx<em>wis</em></a>
 <div class="header-side"><span class="header-note">personal site / 2026</span><button class="terminal-trigger" id="terminal-trigger" type="button" aria-haspopup="dialog" aria-controls="terminal-modal"><span class="terminal-mark">&gt;_</span><span>Terminal</span><kbd>Ctrl K</kbd></button></div>
 </header>
 <main>
