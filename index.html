@@ -37,7 +37,7 @@ header{display:flex;justify-content:space-between;align-items:center;padding:25p
 .hero{padding:105px 0 85px;border-bottom:1px solid var(--line);position:relative}
 .hero-meta{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.72rem;margin-bottom:25px}
 .hero-meta:before{content:"";width:7px;height:7px;border-radius:50%;background:#a7a7a7;display:inline-block}
-h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(4rem,15vw,8.5rem);line-height:.85;letter-spacing:-.075em;font-weight:900;margin-bottom:30px}
+h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(4rem,15vw,8.5rem);line-height:.85;letter-spacing:-.075em;font-weight:700;margin-bottom:30px}
 .intro{font-size:1.12rem;color:var(--soft)}
 .hero-foot{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-top:52px;padding-top:18px;border-top:1px solid #292929;color:var(--muted);font-size:.72rem}
 .hero-foot a{text-decoration:underline;text-decoration-color:#555;text-underline-offset:4px}
@@ -208,6 +208,8 @@ footer{padding:20px 0 28px}
 .contact-list a{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);column-gap:14px;padding-right:20px}
 .contact-list span{grid-column:2;max-width:none;width:100%;text-align:left;font-size:.72rem}
 }
+
+.hero h1 em{font-style:italic;font-weight:500;color:#a0a0a0}
 </style>
 </head>
 <body>
@@ -218,7 +220,7 @@ footer{padding:20px 0 28px}
 </header>
 <main>
 <section class="hero">
-<h1>lxwis</h1>
+<h1>lx<em>wis</em></h1>
 <p class="intro">I'm a student</p>
 </section>
 <section class="content-section" id="work">
