@@ -116,7 +116,7 @@ footer{flex-direction:row;justify-content:space-between;gap:12px;padding:22px 0 
 .terminal-hints{padding:0 16px 16px}
 .terminal-trigger kbd{display:none}
 }
-/* Subtle motion: hover, loading, depth, entrance, microinteractions, background, pointer */
+
 body:before{animation:grid-drift 28s linear infinite}
 body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;background:radial-gradient(280px circle at var(--pointer-x,50%) var(--pointer-y,35%),rgba(255,255,255,.075),transparent 70%);transition:opacity .25s}
 @media(hover:hover) and (pointer:fine){body:after{opacity:1}.project{transition:transform .25s ease,border-color .25s ease}.project:hover{transform:perspective(900px) rotateY(-1deg) translateX(4px)}.project h3 a{transition:color .2s ease}.terminal-trigger:hover,.terminal-hint:hover,.terminal-close:hover{transform:translateY(-1px)}}
@@ -130,7 +130,7 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opaci
 @keyframes grid-drift{from{background-position:0 0,0 0}to{background-position:36px 36px,-36px 36px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 
-/* Floating turntable-style vinyl player */
+
 .vinyl-widget{position:fixed;left:22px;bottom:22px;z-index:9000;width:112px;height:112px;filter:drop-shadow(0 9px 12px rgba(0,0,0,.7));transition:width .22s ease,height .22s ease}
 .vinyl-toggle{position:absolute;left:0;bottom:0;width:100px;height:100px;border:0;border-radius:50%;padding:0;background:transparent;cursor:pointer;transition:transform .2s ease}
 .vinyl-toggle:hover{transform:translateY(-2px) scale(1.02)}
@@ -304,7 +304,7 @@ document.addEventListener('keydown',function(event){if(event.key==='Escape'&&ove
 </script>
 
 <style>
-/* Site-wide page transition and privacy notice */
+
 #lx-page-loader{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:#111;color:#f2f2f2;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
 #lx-page-loader.is-active{opacity:1;visibility:visible;pointer-events:auto}
 .lx-loader-ring{width:34px;height:34px;border:2px solid #383838;border-top-color:#f2f2f2;border-radius:50%;animation:lx-spin .75s linear infinite}
@@ -355,13 +355,11 @@ document.addEventListener('keydown',function(event){if(event.key==='Escape'&&ove
     loader.classList.add('is-active');
     loader.setAttribute('aria-hidden','false');
   });
-  // Restore the page when returning with the browser Back/Forward buttons.
   window.addEventListener('pageshow',function(){
     loader.classList.remove('is-active');
     loader.setAttribute('aria-hidden','true');
   });
   window.addEventListener('pagehide',function(){
-    // Keep the current page state clean if the browser caches this document.
     loader.classList.remove('is-active');
     loader.setAttribute('aria-hidden','true');
   });
