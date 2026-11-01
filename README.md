@@ -1,36 +1,45 @@
 # lxwis.site
 
-A lightweight static website. Each page keeps its own structure, styles, and behavior in separate files.
+A small corner of the internet by **lxwis**.
 
-## Project structure
+Personal site, experiments, and student tools. Built with plain HTML, CSS, and JavaScript.
+
+**Live:** [lxwis.site](https://lxwis.site)
+
+## Structure
 
 ```text
-/
-├── index.html
-├── style.css
-├── script.js
-├── 404.html
-├── log.html
-├── vercel.json
-├── meow/
+portfolio/
+├── main/
 │   ├── index.html
 │   ├── style.css
-│   └── script.js
-├── arf/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-└── student/
-    ├── index.html
-    ├── style.css
-    └── script.js
+│   ├── script.js
+│   ├── 404.html
+│   ├── log.html
+│   ├── vercel.json
+│   ├── api/
+│   │   ├── index.js
+│   │   └── log.js
+│   ├── meow/
+│   ├── arf/
+│   └── student/
+└── README.md
 ```
 
-## Editing
+## Pages
 
-- Root `index.html`, `style.css`, and `script.js` are the homepage.
-- `404.html` and `log.html` are intentionally standalone pages.
-- Each folder contains the HTML, CSS, and JavaScript for that page.
-- The clean `/log` URL is routed to `log.html` by `vercel.json`.
+- **Home** — personal homepage
+- **Meow** — cat corner
+- **Arf** — dog corner
+- **Student** — study tools
+- **Log** — site updates
 
-The site is deployed on Vercel as a static site. No build step is required.
+## Development
+
+The site is deployed with Vercel. Its **Root Directory** is set to `main`.
+
+No build step is required. Edit each page's HTML, CSS, and JavaScript in its own folder.
+
+---
+
+Made with care by [lxwis](https://lxwis.site).
