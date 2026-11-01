@@ -10,8 +10,8 @@ A lightweight static website. Each page keeps its own structure, styles, and beh
 ├── style.css
 ├── script.js
 ├── 404.html
-├── 404.css
-├── 404.js
+├── log.html
+├── vercel.json
 ├── meow/
 │   ├── index.html
 │   ├── style.css
@@ -28,9 +28,9 @@ A lightweight static website. Each page keeps its own structure, styles, and beh
 
 ## Editing
 
-- Edit a page's `index.html` for its content and structure.
-- Edit that page's `style.css` for its appearance.
-- Edit that page's `script.js` for its interactions and behavior.
-- Keep assets inside the matching page folder when adding page-specific files.
+- Root `index.html`, `style.css`, and `script.js` are the homepage.
+- `404.html` and `log.html` are intentionally standalone pages.
+- Each folder contains the HTML, CSS, and JavaScript for that page.
+- The clean `/log` URL is routed to `log.html` by `vercel.json`.
 
 The site is deployed on Vercel as a static site. No build step is required.
