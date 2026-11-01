@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student Hub — lxwis</title><meta name="theme-color" content="#111111"><link rel="icon" href="https://i.imgur.com/9jrzHF1_d.webp?maxwidth=64&fidelity=grand" type="image/webp"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/student/style.css?v=2"></head><body><div class="wrap"><header class="student-header"><a href="/" class="logo" aria-label="lxwis home">lx<em>wis</em></a><a href="/" class="portfolio-link">← Portfolio</a></header><section class="hero"><div class="muted">LXWIS / STUDENT TOOLS</div><h1>Student Hub.</h1><p class="muted">Turn your lessons into flashcards, then test what you remember.</p></section>
+<section class="panel active" id="cards">
+  <div class="workspace-head"><div><h2>Make your lesson stick.</h2><p class="muted">Upload your lesson and AI will build a flashcard deck. Then turn those cards into a practice quiz.</p></div></div>
+  <div class="grid workspace-grid">
+    <div class="card" id="sourceCard"><h3>1. Add your lesson</h3>
+      <div class="field"><label for="cf">Upload a lesson</label><div class="upload-zone" id="dropCf"><span class="upload-icon" aria-hidden="true">↑</span><span class="upload-title">Drop your lesson here</span><span class="upload-sub">PDF, DOCX, or TXT · tap to browse</span><span class="upload-browse" aria-hidden="true">Browse files <span>↗</span></span><input id="cf" type="file" accept=".pdf,.docx,.txt" aria-label="Choose a lesson file"><span class="file-name" id="cfName">No file selected</span></div></div>
+      <div class="field"><label>Or paste your notes</label><textarea id="ct" placeholder="Paste your lesson here..."></textarea></div>
+      <button id="makeCards" class="primary-action"><span class="button-label">Generate flashcards</span><span class="button-loader hidden" aria-hidden="true"></span></button>
+      <div class="field">
+        <label>Import an existing deck</label>
+        <label class="json-upload" id="jsonDropZone" for="deckJson">
+          <span class="json-upload-icon" aria-hidden="true">↥</span>
+          <span class="json-upload-title" id="jsonUploadTitle">Choose a JSON deck</span>
+          <span class="json-upload-sub" id="jsonUploadSub">Tap to browse or drop your file here</span>
+          <span class="json-upload-format">JSON FILE</span>
+          <input id="deckJson" type="file" accept=".json,application/json" aria-label="Upload an existing flashcard JSON file">
+        </label>
+        <p class="hint">Bring back a deck you exported earlier and continue studying.</p>
+      </div>
+      <div class="status" id="cs" role="status" aria-live="polite"></div>
+      <div class="loading-panel hidden" id="cardLoading"><div class="loader-ring"></div><strong id="loadingTitle">Reading your lesson</strong><p id="loadingText" class="muted">Finding the key ideas and important details.</p><div class="loading-track"><div class="loading-bar"></div></div></div>
+    </div>
+    <div class="card" id="flashcardPanel"><div class="section-top"><h3>2. Review your cards</h3><span class="pill" id="cardCount">Not generated</span></div>
+      <div id="cr" class="empty-state">Your flashcards will appear here after generation.</div>
+      <div id="cv" class="hidden"><div class="progress-track"><div class="progress-fill" id="cardProgress"></div></div><div class="deck-tools"><input id="cardSearch" type="search" placeholder="Find a card in this deck..." aria-label="Search flashcards"><button id="shuffleCards" class="secondary" type="button">Shuffle</button><span id="deckPosition" class="muted">Card 1</span></div><button id="face" class="face" type="button"><span class="side-label" id="sideLabel">QUESTION</span><span id="faceText"></span><span class="hint" id="cardHint">Tap to reveal answer · Swipe to mark your progress</span></button><p id="cp" class="muted"></p>
+        <div class="action-row"><button id="prev" class="secondary">← Backward</button><button id="flip">Flip card</button><button id="next">Forward →</button></div>
+        <div class="action-row"><button id="knowIt">✓ Know it</button><button id="learnAgain" class="secondary">Still learning</button></div>
+        <div class="action-row"><button id="downloadDeck" class="secondary">Export flashcards (.json)</button></div>
+        <section class="coverage-panel hidden" id="coveragePanel">
+          <div class="section-top"><div><strong>Lesson coverage</strong><p class="muted" id="coverageSummary">Mapping your lesson topics...</p></div><span class="pill" id="coveragePercent">0%</span></div>
+          <div class="progress-track"><div class="progress-fill" id="coverageBar"></div></div>
+          <div class="coverage-breakdown" id="coverageBreakdown"></div>
+          <div class="coverage-topics" id="coverageTopics"></div>
+        </section>
+        <div class="generation-controls hidden" id="generationControls">
+          <div class="field"><label for="generationFocus">Generate cards about</label><select id="generationFocus"><option value="missing">Uncovered topics</option><option value="definitions">More definitions</option><option value="applications">Application questions</option><option value="examples">More examples</option><option value="difficult">More difficult cards</option><option value="all">All remaining useful details</option></select></div>
+          <div class="field"><label for="generationDifficulty">Card difficulty</label><select id="generationDifficulty"><option value="mixed">Mixed</option><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select></div>
+        </div>
+        <div class="more-cards-wrap"><button id="moreCards" class="secondary hidden" type="button">＋ Generate more cards</button><p id="moreCardsStatus" class="muted" role="status" aria-live="polite"></p></div>
+      </div>
+      <div class="next-step hidden" id="quizNextStep"><div><strong>Ready to test yourself?</strong><p class="muted">Make a quiz using the flashcards you just reviewed.</p></div><button id="makeQuizFromCards">Make a quiz →</button></div>
+    </div>
+  </div>
+  <section class="card quiz-workspace hidden" id="quizWorkspace"><div class="section-top"><div><p class="eyebrow muted">NEXT STEP</p><h3>3. Practice quiz</h3></div><span class="pill" id="quizCount">Based on your deck</span></div><p class="muted">Questions are made from your generated flashcards, so the quiz stays connected to what you studied.</p>
+    <div class="quiz-settings card" id="quizSettings">
+      <div class="section-top"><strong>Quiz settings</strong><span class="muted">Customize your test</span></div>
+      <div class="grid">
+        <div class="field"><label for="quizQuestionCount">Questions</label><select id="quizQuestionCount"><option value="10">10 questions</option><option value="20">20 questions</option><option value="30">30 questions</option><option value="50">50 questions</option></select></div>
+        <div class="field"><label for="quizDifficulty">Difficulty</label><select id="quizDifficulty"><option>Mixed</option><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
+        <div class="field"><label for="quizTypes">Question types</label><select id="quizTypes"><option value="mixed">Mixed</option><option value="multiple">Multiple choice only</option><option value="truefalse">True or false only</option></select></div>
+        <div class="field"><label for="quizMode">Quiz mode</label><select id="quizMode"><option value="practice">Practice · instant feedback</option><option value="exam">Exam · reveal after submit</option><option value="timed">Timed challenge</option></select></div>
+      </div>
+      <div class="field hidden" id="quizTimerField"><label for="quizMinutes">Time limit</label><select id="quizMinutes"><option value="5">5 minutes</option><option value="10" selected>10 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option></select></div>
+      <p class="muted" id="quizSettingsHint">Questions are based only on your flashcard deck.</p>
+    </div>
+    <div class="quiz-tools hidden" id="quizTools"><div class="quiz-progress"><span id="quizProgressText">Question 1 of 10</span><span id="quizTimer" class="pill hidden">10:00</span></div><div class="progress-track"><div class="progress-fill" id="quizProgressFill"></div></div><div class="quiz-nav" id="quizNav"></div></div>
+    <div id="quizLoading" class="loading-panel hidden"><div class="loader-ring"></div><strong>Building your quiz</strong><p class="muted">Turning your cards into practice questions.</p><div class="loading-track"><div class="loading-bar"></div></div></div>
+    <div id="qr" class="muted">Your quiz will appear here.</div><div class="quiz-controls"><button id="quizBack" class="secondary hidden" type="button">← Previous</button><button id="quizForward" class="secondary hidden" type="button">Next →</button><button id="check" class="hidden">Submit quiz</button><button id="retryQuiz" class="secondary hidden">New quiz</button><button id="quizRetryMistakes" class="hidden" type="button">Retry missed topics</button></div><div id="score" class="status"></div>
+  </section>
+</section>
+
+<footer>© 2026 lxwis <span style="float:right">Study smarter.</span><p class="muted">Flashcards are not saved on this device. Export your deck as a JSON file to keep a copy.</p></footer></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="generation-overlay hidden" id="generationOverlay" role="dialog" aria-modal="true" aria-labelledby="generationHeading" aria-describedby="generationMessage">
+  <div class="generation-dialog">
+    <div class="generation-mark"><span class="generation-orbit"></span><span class="generation-spark">✳</span></div>
+    <div class="generation-kicker">LXWIS STUDY AI</div>
+    <h2 id="generationHeading">Making your study deck</h2>
+    <p id="generationMessage">Getting your lesson ready...</p>
+    <div class="generation-card-count" id="generationCardCount" aria-live="polite">0 flashcards generated</div>
+    <div class="generation-progress"><span></span></div>
+    <div class="generation-steps"><span class="generation-step active" id="genStep1"><i>1</i> Read lesson</span><span class="generation-step" id="genStep2"><i>2</i> Build cards</span><span class="generation-step" id="genStep3"><i>3</i> Finish deck</span></div>
+    <p class="generation-note">Keep this page open while your cards are being generated.</p>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script><script src="/student/script.js?v=2"></script>
+
+</body></html>
