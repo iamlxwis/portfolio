@@ -13,6 +13,10 @@
       "destination": "/meow/index.html"
     },
     {
+      "source" "/pbb",
+      "destination": "/pbb/index.html"
+    },
+    {
       "source": "/arf",
       "destination": "/arf/index.html"
     },
