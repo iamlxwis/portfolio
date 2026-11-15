@@ -310,10 +310,12 @@ async function play(i) {
   stopWatch();
   hint.style.display = 'none';
 
-  if (typeof shaka === 'undefined') {
-    setLoad(true, ch[0], 'Loading please wait...');
-    return;
-  }
+      if (typeof shaka === 'undefined' || typeof CH === 'undefined') {
+      revealSplashEnter();
+      setLoad(true, ch[0], 'Player engine failed to load. Check connection.');
+      return;
+    }
+
 
   try {
     shaka.polyfill.installAll();
@@ -791,4 +793,16 @@ window.addEventListener('load', function() {
     }
   });
 
+  // Failsafe: Always reveal "Enter Studio" within 2.5s even on slow mobile networks
+  setTimeout(revealSplashEnter, 2500);
+
+  applyPrefs(true);
+  if (prefs.layout === 'grid') {
+    startGridMode();
+  } else {
+    document.body.setAttribute('data-layout', prefs.layout);
+    play(1);
+  }
+  resetHideTimer();
 })();
+
