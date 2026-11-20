@@ -55,7 +55,7 @@ footer{margin-top:clamp(60px,12vh,100px);border-top:1px solid var(--line);paddin
 @media(prefers-reduced-motion:reduce){#lx-page-loader,#lx-cookie-banner{transition:none;animation:none!important}.lx-loader-ring{animation-duration:1.5s}}
 .logo{font-family:'Fraunces',Georgia,serif;font-weight:700;letter-spacing:-.055em}.logo em{color:#a0a0a0;font-style:italic;font-weight:500}
 </style>
-</head>
+<link rel="stylesheet" href="/privacy.css?v=1"><script src="/privacy.js?v=1" defer></script></head>
 <body>
 <main>
 <header><a class="logo" href="/">lx<em>wis</em></a><span class="label">PAGE NOT FOUND</span></header>
@@ -69,10 +69,7 @@ footer{margin-top:clamp(60px,12vh,100px);border-top:1px solid var(--line);paddin
 
 
 <div id="lx-page-loader" aria-hidden="true"><span class="lx-loader-ring" aria-hidden="true"></span><span class="lx-loader-label">Loading page</span></div>
-<aside id="lx-cookie-banner" role="dialog" aria-label="Cookie and privacy notice" aria-live="polite">
-  <div><p class="lx-cookie-title">A small privacy note</p><p class="lx-cookie-copy">This site doesn't use tracking cookies. It stores your choice in this browser so this notice won't keep appearing.</p></div>
-  <div class="lx-cookie-actions"><button class="lx-cookie-button" type="button" data-lx-cookie="dismiss">Dismiss</button><button class="lx-cookie-button primary" type="button" data-lx-cookie="okay">Got it</button></div>
-</aside>
+
 
 
 <script src="/404.js?v=1" defer></script>
@@ -80,7 +77,7 @@ footer{margin-top:clamp(60px,12vh,100px);border-top:1px solid var(--line);paddin
 (function(){
   var loader=document.getElementById('lx-page-loader');
   var banner=document.getElementById('lx-cookie-banner');
-  if(!loader||!banner)return;
+  if(!loader)return;
   document.addEventListener('click',function(event){
     var link=event.target.closest&&event.target.closest('a[href]');
     if(!link||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
@@ -112,15 +109,7 @@ footer{margin-top:clamp(60px,12vh,100px);border-top:1px solid var(--line);paddin
     loader.classList.remove('is-active');
     loader.setAttribute('aria-hidden','true');
   });
-  var saved=false;
-  try{saved=window.localStorage.getItem('lxwis-privacy-note')==='seen'}catch(e){}
-  if(!saved){window.setTimeout(function(){banner.classList.add('is-visible')},700)}
-  banner.querySelectorAll('[data-lx-cookie]').forEach(function(button){
-    button.addEventListener('click',function(){
-      banner.classList.remove('is-visible');
-      try{window.localStorage.setItem('lxwis-privacy-note','seen')}catch(e){}
-    });
-  });
+
 })();
 </script>
 </body>
