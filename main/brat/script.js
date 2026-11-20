@@ -119,9 +119,12 @@ function getRows(){
  }
  return rows.sort((a,b)=>a.y-b.y)
 }
-function exportArt(){
+async function exportArt(){
  if(progressActive)return;
  showProgress('Saving your image…');
+ // Paint the progress UI before canvas encoding starts.
+ await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+ try{
  const [w,h]=sizes[state.size],mul=Number($('exportScale').value),out=document.createElement('canvas');out.width=w*mul;out.height=h*mul;
  const c=out.getContext('2d'),previewWidth=art.clientWidth,previewHeight=art.clientHeight;if(!previewWidth){notify('export failed: preview is not ready');return;}
  const sx=out.width/previewWidth,sy=out.height/previewHeight;
@@ -152,6 +155,7 @@ function exportArt(){
   }
   try{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='brat.'+extension;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);notify('image ready to download')}catch(error){notify('export failed: '+(error?.message||'please try again'))}
  },'image/'+type,.95)
+ }catch(error){console.error('BRAT export failed',error);notify('export failed: '+(error?.message||'please try again'))}
 }
 function bind(id,event,key,convert=x=>x){$(id).addEventListener(event,e=>update({[key]:convert(e.target.value)}))}
 bind('mainText','input','text');bind('bgColor','input','bg');bind('textColor','input','fg');bind('blur','input','blur',Number);bind('grain','input','grain',Number);bind('canvasSize','change','size');bind('fontFamily','change','font');bind('sizeAdjust','input','fontScale',Number);bind('lineHeight','input','lineHeight',Number);
