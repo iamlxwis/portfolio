@@ -100,10 +100,14 @@ function exportArt(){
     if(!Filesystem||!Share)throw new Error('Native export plugins unavailable');
     const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(',')[1]);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(blob)});
     const name='brat-'+Date.now()+'.'+extension;
-    const saved=await Filesystem.writeFile({path:name,data,directory:'CACHE',recursive:true});
-    await Share.share({title:'Export BRAT image',files:[saved.uri],dialogTitle:'Save or share your BRAT image'});
+    notify('preparing image…');
+    await Filesystem.writeFile({path:name,data,directory:'CACHE',recursive:true});
+    const saved=await Filesystem.getUri({path:name,directory:'CACHE'});
+    if(!saved?.uri)throw new Error('No file URI returned');
+    await Share.share({title:'BRAT image',files:[saved.uri],dialogTitle:'Save or share your BRAT image'});
+    notify('image ready to share');
     return;
-   }catch(error){console.error('Native image export failed',error);notify('could not share image');return}
+   }catch(error){console.error('Native image export failed',error);notify('export failed: '+(error?.message||'please try again'));return}
   }
   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='brat.'+extension;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)
  },'image/'+type,.95)
