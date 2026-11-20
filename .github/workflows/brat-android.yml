@@ -39,24 +39,26 @@ jobs:
         run: npm install
       - name: Generate offline assets and Android project
         run: npm run android:add
+      - name: Generate classic green BRAT app icon
+        run: npm run android:icons
       - name: Build debug APK
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: brat-debug-apk
+          name: brat-apk
           path: android/brat/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
       - name: Prepare direct APK download
         run: |
           mkdir -p release
-          cp android/app/build/outputs/apk/debug/app-debug.apk release/brat-android-debug.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk release/brat.apk
       - name: Publish APK to GitHub Releases
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           if gh release view brat-android-test >/dev/null 2>&1; then
-            gh release upload brat-android-test release/brat-android-debug.apk --clobber
+            gh release upload brat-android-test release/brat.apk --clobber
           else
-            gh release create brat-android-test release/brat-android-debug.apk --title "BRAT Android — test APK" --notes "Offline BRAT editor for Android. Debug-signed testing build, not a Play Store release." --prerelease
+            gh release create brat-android-test release/brat.apk --title "BRAT Android — test APK" --notes "Offline BRAT editor for Android. Debug-signed testing build, not a Play Store release." --prerelease
           fi
