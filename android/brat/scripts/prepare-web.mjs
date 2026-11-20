@@ -8,13 +8,15 @@ for(const name of ['privacy.css','privacy.js','legal.css','privacy.html','cookie
 const file=resolve(dest,'index.html');let html=await readFile(file,'utf8');
 html=html.replaceAll(/(href|src)="\/brat\//g,'$1="./');
 html=html.replaceAll(/(href|src)="\/(privacy\.css|privacy\.js)/g,'$1="./$2');
-html=html.replaceAll('href="/"','href="./index.html"');
+html=html.replaceAll('href="/"','href="#editor"');
 for(const name of ['privacy.html','cookies.html','terms.html']){
  const path=resolve(dest,name);let page=await readFile(path,'utf8');
  page=page.replaceAll(/(href|src)="\/(legal\.css|privacy\.css|privacy\.js)/g,'$1="./$2').replaceAll('href="/"','href="./index.html"');
  await writeFile(path,page);
 }
+// The APK uses a one-time consent dialog, never the site's persistent legal footer.
 const widget=resolve(dest,'privacy.js');let js=await readFile(widget,'utf8');
+js=js.replace('document.body.append(root);','document.body.append(root);root.querySelector(\'.lx-footer\')?.remove();');
 js=js.replaceAll('href="/privacy"','href="./privacy.html"').replaceAll('href="/cookies"','href="./cookies.html"').replaceAll('href="/terms"','href="./terms.html"');await writeFile(widget,js);
 // One native-only startup overlay, with a short animation and guaranteed timeout.
 html=html.replace(/<head>/, `<head><meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'">`);
@@ -40,5 +42,7 @@ await writeFile(resolve(dest,'startup.js'),`(() => {
   window.addEventListener('load', ready, {once:true});
   setTimeout(dismiss, 2200);
 })();`);
+// Native-only refinements: no persistent footer, and the logo does not reload the editor.
+html=html.replace('</head>','<style>html,body{overscroll-behavior:none}.logo{cursor:default}.editor-panel>summary,.settings-panel>summary{transition:background-color .18s ease}.editor-panel>summary:active,.settings-panel>summary:active{background-color:var(--line)}.editor-panel .panel-content{animation:bratPanelIn .18s ease-out}@keyframes bratPanelIn{from{opacity:.5;transform:translateY(-5px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.editor-panel .panel-content{animation:none}}</style></head>');
 await writeFile(file,html);
 console.log('Offline BRAT web assets copied to android/brat/www');
