@@ -13,7 +13,7 @@ for(const [density,size] of Object.entries(densities)){
  for(const name of ['ic_launcher','ic_launcher_round'])await sharp(svg()).resize(size,size).png().toFile(join(dir,name+'.png'));
  // Foreground is intentionally smaller inside 108dp adaptive icon bounds.
  const fg=Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
- <text x="256" y="275" text-anchor="middle" dominant-baseline="middle" font-family="Arial,DejaVu Sans,sans-serif" font-size="280" letter-spacing="-13" fill="#111111">brat</text></svg>`);
+ <text x="256" y="275" text-anchor="middle" dominant-baseline="middle" font-family="Arial,DejaVu Sans,sans-serif" font-size="142" letter-spacing="-7" fill="#111111">brat</text></svg>`);
  await sharp(fg).resize(Math.round(size*108/48),Math.round(size*108/48)).png().toFile(join(dir,'ic_launcher_foreground.png'));
 }
 const colors=join(base,'values','brat_icon_colors.xml');await mkdir(join(base,'values'),{recursive:true});
