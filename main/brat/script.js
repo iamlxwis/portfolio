@@ -1,7 +1,7 @@
 'use strict';
 /* BRAT Studio — vanilla JavaScript and Canvas. */
 const $=id=>document.getElementById(id),canvas=$('artCanvas'),ctx=canvas.getContext('2d',{alpha:false});
-const storageKey='brat-studio-project-v1',presetsKey='brat-studio-custom-presets';
+const storageKey='brat-studio-project-v2',presetsKey='brat-studio-custom-presets';
 const dimensions={square:[1080,1080],portrait:[1080,1350],story:[1080,1920],landscape:[1920,1080],banner:[1800,600]};
 const presets=[
 {name:'reference pink',text:'we got GTA\nVI before i\ngot a\ngirlfriend',bg:'#f2a4c8',fg:'#ffffff',blur:1.15,font:'arial',fontSize:166,spacing:-3,lineHeight:1.05,textAlign:'left',padding:0,grain:0},
@@ -15,7 +15,7 @@ const presets=[
 {name:'blood orange',text:'talk talk',bg:'#ff642a',fg:'#191919',blur:1.8,font:'arial',fontSize:128,spacing:-5},
 {name:'clean slate',text:'your era',bg:'#eeeeec',fg:'#151515',blur:0,font:'arial',fontSize:100,spacing:-4}
 ];
-const defaults={autoFit:true,text:'we got GTA\nVI before i\ngot a\ngirlfriend',fontFamily:'arial',fontSize:166,lineHeight:1.05,letterSpacing:-3,textAlign:'left',weight:'normal',vertical:50,horizontal:50,bgColor:'#f2a4c8',textColor:'#ffffff',sizePreset:'square',padding:0,rotation:0,blur:1.15,grain:0,distort:0,shadow:0,contrast:100,saturation:100,texture:'none',overlay:'none',imageMode:'background',imageFit:'cover',imageOpacity:100,imageScale:100,imageX:0,imageY:0,imageBlur:0,imageData:null};
+const defaults={autoFit:true,text:'we got GTA VI before i got a girlfriend',fontFamily:'arial',fontSize:145,lineHeight:1.02,letterSpacing:-2,textAlign:'left',weight:'normal',vertical:50,horizontal:50,bgColor:'#8ace00',textColor:'#111111',sizePreset:'square',padding:0,rotation:0,blur:1.1,grain:0,distort:0,shadow:0,contrast:100,saturation:100,texture:'none',overlay:'none',imageMode:'background',imageFit:'cover',imageOpacity:100,imageScale:100,imageX:0,imageY:0,imageBlur:0,imageData:null};
 let state={...defaults},image=null,undoStack=[],redoStack=[],lastSnapshot='',drawing=false,zoom=1,fitZoom=1,manuallyZoomed=false,toastTimeout,saveTimeout,drag=null;
 const fields=['fontFamily','fontSize','lineHeight','letterSpacing','vertical','horizontal','bgColor','textColor','sizePreset','padding','rotation','blur','grain','distort','shadow','contrast','saturation','texture','overlay','imageMode','imageFit','imageOpacity','imageScale','imageX','imageY','imageBlur'];
 const valueFormats={fontSize:v=>v,lineHeight:v=>Number(v).toFixed(2),letterSpacing:v=>v,vertical:v=>v+'%',horizontal:v=>v+'%',padding:v=>v+'%',rotation:v=>v+'°',blur:v=>Number(v).toFixed(1),grain:v=>v,distort:v=>v,shadow:v=>v,contrast:v=>v+'%',saturation:v=>v+'%',imageOpacity:v=>v+'%',imageScale:v=>v+'%',imageX:v=>v,imageY:v=>v,imageBlur:v=>v};
@@ -70,15 +70,16 @@ function textLayout(context,w,h){
   height=(lines.length-1)*step+size;
  };
  if(fit){
-  // Largest font that fits BOTH canvas dimensions; preserves manual newlines.
-  let low=8*k,high=900*k;
-  for(let n=0;n<24;n++){
+  // Search for a readable font size that occupies the square vertically.
+  // Wrap on whole words; NEVER stretch letter shapes.
+  let low=12*k,high=230*k;
+  for(let i=0;i<18;i++){
    size=(low+high)/2;calc();
-   const widest=Math.max(0,...lines.map(line=>measureText(context,line,spacing)));
-   if(height<=h*(1-2*Number(state.padding)/100)&&widest<=maxWidth+0.5)low=size;else high=size;
+   const tallest=height<=h*.92;
+   if(tallest)low=size;else high=size;
   }
   size=low;calc();
- }else calc();
+ }
  return {size,margin,maxWidth,spacing,lines,step,height,x:w*state.horizontal/100,y:h*state.vertical/100,fit}
 }
 function drawText(context,w,h){
@@ -90,12 +91,14 @@ function drawText(context,w,h){
  const offset=(l.lines.length-1)*l.step/2;
  for(let i=0;i<l.lines.length;i++){
   const line=l.lines[i],y=i*l.step-offset,wobble=Number(state.distort)>0?Math.sin(i*2.7+1)*Number(state.distort)*k:0;
-  if(l.fit&&line.trim()){
-   // Stretch each row to the full usable width, including short lines.
-   const natural=Math.max(1,measureText(context,line,l.spacing));
-   context.save();context.scale(l.maxWidth/natural,1);
-   drawSpaced(context,line,(-l.maxWidth/2+wobble)/(l.maxWidth/natural),y,l.spacing,'left');
-   context.restore();
+  if(l.fit){
+   const words=line.trim().split(/\s+/);
+   const natural=words.reduce((sum,word)=>sum+measureText(context,word,l.spacing),0);
+   // Spread the WORD GAPS, not the glyphs. Single words stay natural width.
+   const gaps=words.length-1,remaining=l.maxWidth-natural;
+   const gap=gaps>0?Math.max(l.size*.14,remaining/gaps):0;
+   let x=-l.maxWidth/2+wobble;
+   for(let j=0;j<words.length;j++){drawSpaced(context,words[j],x,y,l.spacing,'left');x+=measureText(context,words[j],l.spacing)+gap}
   }else{
    const left=state.textAlign==='left'?-l.maxWidth/2:state.textAlign==='right'?l.maxWidth/2:0;
    drawSpaced(context,line,left+wobble,y,l.spacing,state.textAlign);
@@ -139,7 +142,7 @@ function paint(context,w,h){
  else{drawText(context,w,h);drawImage(context,w,h,'foreground')}
  drawTexture(context,w,h);drawOverlay(context,w,h);context.restore()
 }
-function render(){if(drawing)return;drawing=true;requestAnimationFrame(()=>{drawing=false;const [w,h]=dimensions[state.sizePreset]||dimensions.square;if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}paint(ctx,w,h);$('canvasInfo').textContent=w+' × '+h+' px'})}
+function render(){if(drawing)return;drawing=true;requestAnimationFrame(()=>{drawing=false;const [w,h]=dimensions[state.sizePreset]||dimensions.square;const scale=Math.min(1,650/Math.max(w,h)),pw=Math.round(w*scale),ph=Math.round(h*scale);if(canvas.width!==pw||canvas.height!==ph){canvas.width=pw;canvas.height=ph}paint(ctx,pw,ph);$('canvasInfo').textContent=w+' × '+h+' px'})}
 function fitCanvas(){const [w,h]=dimensions[state.sizePreset]||dimensions.square,stage=$('stageBody'),aw=Math.max(160,stage.clientWidth-30),ah=Math.max(160,stage.clientHeight-30);fitZoom=Math.min(aw/w,ah/h);if(!manuallyZoomed)zoom=fitZoom;applyZoom();render()}
 function applyZoom(){const [w,h]=dimensions[state.sizePreset]||dimensions.square,wrap=$('canvasWrap');wrap.style.width=Math.round(w*zoom)+'px';wrap.style.height=Math.round(h*zoom)+'px';$('zoomLabel').textContent=manuallyZoomed?Math.round(zoom/fitZoom*100)+'%':'Fit'}
 function setZoom(m){zoom=Math.min(fitZoom*4,Math.max(fitZoom*.35,zoom*m));manuallyZoomed=true;applyZoom()}
