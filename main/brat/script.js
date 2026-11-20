@@ -8,7 +8,9 @@ const key='brat-minimal-v2';let state={...defaults},photo=null,raf=0,toastTimer;
 function notify(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2000)}
 function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch{}}
 function update(p){state={...state,...p};save();sync();schedule()}
-function sync(){for(const [id,v] of [['mainText',state.text],['bgColor',state.bg],['textColor',state.fg],['blur',state.blur],['grain',state.grain],['canvasSize',state.size],['fontFamily',state.font],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id).value=v;document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',palettes[b.dataset.palette].join('|')===[state.bg,state.fg].join('|')));for(const [id,value] of [['blur',Math.round(state.blur/5*100)],['grain',Math.round(state.grain/35*100)],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id+'Value').textContent=value+'%'}
+function sync(){for(const [id,v] of [['mainText',state.text],['bgColor',state.bg],['textColor',state.fg],['blur',state.blur],['grain',state.grain],['canvasSize',state.size],['fontFamily',state.font],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id).value=v;document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',palettes[b.dataset.palette].join('|')===[state.bg,state.fg].join('|')));for(const [id,value] of [['blur',Math.round(state.blur/5*100)],['grain',Math.round(state.grain/35*100)],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id+'Value').value=value;syncHex()}
+function validHex(v){const raw=v.trim().replace(/^#/,'');return /^[0-9a-f]{6}$/i.test(raw)?'#'+raw.toLowerCase():/^[0-9a-f]{3}$/i.test(raw)?'#'+raw.split('').map(c=>c+c).join('').toLowerCase():null}
+function syncHex(){for(const [id,color] of [['bgHex',state.bg],['textHex',state.fg]]){if(document.activeElement!==$(id))$(id).value=color.toUpperCase()}}
 function schedule(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;draw()})}
 function fitText(){
  // Same core method as bratify: browser-native justified layout, then text-fit.
@@ -58,6 +60,17 @@ function exportArt(){
 }
 function bind(id,event,key,convert=x=>x){$(id).addEventListener(event,e=>update({[key]:convert(e.target.value)}))}
 bind('mainText','input','text');bind('bgColor','input','bg');bind('textColor','input','fg');bind('blur','input','blur',Number);bind('grain','input','grain',Number);bind('canvasSize','change','size');bind('fontFamily','change','font');bind('sizeAdjust','input','fontScale',Number);bind('lineHeight','input','lineHeight',Number);
+for(const [id,keyName] of [['bgHex','bg'],['textHex','fg']]){
+ const el=$(id);el.addEventListener('change',()=>{const hex=validHex(el.value);if(hex)update({[keyName]:hex});else{el.value=state[keyName];notify('enter a valid HEX color')}});
+ el.addEventListener('blur',()=>{el.value=state[keyName].toUpperCase()});
+}
+for(const [id,keyName,min,max,fromPercent] of [['blurValue','blur',0,100,v=>v*5/100],['grainValue','grain',0,100,v=>Math.round(v*35/100)],['sizeAdjustValue','fontScale',60,140,v=>v],['lineHeightValue','lineHeight',75,125,v=>v]]){
+ $(id).addEventListener('change',e=>{const n=Number(e.target.value);if(!Number.isFinite(n)||e.target.value.trim()===''){sync();return}update({[keyName]:fromPercent(Math.max(min,Math.min(max,Math.round(n))))})});
+}
+document.querySelectorAll('.hint-trigger').forEach(button=>{
+ button.addEventListener('click',e=>{e.stopPropagation();const active=button.getAttribute('aria-expanded')==='true';document.querySelectorAll('.hint-trigger').forEach(b=>b.setAttribute('aria-expanded','false'));button.setAttribute('aria-expanded',String(!active))});
+});
+document.addEventListener('click',e=>{if(!e.target.closest('.hint-wrap'))document.querySelectorAll('.hint-trigger').forEach(b=>b.setAttribute('aria-expanded','false'))});
 document.querySelectorAll('.swatch').forEach(b=>b.addEventListener('click',()=>{const [bg,fg]=palettes[b.dataset.palette];update({bg,fg})}));
 $('downloadTop').addEventListener('click',exportArt);
 $('resetDesign').addEventListener('click',()=>{state={...defaults};photo=null;save();sync();schedule()});
