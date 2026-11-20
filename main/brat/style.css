@@ -254,3 +254,8 @@ button:focus-visible,summary:focus-visible{outline:2px solid #8ace00;outline-off
 .select-item{padding:12px;border-radius:10px;font-size:13px;min-height:42px}
 .select-item[aria-selected=true]{background:color-mix(in srgb,#8ace00 17%,var(--panel));font-weight:700}
 @media(prefers-reduced-motion:reduce){.brat-choice-content,.select-display{transition:none}}
+
+.select-item{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.select-item .brat-premium-icon{opacity:0;width:16px;height:16px}
+.select-item[aria-selected=true] .brat-premium-icon{opacity:1;color:#8ace00}
+.select-display[aria-expanded=true]>.brat-premium-icon{transform:rotate(180deg)}
