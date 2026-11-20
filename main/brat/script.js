@@ -178,7 +178,18 @@ $('downloadTop').addEventListener('click',exportArt);
 $('resetDesign').addEventListener('click',()=>{state={...defaults};photo=null;save();sync();schedule()});
 $('imageInput').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;$('uploadLabel').textContent=file.name.length>18?file.name.slice(0,15)+'…':file.name;if(file.size>5e6){notify('image must be under 5 MB');return}const reader=new FileReader();reader.onload=()=>{showProgress('Loading your image…');update({image:reader.result});loadPhoto();document.querySelector('.media-panel').open=false;document.querySelector('.controls').scrollTo({top:0,behavior:'smooth'})};reader.onerror=()=>notify('image failed to load');reader.readAsDataURL(file)});
 $('removeImage').addEventListener('click',()=>{photo=null;$('imageInput').value='';$('uploadLabel').textContent='upload image';update({image:null})});
-function theme(v){document.documentElement.dataset.theme=v;try{localStorage.setItem('brat-ui-theme',v)}catch{}}
+function theme(v){
+ document.documentElement.dataset.theme=v;
+ const dark=v==='dark';
+ const themeColor=dark?'#141613':'#f5f5f2';
+ document.querySelector('meta[name="theme-color"]')?.setAttribute('content',themeColor);
+ const status=window.Capacitor?.Plugins?.StatusBar;
+ if(window.Capacitor?.isNativePlatform?.()&&status){
+  status.setBackgroundColor({color:themeColor}).catch(()=>{});
+  status.setStyle({style:dark?'DARK':'LIGHT'}).catch(()=>{});
+ }
+ try{localStorage.setItem('brat-ui-theme',v)}catch{}
+}
 $('themeToggle').addEventListener('click',()=>theme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
 try{const old=JSON.parse(localStorage.getItem(key));if(old&&sizes[old.size])state={...defaults,...old}}catch{}
 try{theme(localStorage.getItem('brat-ui-theme')||'light')}catch{theme('light')}
