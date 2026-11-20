@@ -40,6 +40,9 @@ function upgradeIcons(){
   if(old)old.replaceWith(premiumIcon(name));
  }
  document.querySelectorAll('details.editor-panel>summary>svg,details.settings-panel>summary>svg').forEach(svg=>svg.replaceWith(premiumIcon('chevron')));
+ document.querySelectorAll('.hint-trigger').forEach(button=>{button.textContent='';button.append(premiumIcon('info',15))});
+ const upload=document.querySelector('.upload-button svg');if(upload)upload.replaceWith(premiumIcon('image'));
+ document.querySelectorAll('.mirror-toggle svg,#mirrorToggle svg').forEach(svg=>svg.classList.add('brat-premium-icon'));
 }
 function exportOptions(){
  const el=$('toast');clearTimeout(toastTimer);el.replaceChildren();
