@@ -180,3 +180,16 @@ html.capacitor-app main{height:calc(100dvh - 54px - var(--native-top) - var(--na
  .export:active,.swatch:active,.select-display:active{transform:scale(.97)}
  .export,.swatch,.select-display{transition:transform .14s ease}
 }
+
+/* Centered, accessible feedback dialog for save, export and errors */
+#toast.brat-modal{position:fixed;inset:0;left:0;bottom:0;transform:none;width:100%;max-width:none;min-width:0;height:100dvh;padding:20px;z-index:2147483000;display:grid;place-items:center;background:rgba(0,0,0,.54);opacity:0;pointer-events:none;transition:opacity .2s ease;box-sizing:border-box}
+#toast.brat-modal.show{opacity:1;pointer-events:auto;transform:none}
+.brat-dialog{width:min(100%,350px);box-sizing:border-box;text-align:center;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:24px;padding:27px 24px 22px;box-shadow:0 22px 80px #0006;transform:translateY(18px) scale(.95);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.brat-modal.show .brat-dialog{transform:translateY(0) scale(1)}
+.brat-dialog-symbol{display:grid;place-items:center;width:56px;height:56px;margin:0 auto 15px;border-radius:19px;background:#8ace00;color:#141414;font-size:30px;font-weight:700}
+.brat-modal-error .brat-dialog-symbol{background:#ffe4e4;color:#b42318}
+.brat-dialog h2{font-size:21px;line-height:1.2;margin:0 0 8px;font-weight:750}
+.brat-dialog p{font-size:14px;line-height:1.5;margin:0 0 23px;color:var(--muted);overflow-wrap:anywhere}
+.brat-dialog-done{display:block;width:100%;min-height:46px;border:0;border-radius:14px;background:#8ace00;color:#141414;font:700 15px Arial,Helvetica,sans-serif;cursor:pointer}
+.brat-dialog-done:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){#toast.brat-modal,.brat-dialog{transition:none}}
