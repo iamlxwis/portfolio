@@ -8,3 +8,58 @@
 @media(max-width:800px){.header{height:56px;padding:0 16px}.wordmark{font-size:25px}.icon-button{height:34px;width:34px;border-radius:9px}.download-top{height:34px;padding:0 12px}.workspace{height:calc(100dvh - 56px);min-height:0;display:flex;flex-direction:column}.preview{flex:1;min-height:0}.preview-top,.preview-bottom{height:35px;padding:0 18px;font-size:10px}.preview-area{min-height:0;padding:10px 14px}.preview-area canvas{max-height:100%;max-width:100%;object-fit:contain}.editor{height:clamp(270px,39dvh,380px);flex:none;max-height:none;border-left:0;border-top:1px solid var(--border);border-radius:16px 16px 0 0;box-shadow:0 -5px 25px #00000008}.editor-title{padding:13px 18px 6px}.editor-title h1{font-size:17px;margin-top:2px}.eyebrow{font-size:9px}.editor-scroll{padding:7px 18px 12px}.field{margin-bottom:18px}.field textarea{min-height:65px;padding:9px 12px;font-size:14px}.swatch{width:32px;height:32px}.editor-footer{padding:9px 18px max(12px,env(safe-area-inset-bottom))}.download{height:41px;font-size:13px}.preview-bottom{display:none}}
 @media(max-width:360px){.download-top span{display:none}.download-top{padding:0 9px}.header-right{gap:5px}.icon-button{width:31px}.editor{height:42dvh}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+
+/* v11 — editorial canvas-first interface; intentionally replaces the previous card layout */
+:root{--bg:#e9eae5;--surface:#f9f9f6;--surface2:#ecece7;--border:#d9dad3;--ink:#1b1c19;--sub:#686a62}
+:root[data-theme=dark]{--bg:#151714;--surface:#20221e;--surface2:#30332c;--border:#3b3e37;--ink:#f6f7f1;--sub:#afb2a8}
+.header{background:var(--bg);border-bottom:0;height:74px;padding:0 35px}
+.wordmark{font-size:35px;font-weight:700;letter-spacing:-.11em}
+.wordmark .spark{color:var(--ink)}
+.header-right .icon-button{border:0;background:transparent;border-radius:50%}
+.download-top{background:var(--ink);color:var(--surface);border-radius:100px;padding:0 21px}
+.workspace{grid-template-columns:350px minmax(0,1fr);direction:rtl;gap:0}
+.workspace>*{direction:ltr}
+.preview{background:var(--bg)}
+.preview-top{height:65px;padding:0 45px}
+.preview-title{font-weight:700;color:var(--ink);letter-spacing:.13em}
+.preview-bottom{height:55px;padding:0 45px}
+.preview-area{padding:20px 48px 34px}
+.preview-area canvas{box-shadow:0 24px 55px #00000013}
+.editor{border:0;border-right:1px solid var(--border);background:var(--surface);max-height:calc(100dvh - 74px)}
+.editor-title{padding:42px 30px 25px;border-bottom:1px solid var(--border)}
+.editor-title h1{font-size:31px;letter-spacing:-.065em;margin-top:13px}
+.period{color:#80b800}
+.editor-scroll{padding:25px 30px}
+.editor-scroll .field{margin-bottom:30px}
+.editor-scroll .field>label,.editor-scroll .field-heading>label{font-family:'DM Mono',monospace;font-size:11px;color:var(--sub);letter-spacing:.07em;font-weight:400;justify-content:flex-start;gap:12px}
+.editor-scroll .field>label span,.editor-scroll .field-heading>label span{color:var(--ink);font-weight:600}
+.field textarea{border:0;border-bottom:1px solid var(--border);border-radius:0;background:transparent;padding:10px 0 14px;font-size:18px;font-weight:500;line-height:1.35;min-height:95px}
+.field-note{font-size:10px}
+.swatches{gap:13px}
+.swatch{width:38px;height:38px;border:0;box-shadow:0 0 0 1px var(--border)}
+.swatch.active{box-shadow:0 0 0 2px var(--ink),inset 0 0 0 3px var(--surface)}
+.color-control{border-radius:5px;background:var(--surface2);border:0}
+.more{padding-top:20px}
+.editor-footer{background:var(--surface);padding:17px 30px 25px}
+.download{height:53px;border-radius:4px;letter-spacing:.07em;font:700 12px 'DM Mono',monospace}
+.mobile-tip{display:none}
+@media(max-width:800px){
+ .header{height:55px;padding:0 16px}.wordmark{font-size:28px}
+ .workspace{height:calc(100dvh - 55px);display:flex;flex-direction:column;direction:ltr}
+ .preview{min-height:0;flex:1}
+ .preview-top{height:30px;padding:0 17px;font-size:9px}
+ .preview-bottom{display:none}
+ .preview-area{padding:8px 16px 16px;min-height:0}
+ .preview-area canvas{box-shadow:0 10px 30px #00000018}
+ .editor{height:clamp(275px,39dvh,390px);flex:none;border:0;border-top:2px solid var(--ink);border-radius:0;background:var(--surface)}
+ .editor-title{padding:11px 18px 5px;border-bottom:0}
+ .editor-title h1{font-size:20px;margin:2px 0 0}
+ .eyebrow{font-size:8px}
+ .editor-scroll{padding:4px 18px 10px}
+ .mobile-tip{display:block;font:9px 'DM Mono',monospace;letter-spacing:.1em;color:var(--sub);margin:5px 0 13px}
+ .editor-scroll .field{margin-bottom:19px}
+ .field textarea{font-size:16px;min-height:60px;padding:7px 0}
+ .editor-footer{padding:8px 18px max(10px,env(safe-area-inset-bottom))}
+ .download{height:42px;border-radius:4px}
+ .swatch{width:33px;height:33px}
+}
