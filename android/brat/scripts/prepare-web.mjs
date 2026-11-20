@@ -8,7 +8,7 @@ for(const name of ['privacy.css','privacy.js','legal.css','privacy.html','cookie
 const file=resolve(dest,'index.html');let html=await readFile(file,'utf8');
 html=html.replaceAll(/(href|src)="\/brat\//g,'$1="./');
 html=html.replaceAll(/(href|src)="\/(privacy\.css|privacy\.js)/g,'$1="./$2');
-html=html.replaceAll('href="/"','href="#editor"');
+html=html.replace(/<a href="\/" class="logo">brat\.<\/a>/,'<span class="logo" aria-label="BRAT editor">brat.</span>');
 for(const name of ['privacy.html','cookies.html','terms.html']){
  const path=resolve(dest,name);let page=await readFile(path,'utf8');
  page=page.replaceAll(/(href|src)="\/(legal\.css|privacy\.css|privacy\.js)/g,'$1="./$2').replaceAll('href="/"','href="./index.html"');
