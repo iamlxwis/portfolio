@@ -40,7 +40,7 @@ function upgradeIcons(){
   if(old)old.replaceWith(premiumIcon(name));
  }
  document.querySelectorAll('details.editor-panel>summary>svg,details.settings-panel>summary>svg').forEach(svg=>svg.replaceWith(premiumIcon('chevron')));
- document.querySelectorAll('.hint-trigger').forEach(button=>{button.textContent='';button.append(premiumIcon('info',15))});
+ document.querySelectorAll('.hint-trigger').forEach(button=>{button.textContent='';button.append(premiumIcon('info',14));button.classList.add('premium-hint')});
  const upload=document.querySelector('.upload-button svg');if(upload)upload.replaceWith(premiumIcon('image'));
  document.querySelectorAll('.mirror-toggle svg,#mirrorToggle svg').forEach(svg=>svg.classList.add('brat-premium-icon'));
 }
@@ -52,17 +52,26 @@ function exportOptions(){
  const heading=document.createElement('h2');heading.id='brat-export-title';heading.textContent='Export image';
  const description=document.createElement('p');description.textContent='Choose a format and resolution';
  const form=document.createElement('div');form.className='brat-export-form';
- const formatLabel=document.createElement('label');formatLabel.textContent='Image format';
- const format=document.createElement('select');format.className='brat-export-select';
- for(const [value,label] of [['png','PNG · best quality'],['jpeg','JPG · smaller file'],['webp','WebP · modern format']]){
-  const option=new Option(label,value);format.add(option);
+ function choiceGroup(title,name,choices,current){
+  const group=document.createElement('fieldset');group.className='brat-choice-group';
+  const legend=document.createElement('legend');legend.textContent=title;group.append(legend);
+  const grid=document.createElement('div');grid.className='brat-choice-grid';
+  for(const [value,label,detail] of choices){
+   const option=document.createElement('label');option.className='brat-choice';
+   const input=document.createElement('input');input.type='radio';input.name=name;input.value=value;input.checked=value===current;
+   const content=document.createElement('span');content.className='brat-choice-content';
+   const titleEl=document.createElement('strong');titleEl.textContent=label;
+   const detailEl=document.createElement('small');detailEl.textContent=detail;
+   content.append(titleEl,detailEl);option.append(input,content);grid.append(option);
+  }
+  group.append(grid);return group;
  }
- format.value=$('exportFormat').value;formatLabel.append(format);
- const qualityLabel=document.createElement('label');qualityLabel.textContent='Resolution';
- const quality=document.createElement('select');quality.className='brat-export-select';
- for(const [value,label] of [['1','1080px · standard'],['2','2160px · high quality']])quality.add(new Option(label,value));
- quality.value=$('exportScale').value;qualityLabel.append(quality);
- form.append(formatLabel,qualityLabel);
+ form.append(
+  choiceGroup('Image format','brat-format',[['png','PNG','Best quality'],['jpeg','JPG','Smaller file'],['webp','WebP','Modern format']],$('exportFormat').value),
+  choiceGroup('Resolution','brat-resolution',[['1','1080px','Standard'],['2','2160px','High quality']],$('exportScale').value)
+ );
+ const format={get value(){return form.querySelector('input[name="brat-format"]:checked')?.value||'png'},focus(){form.querySelector('input[name="brat-format"]:checked')?.focus()}};
+ const quality={get value(){return form.querySelector('input[name="brat-resolution"]:checked')?.value||'1'}};
  const actions=document.createElement('div');actions.className='brat-export-actions';
  const cancel=document.createElement('button');cancel.type='button';cancel.className='brat-export-cancel';cancel.textContent='Cancel';
  const save=document.createElement('button');save.type='button';save.className='brat-dialog-done';save.append(premiumIcon('download',19),document.createTextNode(' Save image'));
@@ -70,7 +79,7 @@ function exportOptions(){
  el.className='brat-modal show';
  const prior=document.activeElement;
  function close(){el.classList.remove('show');document.removeEventListener('keydown',onKey);if(prior?.focus)prior.focus({preventScroll:true})}
- function onKey(e){if(e.key==='Escape'){e.preventDefault();close()}else if(e.key==='Tab'){const nodes=[format,quality,cancel,save],index=nodes.indexOf(document.activeElement);if(index>=0){e.preventDefault();nodes[(index+(e.shiftKey?nodes.length-1:1))%nodes.length].focus()}}}
+ function onKey(e){if(e.key==='Escape'){e.preventDefault();close()}else if(e.key==='Tab'){const nodes=[...form.querySelectorAll('input[type=radio]'),cancel,save],index=nodes.indexOf(document.activeElement);if(index>=0){e.preventDefault();nodes[(index+(e.shiftKey?nodes.length-1:1))%nodes.length].focus()}}}
  document.addEventListener('keydown',onKey);
  cancel.addEventListener('click',close);
  save.addEventListener('click',()=>{$('exportFormat').value=format.value;$('exportScale').value=quality.value;document.removeEventListener('keydown',onKey);exportArt()});
