@@ -39,6 +39,8 @@ jobs:
         run: npm install
       - name: Generate offline assets and Android project
         run: npm run android:add
+      - name: Install native gallery saving plugin
+        run: node scripts/install-gallery.mjs
       - name: Generate classic green BRAT app icon
         run: npm run android:icons
       - name: Build debug APK
