@@ -32,3 +32,11 @@ html.capacitor-app main{height:calc(100dvh - 54px - var(--native-top) - var(--na
 .color-pickers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .color-pickers label{justify-content:space-between;padding:10px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);font-weight:600;min-width:0}
 .color-pickers input[type=color]{width:40px;height:34px;border-radius:6px;overflow:hidden;flex:none}
+
+.brat-guide{border:1px solid var(--line);border-radius:9px;padding:0;margin:18px 0 4px;background:var(--page)}
+.brat-guide>summary{padding:13px 14px;font-size:12px}
+.brat-guide .guide-heading{display:inline-flex;align-items:center;gap:9px}
+.brat-guide .guide-heading svg{width:17px;height:17px}
+.brat-guide .guide-content{padding:0 14px 13px;color:var(--muted);font-size:12px;line-height:1.55}
+.brat-guide .guide-content p{margin:11px 0}
+.brat-guide .guide-content strong,.brat-guide .guide-content b{color:var(--ink);font-weight:600}
