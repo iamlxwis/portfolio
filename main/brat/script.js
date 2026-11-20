@@ -27,6 +27,9 @@ function fitText(){
  const pad=Math.max(8,Math.round(width*.055));
  const availableWidth=width-pad*2,availableHeight=height-Math.max(8,Math.round(height*.055))*2;
  txt.style.width=availableWidth+'px';
+ txt.style.height='auto';
+ txt.style.top='50%';
+ txt.style.bottom='auto';
  txt.style.left=pad+'px';
  txt.style.right='auto';
  if(!content.trim()){txt.style.fontSize='0px';return}
