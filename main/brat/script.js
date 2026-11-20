@@ -5,6 +5,75 @@ const sizes={square:[1080,1080],portrait:[1080,1350],story:[1080,1920],landscape
 const palettes={classic:['#8ace00','#141414'],pink:['#f1a6c9','#ffffff'],white:['#f4f4f0','#141414'],blue:['#1766ef','#ffffff'],black:['#141414','#ffffff']};
 const defaults={text:'brat',bg:'#8ace00',fg:'#141414',blur:1,grain:.35,mirror:false,size:'square',font:'Arial, Helvetica, sans-serif',fontScale:100,lineHeight:100,image:null};
 const key='brat-minimal-v2';let state={...defaults},photo=null,raf=0,toastTimer;
+
+const iconPaths={
+ check:'<path d="m20 6-11 11-5-5"/>',
+ alert:'<circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>',
+ info:'<circle cx="12" cy="12" r="10"/><path d="M12 11v5m0-8h.01"/>',
+ download:'<path d="M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4"/>',
+ moon:'<path d="M20.985 12.486A9 9 0 0 1 11.514 3.015 9 9 0 1 0 20.985 12.486Z"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>',
+ type:'<path d="M4 7V4h16v3M12 4v16m-4 0h8"/>',
+ sliders:'<path d="M4 7h16M4 17h16M8 4v6M16 14v6"/>',
+ image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>',
+ chevron:'<path d="m6 9 6 6 6-6"/>',
+ trash:'<path d="M3 6h18M8 6V4h8v2m3 0-1 15H6L5 6m5 4v7m4-7v7"/>',
+ reset:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5"/>'
+};
+function premiumIcon(name,size=24){
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('width',String(size));svg.setAttribute('height',String(size));
+ svg.setAttribute('fill','none');svg.setAttribute('stroke','currentColor');svg.setAttribute('stroke-width','1.8');svg.setAttribute('stroke-linecap','round');svg.setAttribute('stroke-linejoin','round');
+ svg.classList.add('brat-premium-icon');svg.setAttribute('aria-hidden','true');
+ svg.innerHTML=iconPaths[name]||iconPaths.info;return svg;
+}
+function upgradeIcons(){
+ const entries=[
+  ['#downloadTop','download'],['#themeToggle','moon'],
+  ['.editor-panel>summary .settings-title','type'],
+  ['.settings-panel>summary .settings-title','sliders'],
+  ['.media-panel>summary .settings-title','image'],
+  ['#removeImage','trash'],['#resetDesign','reset']
+ ];
+ for(const [selector,name] of entries){
+  const parent=document.querySelector(selector);const old=parent?.querySelector('svg');
+  if(old)old.replaceWith(premiumIcon(name));
+ }
+ document.querySelectorAll('details.editor-panel>summary>svg,details.settings-panel>summary>svg').forEach(svg=>svg.replaceWith(premiumIcon('chevron')));
+}
+function exportOptions(){
+ const el=$('toast');clearTimeout(toastTimer);el.replaceChildren();
+ const dialog=document.createElement('div');dialog.className='brat-dialog brat-export-dialog';
+ dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-labelledby','brat-export-title');
+ const icon=document.createElement('span');icon.className='brat-dialog-symbol';icon.append(premiumIcon('download',29));
+ const heading=document.createElement('h2');heading.id='brat-export-title';heading.textContent='Export image';
+ const description=document.createElement('p');description.textContent='Choose a format and resolution';
+ const form=document.createElement('div');form.className='brat-export-form';
+ const formatLabel=document.createElement('label');formatLabel.textContent='Image format';
+ const format=document.createElement('select');format.className='brat-export-select';
+ for(const [value,label] of [['png','PNG · best quality'],['jpeg','JPG · smaller file'],['webp','WebP · modern format']]){
+  const option=new Option(label,value);format.add(option);
+ }
+ format.value=$('exportFormat').value;formatLabel.append(format);
+ const qualityLabel=document.createElement('label');qualityLabel.textContent='Resolution';
+ const quality=document.createElement('select');quality.className='brat-export-select';
+ for(const [value,label] of [['1','1080px · standard'],['2','2160px · high quality']])quality.add(new Option(label,value));
+ quality.value=$('exportScale').value;qualityLabel.append(quality);
+ form.append(formatLabel,qualityLabel);
+ const actions=document.createElement('div');actions.className='brat-export-actions';
+ const cancel=document.createElement('button');cancel.type='button';cancel.className='brat-export-cancel';cancel.textContent='Cancel';
+ const save=document.createElement('button');save.type='button';save.className='brat-dialog-done';save.append(premiumIcon('download',19),document.createTextNode(' Save image'));
+ actions.append(cancel,save);dialog.append(icon,heading,description,form,actions);el.append(dialog);
+ el.className='brat-modal show';
+ const prior=document.activeElement;
+ function close(){el.classList.remove('show');document.removeEventListener('keydown',onKey);if(prior?.focus)prior.focus({preventScroll:true})}
+ function onKey(e){if(e.key==='Escape'){e.preventDefault();close()}else if(e.key==='Tab'){const nodes=[format,quality,cancel,save],index=nodes.indexOf(document.activeElement);if(index>=0){e.preventDefault();nodes[(index+(e.shiftKey?nodes.length-1:1))%nodes.length].focus()}}}
+ document.addEventListener('keydown',onKey);
+ cancel.addEventListener('click',close);
+ save.addEventListener('click',()=>{$('exportFormat').value=format.value;$('exportScale').value=quality.value;document.removeEventListener('keydown',onKey);exportArt()});
+ format.focus({preventScroll:true});
+}
+
 let progressActive=false;
 function showProgress(message='Working on your image…'){
  const el=$('toast');
@@ -16,7 +85,7 @@ function showProgress(message='Working on your image…'){
  dialog.setAttribute('role','dialog');
  dialog.setAttribute('aria-modal','true');
  dialog.setAttribute('aria-label',message);
- const icon=document.createElement('span');icon.className='brat-progress-icon';icon.setAttribute('aria-hidden','true');icon.textContent='brat';
+ const icon=document.createElement('span');icon.className='brat-progress-icon';icon.setAttribute('aria-hidden','true');icon.append(premiumIcon('image',32));
  const title=document.createElement('h2');title.textContent=message;
  const subtitle=document.createElement('p');subtitle.textContent='just a moment';
  const skeleton=document.createElement('div');skeleton.className='brat-progress-track';skeleton.innerHTML='<span></span>';
@@ -33,7 +102,7 @@ function notify(t){
  clearTimeout(toastTimer);
  el.replaceChildren();
  const dialog=document.createElement('div');dialog.className='brat-dialog';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-labelledby','brat-dialog-title');
- const symbol=document.createElement('span');symbol.className='brat-dialog-symbol';symbol.textContent=failed?'!':success?'✓':'i';
+ const symbol=document.createElement('span');symbol.className='brat-dialog-symbol';symbol.append(premiumIcon(failed?'alert':success?'check':'info',30));
  const title=document.createElement('h2');title.id='brat-dialog-title';title.textContent=failed?'Something went wrong':success?'Saved successfully':'BRAT';
  const description=document.createElement('p');description.textContent=message;
  const done=document.createElement('button');done.type='button';done.className='brat-dialog-done';done.textContent='Done';
@@ -178,12 +247,13 @@ $('mirrorToggle').addEventListener('click',()=>update({mirror:!state.mirror}));
 document.querySelectorAll('.modern-select').forEach(sel=>{const shell=document.createElement('div');shell.className='select-shell';const trigger=document.createElement('button');trigger.type='button';trigger.className='select-display';trigger.dataset.select=sel.id;trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');trigger.innerHTML='<span></span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>';const options=document.createElement('div');options.className='select-options';options.setAttribute('role','listbox');options.hidden=true;for(const option of sel.options){const item=document.createElement('button');item.type='button';item.className='select-item';item.setAttribute('role','option');item.textContent=option.textContent;item.addEventListener('click',()=>{sel.value=option.value;sel.dispatchEvent(new Event('change',{bubbles:true}));options.hidden=true;trigger.setAttribute('aria-expanded','false');trigger.querySelector('span').textContent=option.textContent;draw();trigger.focus()});options.appendChild(item)}sel.parentNode.insertBefore(shell,sel);shell.append(sel,trigger,options);trigger.addEventListener('click',()=>{const opening=options.hidden;document.querySelectorAll('.select-options').forEach(p=>p.hidden=true);document.querySelectorAll('.select-display').forEach(b=>b.setAttribute('aria-expanded','false'));options.hidden=!opening;trigger.setAttribute('aria-expanded',String(opening))});trigger.addEventListener('keydown',e=>{if(e.key==='Escape'){options.hidden=true;trigger.setAttribute('aria-expanded','false')}else if(e.key==='ArrowDown'){e.preventDefault();options.hidden=false;options.firstElementChild?.focus()}});options.addEventListener('keydown',e=>{if(e.key==='Escape'){options.hidden=true;trigger.focus()}})});
 document.addEventListener('click',e=>{if(!e.target.closest('.select-shell')){document.querySelectorAll('.select-options').forEach(p=>p.hidden=true);document.querySelectorAll('.select-display').forEach(b=>b.setAttribute('aria-expanded','false'))}});
 document.querySelectorAll('.swatch').forEach(b=>b.addEventListener('click',()=>{const [bg,fg]=palettes[b.dataset.palette];update({bg,fg})}));
-$('downloadTop').addEventListener('click',exportArt);
+$('downloadTop').addEventListener('click',exportOptions);
 $('resetDesign').addEventListener('click',()=>{state={...defaults};photo=null;save();sync();schedule()});
 $('imageInput').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;$('uploadLabel').textContent=file.name.length>18?file.name.slice(0,15)+'…':file.name;if(file.size>5e6){notify('image must be under 5 MB');return}const reader=new FileReader();reader.onload=()=>{showProgress('Loading your image…');update({image:reader.result});loadPhoto();document.querySelector('.media-panel').open=false;document.querySelector('.controls').scrollTo({top:0,behavior:'smooth'})};reader.onerror=()=>notify('image failed to load');reader.readAsDataURL(file)});
 $('removeImage').addEventListener('click',()=>{photo=null;$('imageInput').value='';$('uploadLabel').textContent='upload image';update({image:null})});
 function theme(v){
  document.documentElement.dataset.theme=v;
+ const themeIcon=$('themeToggle')?.querySelector('svg');if(themeIcon)themeIcon.replaceWith(premiumIcon(v==='dark'?'sun':'moon'));
  const dark=v==='dark';
  const themeColor=dark?'#141613':'#f5f5f2';
  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',themeColor);
@@ -197,4 +267,5 @@ function theme(v){
 $('themeToggle').addEventListener('click',()=>theme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
 try{const old=JSON.parse(localStorage.getItem(key));if(old&&sizes[old.size])state={...defaults,...old}}catch{}
 try{theme(localStorage.getItem('brat-ui-theme')||'light')}catch{theme('light')}
+upgradeIcons();
 const observer=new ResizeObserver(()=>requestAnimationFrame(draw));observer.observe(art.closest('.art-area'));sync();loadPhoto();schedule();
