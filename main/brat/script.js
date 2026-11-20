@@ -3,8 +3,8 @@ const $=id=>document.getElementById(id),art=$('art'),txt=$('artText');
 if(window.Capacitor?.isNativePlatform?.())document.documentElement.classList.add('capacitor-app');
 const sizes={square:[1080,1080],portrait:[1080,1350],story:[1080,1920],landscape:[1920,1080]};
 const palettes={classic:['#8ace00','#141414'],pink:['#f1a6c9','#ffffff'],white:['#f4f4f0','#141414'],blue:['#1766ef','#ffffff'],black:['#141414','#ffffff']};
-const defaults={text:'we got GTA VI before i got a girlfriend',bg:'#8ace00',fg:'#141414',blur:1,grain:0,size:'square',font:'Arial, Helvetica, sans-serif',fontScale:100,lineHeight:100,image:null};
-const key='brat-minimal-v1';let state={...defaults},photo=null,raf=0,toastTimer;
+const defaults={text:'brat',bg:'#8ace00',fg:'#141414',blur:1,grain:0,size:'square',font:'Arial, Helvetica, sans-serif',fontScale:100,lineHeight:100,image:null};
+const key='brat-minimal-v2';let state={...defaults},photo=null,raf=0,toastTimer;
 function notify(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2000)}
 function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch{}}
 function update(p){state={...state,...p};save();sync();schedule()}
@@ -14,7 +14,7 @@ function fitText(){
  // Same core method as bratify: browser-native justified layout, then text-fit.
  // Binary-search font size against the actual DOM box, not an approximation of wrapping.
  const width=art.clientWidth,height=art.clientHeight;if(!width||!height)return;
- txt.style.fontFamily=state.font;txt.style.lineHeight=String(1.12*state.lineHeight/100);
+ txt.classList.toggle('single-word',!String(state.text||'brat').trim().includes(' '));txt.style.fontFamily=state.font;txt.style.lineHeight=String(1.12*state.lineHeight/100);
  txt.style.color=state.fg;txt.style.filter=state.blur?'blur('+(state.blur*width/1080).toFixed(2)+'px)':'none';
  txt.textContent=state.text||'brat';
  let lo=5,hi=Math.min(width*.72,300*width/384)*state.fontScale/100;
