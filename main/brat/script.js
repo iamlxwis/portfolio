@@ -10,24 +10,24 @@ function notify(t){
  const message=String(t);
  const failed=/failed|could not|error|invalid|under 5 MB/i.test(message);
  const success=/saved to gallery|image added|ready/i.test(message);
- el.className='notice-popup'+(failed?' notice-error':success?' notice-success':'');
- el.innerHTML='';
- const symbol=document.createElement('span');
- symbol.className='notice-symbol';
- symbol.textContent=failed?'!':success?'✓':'i';
- const body=document.createElement('span');
- body.className='notice-body';
- const heading=document.createElement('strong');
- heading.textContent=failed?'Something went wrong':success?'All done':'BRAT';
- const detail=document.createElement('span');
- detail.textContent=message;
- body.append(heading,detail);
- el.append(symbol,body);
- el.setAttribute('role',failed?'alert':'status');
- el.classList.add('show');
  clearTimeout(toastTimer);
- toastTimer=setTimeout(()=>el.classList.remove('show'),success?2600:failed?3800:2200);
+ el.replaceChildren();
+ const dialog=document.createElement('div');dialog.className='brat-dialog';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-labelledby','brat-dialog-title');
+ const symbol=document.createElement('span');symbol.className='brat-dialog-symbol';symbol.textContent=failed?'!':success?'✓':'i';
+ const title=document.createElement('h2');title.id='brat-dialog-title';title.textContent=failed?'Something went wrong':success?'Saved successfully':'BRAT';
+ const description=document.createElement('p');description.textContent=message;
+ const done=document.createElement('button');done.type='button';done.className='brat-dialog-done';done.textContent='Done';
+ dialog.append(symbol,title,description,done);el.append(dialog);
+ el.className='brat-modal show'+(failed?' brat-modal-error':'');
+ const previousFocus=document.activeElement;
+ function close(){if(!el.classList.contains('show'))return;el.classList.remove('show');document.removeEventListener('keydown',onKey);toastTimer=setTimeout(()=>{el.replaceChildren();previousFocus?.focus?.()},220)}
+ function onKey(e){if(e.key==='Escape'){e.preventDefault();close()}if(e.key==='Tab'){e.preventDefault();done.focus()}}
+ done.addEventListener('click',close);
+ el.addEventListener('click',e=>{if(e.target===el)close()},{once:true});
+ document.addEventListener('keydown',onKey);
+ done.focus({preventScroll:true});
 }
+
 function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch{}}
 function update(p){state={...state,...p};save();sync();schedule()}
 function sync(){for(const [id,v] of [['mainText',state.text],['bgColor',state.bg],['textColor',state.fg],['blur',state.blur],['grain',state.grain],['canvasSize',state.size],['fontFamily',state.font],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id).value=v;document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',palettes[b.dataset.palette].join('|')===[state.bg,state.fg].join('|')));for(const [id,value] of [['blur',Math.max(1,Math.round(state.blur/5*100))],['grain',Math.max(1,Math.round(state.grain/35*100))],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id+'Value').value=Math.max(1,Math.min(100,value));$('mirrorToggle').setAttribute('aria-pressed',String(!!state.mirror));$('mirrorToggle').querySelector('span').textContent=state.mirror?'on':'off';syncHex();document.querySelectorAll('.select-display').forEach(b=>{const sel=$(b.dataset.select);b.querySelector('span').textContent=sel.options[sel.selectedIndex]?.textContent||''})}
