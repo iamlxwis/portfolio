@@ -38,7 +38,7 @@ function fitText(){
  const width=art.clientWidth,height=art.clientHeight;
  if(!width||!height)return;
  const content=String(state.text??'');
- const single=!!content.trim()&&!/\\s/.test(content.trim());
+ const single=!!content.trim()&&!/\s/.test(content.trim());
  txt.classList.toggle('single-word',single);
  txt.style.fontFamily=state.font;
  txt.style.lineHeight=String(Math.max(.65,1.12*state.lineHeight/100));
