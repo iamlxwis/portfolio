@@ -7,5 +7,13 @@
   },
   "server": {
     "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "launchAutoHide": true,
+      "backgroundColor": "#8ace00",
+      "showSpinner": false
+    }
   }
 }
