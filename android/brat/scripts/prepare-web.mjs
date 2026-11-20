@@ -20,5 +20,16 @@ js=js.replaceAll('href="/privacy"','href="./privacy.html"').replaceAll('href="/c
 html=html.replace(/<body([^>]*)>/i, (match,attrs)=>match+'<div id="native-startup" aria-label="Loading BRAT" style="position:fixed;inset:0;z-index:2147483647;background:#8ace00;color:#141414;display:flex;align-items:center;justify-content:center;font:700 64px Arial,sans-serif">brat</div>');
 html=html.replace('</body>','<script>window.addEventListener("load",()=>{setTimeout(()=>{const el=document.getElementById("native-startup");if(el)el.remove()},550)},{once:true});</script></body>');
 html=html.replace(/<head>/,'<head><meta http-equiv="Content-Security-Policy" content="default-src \'self\' data: blob:; img-src \'self\' data: blob:; style-src \'self\' \'unsafe-inline\'; script-src \'self\'; connect-src \'self\'">');
+// A visible startup screen for the packaged Android app, removed after its UI is ready.
+html=html.replace('<body>','<body><div id="brat-startup" role="status" aria-label="Loading BRAT" style="position:fixed;inset:0;z-index:2147483647;background:#8ace00;color:#141414;display:flex;align-items:center;justify-content:center;font:700 56px Arial,sans-serif">brat.</div>');
+html=html.replace('</head>','<script src="./startup.js" defer></script></head>');
+await writeFile(resolve(dest,'startup.js'),`(() => {
+  const dismiss = () => {
+    const overlay = document.getElementById('brat-startup');
+    if (overlay) overlay.remove();
+  };
+  window.addEventListener('load', () => requestAnimationFrame(() => requestAnimationFrame(dismiss)), {once:true});
+  setTimeout(dismiss, 6000);
+})();`);
 await writeFile(file,html);
 console.log('Offline BRAT web assets copied to android/brat/www');
