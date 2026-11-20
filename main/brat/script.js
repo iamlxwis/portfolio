@@ -1,5 +1,6 @@
 'use strict';
 const $=id=>document.getElementById(id),art=$('art'),txt=$('artText');
+if(window.Capacitor?.isNativePlatform?.())document.documentElement.classList.add('capacitor-app');
 const sizes={square:[1080,1080],portrait:[1080,1350],story:[1080,1920],landscape:[1920,1080]};
 const palettes={classic:['#8ace00','#141414'],pink:['#f1a6c9','#ffffff'],white:['#f4f4f0','#141414'],blue:['#1766ef','#ffffff'],black:['#141414','#ffffff']};
 const defaults={text:'we got GTA VI before i got a girlfriend',bg:'#8ace00',fg:'#141414',blur:1,grain:0,size:'square',font:'Arial, Helvetica, sans-serif',fontScale:100,lineHeight:100,image:null};
@@ -59,8 +60,8 @@ bind('mainText','input','text');bind('bgColor','input','bg');bind('textColor','i
 document.querySelectorAll('.swatch').forEach(b=>b.addEventListener('click',()=>{const [bg,fg]=palettes[b.dataset.palette];update({bg,fg})}));
 $('download').addEventListener('click',exportArt);$('downloadTop').addEventListener('click',exportArt);
 $('resetDesign').addEventListener('click',()=>{state={...defaults};photo=null;save();sync();schedule()});
-$('imageInput').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>5e6){notify('image must be under 5 MB');return}const reader=new FileReader();reader.onload=()=>{update({image:reader.result});loadPhoto()};reader.readAsDataURL(file)});
-$('removeImage').addEventListener('click',()=>{photo=null;update({image:null})});
+$('imageInput').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;$('uploadLabel').textContent=file.name.length>18?file.name.slice(0,15)+'…':file.name;if(file.size>5e6){notify('image must be under 5 MB');return}const reader=new FileReader();reader.onload=()=>{update({image:reader.result});loadPhoto()};reader.readAsDataURL(file)});
+$('removeImage').addEventListener('click',()=>{photo=null;$('imageInput').value='';$('uploadLabel').textContent='upload image';update({image:null})});
 function theme(v){document.documentElement.dataset.theme=v;try{localStorage.setItem('brat-ui-theme',v)}catch{}}
 $('themeToggle').addEventListener('click',()=>theme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
 try{const old=JSON.parse(localStorage.getItem(key));if(old&&sizes[old.size])state={...defaults,...old}}catch{}
