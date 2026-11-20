@@ -40,3 +40,30 @@ html.capacitor-app main{height:calc(100dvh - 54px - var(--native-top) - var(--na
 .brat-guide .guide-content{padding:0 14px 13px;color:var(--muted);font-size:12px;line-height:1.55}
 .brat-guide .guide-content p{margin:11px 0}
 .brat-guide .guide-content strong,.brat-guide .guide-content b{color:var(--ink);font-weight:600}
+
+/* Compact editor controls */
+.controls-inner{padding:22px 20px 24px}
+.control{margin-bottom:17px}
+.control>label{margin-bottom:9px}
+.text-field{border:1px solid var(--line);border-radius:10px;background:var(--page);padding:12px 13px 9px;transition:border-color .15s}
+.text-field:focus-within{border-color:var(--ink)}
+.control .text-field textarea{display:block;min-height:72px;max-height:160px;width:100%;resize:vertical;border:0;background:transparent;padding:0;font-size:16px;line-height:1.4}
+.text-field-hint{display:block;font-size:10px;color:var(--muted);margin-top:7px}
+.swatches{justify-content:space-between;gap:7px;margin:3px 0 13px}
+.swatch{width:32px;height:32px;flex-shrink:0}
+.color-pickers label{padding:7px 9px}
+.color-pickers input[type=color]{height:30px;width:34px}
+.range-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px}
+.range-head label{font-size:12px;font-weight:600;color:var(--ink)}
+.range-head output{font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted);background:var(--page);border:1px solid var(--line);border-radius:5px;padding:3px 7px;min-width:45px;text-align:center}
+.range-control{display:block}
+.range-control input[type=range]{width:100%;max-width:none}
+.extras{gap:13px;padding-top:17px}
+.extras>label{min-height:33px}
+.extras select{width:138px}
+.controls-inner>details{margin-bottom:10px;padding:14px 0}
+.brat-guide{margin:12px 0 0;padding:0!important}
+.brat-guide>summary{padding:12px}
+.art-text,.art-text.single-word{position:absolute;inset:auto 0 auto 0;top:50%;transform:translateY(-50%);display:block;text-align:center;text-align-last:center;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;overflow:visible;height:auto;max-height:none}
+.art-text.single-word{white-space:nowrap;overflow-wrap:normal}
+@media(max-width:760px){.controls-inner{padding:15px 17px max(28px,env(safe-area-inset-bottom))}.control{margin-bottom:14px}.control .text-field textarea{min-height:55px}.swatches{margin-bottom:11px}}
