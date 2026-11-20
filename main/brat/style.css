@@ -202,3 +202,29 @@ html.capacitor-app main{height:calc(100dvh - 54px - var(--native-top) - var(--na
 @keyframes bratProgressPulse{from{opacity:.7;transform:scale(.96)}to{opacity:1;transform:scale(1.02)}}
 @keyframes bratProgressSlide{from{transform:translateX(-105%)}to{transform:translateX(245%)}}
 @media(prefers-reduced-motion:reduce){.brat-progress-icon,.brat-progress-track>span{animation:none}.brat-progress-track>span{width:100%}}
+
+/* Unified premium outline icons and touch animations */
+.brat-premium-icon{width:20px;height:20px;flex-shrink:0;stroke-width:1.8;transition:transform .22s cubic-bezier(.2,.8,.2,1),opacity .18s ease}
+button:hover .brat-premium-icon,summary:hover .brat-premium-icon{transform:scale(1.1)}
+button:active .brat-premium-icon{transform:scale(.87) rotate(-7deg)}
+#themeToggle .brat-premium-icon{animation:bratIconArrive .32s ease-out}
+#downloadTop .brat-premium-icon{width:21px;height:21px}
+#downloadTop:active .brat-premium-icon{transform:translateY(3px)}
+.brat-dialog-symbol .brat-premium-icon{width:30px;height:30px;animation:bratIconArrive .4s cubic-bezier(.2,.8,.2,1)}
+.brat-progress-icon .brat-premium-icon{width:32px;height:32px}
+@keyframes bratIconArrive{from{opacity:0;transform:scale(.6) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+.brat-export-dialog{text-align:left}
+.brat-export-dialog>.brat-dialog-symbol{margin-left:0;margin-right:0}
+.brat-export-dialog>h2{font-size:23px}
+.brat-export-dialog>p{margin-bottom:22px}
+.brat-export-form{display:grid;gap:15px;margin:0 0 23px}
+.brat-export-form label{display:grid;gap:8px;color:var(--ink);font-size:13px;font-weight:650}
+.brat-export-select{display:block;width:100%;min-height:49px;padding:0 14px;border:1px solid var(--line);border-radius:13px;background:var(--page);color:var(--ink);font-size:15px;outline-offset:3px}
+.brat-export-actions{display:flex;gap:10px}
+.brat-export-actions button{min-height:47px;border-radius:13px;font-size:14px;font-weight:700}
+.brat-export-cancel{flex:1;border:1px solid var(--line);background:var(--page);color:var(--ink)}
+.brat-export-actions .brat-dialog-done{flex:1.45;display:flex;align-items:center;justify-content:center;gap:8px;margin:0}
+.brat-export-actions .brat-dialog-done .brat-premium-icon{width:19px;height:19px}
+button,summary{ -webkit-tap-highlight-color:transparent }
+button:focus-visible,summary:focus-visible{outline:2px solid #8ace00;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.brat-premium-icon,.brat-dialog-symbol .brat-premium-icon,#themeToggle .brat-premium-icon{transition:none!important;animation:none!important}}
