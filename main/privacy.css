@@ -3,3 +3,9 @@
 #lx-privacy-widget .lx-sections details+details{border-top:1px solid #3b4039}
 #lx-privacy-widget .lx-sections summary{font-size:13px}
 #lx-privacy-widget .lx-overlay{isolation:isolate}
+
+/* consent visibility hardening */
+#lx-privacy-widget{position:relative;z-index:2147483639;isolation:isolate}
+#lx-privacy-widget>.lx-overlay:not([hidden]){display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+#lx-privacy-widget>.lx-overlay[hidden]{display:none!important}
+#lx-privacy-widget .lx-panel{position:relative;z-index:1}
