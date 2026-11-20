@@ -4,7 +4,7 @@ if(window.Capacitor?.isNativePlatform?.())document.documentElement.classList.add
 const sizes={square:[1080,1080],portrait:[1080,1350],story:[1080,1920],landscape:[1920,1080]};
 const palettes={classic:['#8ace00','#141414'],pink:['#f1a6c9','#ffffff'],white:['#f4f4f0','#141414'],blue:['#1766ef','#ffffff'],black:['#141414','#ffffff']};
 const defaults={text:'brat',bg:'#8ace00',fg:'#141414',blur:1,grain:.35,mirror:false,size:'square',font:'Arial, Helvetica, sans-serif',fontScale:100,lineHeight:100,image:null};
-const key='brat-minimal-v3';let state={...defaults},photo=null,raf=0,toastTimer;
+const key='brat-minimal-v2';let state={...defaults},photo=null,raf=0,toastTimer;
 function notify(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2000)}
 function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch{}}
 function update(p){state={...state,...p};save();sync();schedule()}
