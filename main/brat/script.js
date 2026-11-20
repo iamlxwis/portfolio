@@ -5,7 +5,29 @@ const sizes={square:[1080,1080],portrait:[1080,1350],story:[1080,1920],landscape
 const palettes={classic:['#8ace00','#141414'],pink:['#f1a6c9','#ffffff'],white:['#f4f4f0','#141414'],blue:['#1766ef','#ffffff'],black:['#141414','#ffffff']};
 const defaults={text:'brat',bg:'#8ace00',fg:'#141414',blur:1,grain:.35,mirror:false,size:'square',font:'Arial, Helvetica, sans-serif',fontScale:100,lineHeight:100,image:null};
 const key='brat-minimal-v2';let state={...defaults},photo=null,raf=0,toastTimer;
-function notify(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2000)}
+function notify(t){
+ const el=$('toast');
+ const message=String(t);
+ const failed=/failed|could not|error|invalid|under 5 MB/i.test(message);
+ const success=/saved to gallery|image added|ready/i.test(message);
+ el.className='notice-popup'+(failed?' notice-error':success?' notice-success':'');
+ el.innerHTML='';
+ const symbol=document.createElement('span');
+ symbol.className='notice-symbol';
+ symbol.textContent=failed?'!':success?'✓':'i';
+ const body=document.createElement('span');
+ body.className='notice-body';
+ const heading=document.createElement('strong');
+ heading.textContent=failed?'Something went wrong':success?'All done':'BRAT';
+ const detail=document.createElement('span');
+ detail.textContent=message;
+ body.append(heading,detail);
+ el.append(symbol,body);
+ el.setAttribute('role',failed?'alert':'status');
+ el.classList.add('show');
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>el.classList.remove('show'),success?2600:failed?3800:2200);
+}
 function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch{}}
 function update(p){state={...state,...p};save();sync();schedule()}
 function sync(){for(const [id,v] of [['mainText',state.text],['bgColor',state.bg],['textColor',state.fg],['blur',state.blur],['grain',state.grain],['canvasSize',state.size],['fontFamily',state.font],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id).value=v;document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',palettes[b.dataset.palette].join('|')===[state.bg,state.fg].join('|')));for(const [id,value] of [['blur',Math.max(1,Math.round(state.blur/5*100))],['grain',Math.max(1,Math.round(state.grain/35*100))],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id+'Value').value=Math.max(1,Math.min(100,value));$('mirrorToggle').setAttribute('aria-pressed',String(!!state.mirror));$('mirrorToggle').querySelector('span').textContent=state.mirror?'on':'off';syncHex();document.querySelectorAll('.select-display').forEach(b=>{const sel=$(b.dataset.select);b.querySelector('span').textContent=sel.options[sel.selectedIndex]?.textContent||''})}
@@ -33,30 +55,32 @@ function fitText(){
  txt.style.left=pad+'px';
  txt.style.right='auto';
  if(!content.trim()){txt.style.fontSize='0px';return}
- // Bratify's textfit principle: measure actual browser line breaks in a
- // constrained box, then binary-search the largest font that still fits.
  const scale=Math.max(.01,Math.min(1,Number(state.fontScale)||100)/100);
  const maximum=Math.min(availableWidth*.85,availableHeight*.85,400)*scale;
- let low=.5,high=Math.max(1,maximum);
- const node=txt.firstChild;
+ // Single words use canvas glyph measurement, avoiding unreliable DOM range
+ // bounds and flex layout measurements that previously forced 0.5px text.
+ if(single){
+  const probe=document.createElement('canvas').getContext('2d');
+  probe.font='400 100px '+state.font;
+  const measured=Math.max(1,probe.measureText(content).width);
+  const lineFactor=Math.max(.65,1.12*state.lineHeight/100);
+  const target=Math.min(maximum,availableWidth*100/measured,availableHeight/lineFactor);
+  txt.style.fontSize=Math.max(1,target)+'px';
+  return;
+ }
+ // Multiline content: fit by actual rendered height and width only.
+ // Range rectangles were compared to their own transformed parent, producing
+ // false overflow and shrinking even short text to nearly zero.
+ let low=1,high=Math.max(1,maximum);
  function fits(px){
   txt.style.fontSize=px+'px';
-  if(txt.scrollHeight>availableHeight+.5||txt.scrollWidth>availableWidth+.5)return false;
-  // scrollWidth alone cannot detect a final glyph protruding beyond a line.
-  // Inspect the browser's actual glyph boxes, including justified lines.
-  if(!node||node.nodeType!==3)return true;
-  const parent=txt.getBoundingClientRect();
-  const range=document.createRange();
-  for(let i=0;i<node.length;i++){
-   if(/\\s/.test(node.textContent[i]))continue;
-   range.setStart(node,i);range.setEnd(node,i+1);
-   const rect=range.getBoundingClientRect();
-   if(rect.left<parent.left-1||rect.right>parent.right+1)return false;
-  }
-  return true;
+  return txt.scrollHeight<=availableHeight+1 && txt.scrollWidth<=availableWidth+1;
  }
- for(let i=0;i<18;i++){const mid=(low+high)/2;if(fits(mid))low=mid;else high=mid}
- txt.style.fontSize=Math.max(.5,low-.15)+'px';
+ for(let i=0;i<15;i++){
+  const mid=(low+high)/2;
+  if(fits(mid))low=mid;else high=mid;
+ }
+ txt.style.fontSize=Math.max(1,low-.1)+'px';
 }
 
 function draw(){const [w,h]=sizes[state.size];const area=art.closest('.art-area');const styles=getComputedStyle(area);const aw=area.clientWidth-parseFloat(styles.paddingLeft)-parseFloat(styles.paddingRight),ah=area.clientHeight-parseFloat(styles.paddingTop)-parseFloat(styles.paddingBottom);const scale=Math.min(aw/w,ah/h);if(scale>0){art.style.width=Math.floor(w*scale)+'px';art.style.height=Math.floor(h*scale)+'px'}art.style.aspectRatio=w+'/'+h;art.style.background=state.bg;if(photo)art.style.backgroundImage='url('+JSON.stringify(photo.src)+')';else art.style.backgroundImage='none';art.style.backgroundSize='cover';art.style.backgroundPosition='center';fitText()}
