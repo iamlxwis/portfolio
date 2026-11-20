@@ -23,3 +23,49 @@
 
 .sidebar-heading{display:none}
 .simple-editor .button{font-size:12px}
+
+/* Minimalist refresh */
+:root{--lime:#8ace00;--bg:#f5f5f1;--panel:#fff;--line:#e4e4df;--white:#191919;--muted:#777}
+body{background:var(--bg);color:#191919}
+.topbar{background:#fff;border-color:var(--line);height:62px;padding:0 22px}
+.brand{font-size:17px}.brand-mark{width:34px;height:34px}
+.workspace{height:calc(100dvh - 62px);grid-template-columns:340px minmax(0,1fr)}
+.sidebar{background:#fff;border-color:var(--line)}
+.simple-editor{padding:24px;max-width:100%}
+.simple-heading strong{font-size:29px}
+.simple-heading span{color:#5a8600}
+.simple-editor label{color:#555;font-size:10px}
+.simple-editor textarea,.simple-editor select{background:#fafaf8;color:#191919;border:1px solid #deded9;border-radius:9px;font-size:14px}
+.simple-editor textarea{min-height:110px}
+.simple-colors input[type=color]{background:#fafaf8;border:1px solid #deded9;border-radius:9px}
+.simple-editor .button{border-radius:9px;font-size:12px;padding:13px}
+.simple-editor .button.secondary{color:#222;background:#f4f4f1;border-color:#e1e1dc}
+.simple-editor .button.primary{background:#8ace00;color:#141414;border-color:#8ace00}
+.simple-check{color:#333!important}
+.simple-effects input[type=range]{accent-color:#82bd00}
+.stage{background:#f5f5f1}
+.stage-top,.stage-bottom{border-color:#e6e6e0}
+.stage-label{color:#567b00}.stage-sub,.stage-bottom{color:#777}
+.stage-body{background:#efefeb;padding:28px}
+.canvas-wrap{box-shadow:0 12px 42px #00000015}
+.icon-btn{background:#f3f3ef;color:#222;border-color:#e4e4df;border-radius:9px}
+.preview-actions{color:#555}
+.mobile-dock{background:#fff;border-color:#e4e4df}
+.mobile-dock button{border-radius:9px;background:#f3f3ef;color:#222;border-color:#e4e4df}
+.mobile-dock button:last-child{background:#8ace00;border-color:#8ace00}
+.sidebar-footer{border-color:#e4e4df;color:#777}
+.sidebar-footer a{color:#547c00}
+.advanced-open .advanced-tools{background:#1f1f1c;color:#f6f6f0}
+.advanced-open .tabs{background:#1f1f1c}
+@media(max-width:700px){
+ .topbar{height:58px;padding:0 16px}
+ .workspace{height:calc(100dvh - 114px)}
+ .sidebar{top:62px;bottom:56px;background:#fff;border:1px solid #e0e0da;box-shadow:0 -12px 40px #0002}
+ .simple-editor{padding:20px}
+ .simple-heading strong{font-size:26px}
+ .stage-top{padding:12px 15px}
+ .stage-body{padding:14px}
+ .stage-bottom{padding:12px 15px}
+ .mobile-dock{height:56px}
+ .top-actions .icon-btn{background:#f4f4f1}
+}
