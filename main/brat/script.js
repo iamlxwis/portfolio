@@ -5,9 +5,29 @@ const sizes={square:[1080,1080],portrait:[1080,1350],story:[1080,1920],landscape
 const palettes={classic:['#8ace00','#141414'],pink:['#f1a6c9','#ffffff'],white:['#f4f4f0','#141414'],blue:['#1766ef','#ffffff'],black:['#141414','#ffffff']};
 const defaults={text:'brat',bg:'#8ace00',fg:'#141414',blur:1,grain:.35,mirror:false,size:'square',font:'Arial, Helvetica, sans-serif',fontScale:100,lineHeight:100,image:null};
 const key='brat-minimal-v2';let state={...defaults},photo=null,raf=0,toastTimer;
-function notify(t){
+let progressActive=false;
+function showProgress(message='Working on your image…'){
  const el=$('toast');
- const message=String(t);
+ clearTimeout(toastTimer);
+ progressActive=true;
+ el.replaceChildren();
+ const dialog=document.createElement('div');
+ dialog.className='brat-dialog brat-progress-dialog';
+ dialog.setAttribute('role','dialog');
+ dialog.setAttribute('aria-modal','true');
+ dialog.setAttribute('aria-label',message);
+ const icon=document.createElement('span');icon.className='brat-progress-icon';icon.setAttribute('aria-hidden','true');icon.textContent='brat';
+ const title=document.createElement('h2');title.textContent=message;
+ const subtitle=document.createElement('p');subtitle.textContent='just a moment';
+ const skeleton=document.createElement('div');skeleton.className='brat-progress-track';skeleton.innerHTML='<span></span>';
+ dialog.append(icon,title,subtitle,skeleton);el.append(dialog);
+ el.className='brat-modal show brat-modal-loading';
+ el.setAttribute('aria-busy','true');
+}
+function notify(t){
+ const el=$('toast'),message=String(t);
+ progressActive=false;
+ el.removeAttribute('aria-busy');
  const failed=/failed|could not|error|invalid|under 5 MB/i.test(message);
  const success=/saved to gallery|image added|ready/i.test(message);
  clearTimeout(toastTimer);
@@ -20,7 +40,7 @@ function notify(t){
  dialog.append(symbol,title,description,done);el.append(dialog);
  el.className='brat-modal show'+(failed?' brat-modal-error':'');
  const previousFocus=document.activeElement;
- function close(){if(!el.classList.contains('show'))return;el.classList.remove('show');document.removeEventListener('keydown',onKey);toastTimer=setTimeout(()=>{el.replaceChildren();previousFocus?.focus?.()},220)}
+ function close(){if(!el.classList.contains('show'))return;el.classList.remove('show');document.removeEventListener('keydown',onKey);toastTimer=setTimeout(()=>{if(!el.classList.contains('show'))el.replaceChildren();previousFocus?.focus?.()},220)}
  function onKey(e){if(e.key==='Escape'){e.preventDefault();close()}if(e.key==='Tab'){e.preventDefault();done.focus()}}
  done.addEventListener('click',close);
  el.addEventListener('click',e=>{if(e.target===el)close()},{once:true});
@@ -84,7 +104,7 @@ function fitText(){
 }
 
 function draw(){const [w,h]=sizes[state.size];const area=art.closest('.art-area');const styles=getComputedStyle(area);const aw=area.clientWidth-parseFloat(styles.paddingLeft)-parseFloat(styles.paddingRight),ah=area.clientHeight-parseFloat(styles.paddingTop)-parseFloat(styles.paddingBottom);const scale=Math.min(aw/w,ah/h);if(scale>0){art.style.width=Math.floor(w*scale)+'px';art.style.height=Math.floor(h*scale)+'px'}art.style.aspectRatio=w+'/'+h;art.style.background=state.bg;if(photo)art.style.backgroundImage='url('+JSON.stringify(photo.src)+')';else art.style.backgroundImage='none';art.style.backgroundSize='cover';art.style.backgroundPosition='center';fitText()}
-function loadPhoto(){if(!state.image){photo=null;schedule();return}const im=new Image();im.onload=()=>{photo=im;schedule();notify('image added')};im.onerror=()=>{photo=null;schedule()};im.src=state.image}
+function loadPhoto(){if(!state.image){photo=null;schedule();return}const im=new Image();im.onload=()=>{photo=im;schedule();if(progressActive)notify('image added')};im.onerror=()=>{photo=null;schedule();if(progressActive)notify('image failed to load')};im.src=state.image}
 function getRows(){
  // Inspect the actual browser line boxes so exported wrapping matches the preview.
  const node=txt.firstChild;if(!node||node.nodeType!==3)return [];
@@ -100,8 +120,10 @@ function getRows(){
  return rows.sort((a,b)=>a.y-b.y)
 }
 function exportArt(){
+ if(progressActive)return;
+ showProgress('Saving your image…');
  const [w,h]=sizes[state.size],mul=Number($('exportScale').value),out=document.createElement('canvas');out.width=w*mul;out.height=h*mul;
- const c=out.getContext('2d'),previewWidth=art.clientWidth,previewHeight=art.clientHeight;if(!previewWidth)return;
+ const c=out.getContext('2d'),previewWidth=art.clientWidth,previewHeight=art.clientHeight;if(!previewWidth){notify('export failed: preview is not ready');return;}
  const sx=out.width/previewWidth,sy=out.height/previewHeight;
  c.fillStyle=state.bg;c.fillRect(0,0,out.width,out.height);
  if(photo){const ratio=Math.max(out.width/photo.width,out.height/photo.height),iw=photo.width*ratio,ih=photo.height*ratio;c.drawImage(photo,(out.width-iw)/2,(out.height-ih)/2,iw,ih)}
@@ -128,7 +150,7 @@ function exportArt(){
    }catch(error){console.error('Gallery export failed',error);notify('save failed: '+(error?.message||'please try again'))}
    return;
   }
-  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='brat.'+extension;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)
+  try{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='brat.'+extension;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);notify('image ready to download')}catch(error){notify('export failed: '+(error?.message||'please try again'))}
  },'image/'+type,.95)
 }
 function bind(id,event,key,convert=x=>x){$(id).addEventListener(event,e=>update({[key]:convert(e.target.value)}))}
@@ -154,7 +176,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('.select-shell')){doc
 document.querySelectorAll('.swatch').forEach(b=>b.addEventListener('click',()=>{const [bg,fg]=palettes[b.dataset.palette];update({bg,fg})}));
 $('downloadTop').addEventListener('click',exportArt);
 $('resetDesign').addEventListener('click',()=>{state={...defaults};photo=null;save();sync();schedule()});
-$('imageInput').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;$('uploadLabel').textContent=file.name.length>18?file.name.slice(0,15)+'…':file.name;if(file.size>5e6){notify('image must be under 5 MB');return}const reader=new FileReader();reader.onload=()=>{update({image:reader.result});loadPhoto();document.querySelector('.media-panel').open=false;document.querySelector('.controls').scrollTo({top:0,behavior:'smooth'})};reader.readAsDataURL(file)});
+$('imageInput').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;$('uploadLabel').textContent=file.name.length>18?file.name.slice(0,15)+'…':file.name;if(file.size>5e6){notify('image must be under 5 MB');return}const reader=new FileReader();reader.onload=()=>{showProgress('Loading your image…');update({image:reader.result});loadPhoto();document.querySelector('.media-panel').open=false;document.querySelector('.controls').scrollTo({top:0,behavior:'smooth'})};reader.onerror=()=>notify('image failed to load');reader.readAsDataURL(file)});
 $('removeImage').addEventListener('click',()=>{photo=null;$('imageInput').value='';$('uploadLabel').textContent='upload image';update({image:null})});
 function theme(v){document.documentElement.dataset.theme=v;try{localStorage.setItem('brat-ui-theme',v)}catch{}}
 $('themeToggle').addEventListener('click',()=>theme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
