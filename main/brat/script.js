@@ -23,7 +23,7 @@ function fitText(){
  let lo=5,hi=Math.min(width*(txt.classList.contains('single-word')?.43:.72),300*width/384)*state.fontScale/100;
  for(let i=0;i<19;i++){
   const mid=(lo+hi)/2;txt.style.fontSize=mid+'px';
-  if(txt.scrollHeight<=height+1&&txt.scrollWidth<=width+1)lo=mid;else hi=mid;
+  if(txt.getBoundingClientRect().height<=height+1&&txt.scrollWidth<=width+1)lo=mid;else hi=mid;
  }
  txt.style.fontSize=lo+'px';
 }
@@ -54,7 +54,7 @@ function exportArt(){
  c.filter=state.blur?'blur('+(state.blur*mul).toFixed(2)+'px)':'none';
  // Paint browser-positioned characters, retaining CSS justification and natural glyph widths.
  if(state.mirror){c.translate(out.width,0);c.scale(-1,1)}
- for(const row of rows)for(const item of row.chars){if(item.ch===' '||item.ch==='\n')continue;c.fillText(item.ch,item.x*sx,(row.y+(line-size)*.28)*sy)}
+ for(const row of rows)for(const item of row.chars){if(item.ch===' '||item.ch==='\n')continue;c.fillText(item.ch,(state.mirror?previewWidth-item.x-item.w:item.x)*sx,(row.y+(line-size)*.28)*sy)}
  if(state.mirror)c.setTransform(1,0,0,1,0,0);
  c.filter='none';
  if(state.grain>0){const tile=document.createElement('canvas');tile.width=96;tile.height=96;const g=tile.getContext('2d'),d=g.createImageData(96,96);for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=Math.round(state.grain*2)}g.putImageData(d,0,0);c.globalCompositeOperation='soft-light';c.fillStyle=c.createPattern(tile,'repeat');c.fillRect(0,0,out.width,out.height)}
