@@ -16,20 +16,29 @@ for(const name of ['privacy.html','cookies.html','terms.html']){
 }
 const widget=resolve(dest,'privacy.js');let js=await readFile(widget,'utf8');
 js=js.replaceAll('href="/privacy"','href="./privacy.html"').replaceAll('href="/cookies"','href="./cookies.html"').replaceAll('href="/terms"','href="./terms.html"');await writeFile(widget,js);
-// Native-only startup overlay: visible while the offline editor initializes.
-html=html.replace(/<body([^>]*)>/i, (match,attrs)=>match+'<div id="native-startup" aria-label="Loading BRAT" style="position:fixed;inset:0;z-index:2147483647;background:#8ace00;color:#141414;display:flex;align-items:center;justify-content:center;font:700 64px Arial,sans-serif">brat</div>');
-html=html.replace('</body>','<script>window.addEventListener("load",()=>{setTimeout(()=>{const el=document.getElementById("native-startup");if(el)el.remove()},550)},{once:true});</script></body>');
-html=html.replace(/<head>/,'<head><meta http-equiv="Content-Security-Policy" content="default-src \'self\' data: blob:; img-src \'self\' data: blob:; style-src \'self\' \'unsafe-inline\'; script-src \'self\'; connect-src \'self\'">');
-// A visible startup screen for the packaged Android app, removed after its UI is ready.
-html=html.replace('<body>','<body><div id="brat-startup" role="status" aria-label="Loading BRAT" style="position:fixed;inset:0;z-index:2147483647;background:#8ace00;color:#141414;display:flex;align-items:center;justify-content:center;font:700 56px Arial,sans-serif">brat.</div>');
-html=html.replace('</head>','<script src="./startup.js" defer></script></head>');
+// One native-only startup overlay, with a short animation and guaranteed timeout.
+html=html.replace(/<head>/,'<head><meta http-equiv="Content-Security-Policy" content="default-src \\'self\\' data: blob:; img-src \\'self\\' data: blob:; style-src \\'self\\' \\'unsafe-inline\\'; script-src \\'self\\'; connect-src \\'self\\'">');
+html=html.replace(/<body([^>]*)>/i, match=>match+'<div id="brat-startup" role="status" aria-label="Loading BRAT" style="position:fixed;inset:0;z-index:2147483647;background:#8ace00;color:#141414;display:flex;flex-direction:column;align-items:center;justify-content:center;font:700 64px Arial,sans-serif;transition:opacity .28s ease"><span id="brat-startup-word" style="animation:bratEnter .55s cubic-bezier(.2,.8,.2,1) both">brat</span><span style="position:absolute;bottom:12%;width:48px;height:3px;background:#14141433;overflow:hidden;border-radius:4px"><span style="display:block;width:40%;height:100%;background:#141414;animation:bratLoad .8s ease-in-out infinite alternate"></span></span></div>');
+html=html.replace('</head>','<style>@keyframes bratEnter{from{opacity:0;transform:translateY(12px) scale(.94)}to{opacity:1;transform:none}}@keyframes bratLoad{from{transform:translateX(-100%)}to{transform:translateX(250%)}}</style><script src="./startup.js" defer></script></head>');
 await writeFile(resolve(dest,'startup.js'),`(() => {
-  const dismiss = () => {
-    const overlay = document.getElementById('brat-startup');
-    if (overlay) overlay.remove();
-  };
-  window.addEventListener('load', () => requestAnimationFrame(() => requestAnimationFrame(dismiss)), {once:true});
-  setTimeout(dismiss, 6000);
+  let closing = false;
+  function dismiss() {
+    if (closing) return;
+    closing = true;
+    for (const id of ['brat-startup','native-startup']) {
+      const overlay = document.getElementById(id);
+      if (!overlay) continue;
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+      setTimeout(() => overlay.remove(), 320);
+    }
+  }
+  // Never block the editor waiting for an image, font, or network load event.
+  const ready = () => setTimeout(dismiss, 550);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready, {once:true});
+  else ready();
+  window.addEventListener('load', ready, {once:true});
+  setTimeout(dismiss, 2200);
 })();`);
 await writeFile(file,html);
 console.log('Offline BRAT web assets copied to android/brat/www');
