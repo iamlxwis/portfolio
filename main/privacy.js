@@ -1,7 +1,10 @@
 (()=>{
 'use strict';
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',()=>{window.__lxPrivacyInit?.()}, {once:true});window.__lxPrivacyInit=init;return;}
+init();
+function init(){
 if(document.getElementById('lx-privacy-widget'))return;
-const key='lxwis-consent-v2';
+const key='lxwis-consent-v3';
 const icon=(name)=>{const paths={
 shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>',
 cookie:'<path d="M20 12a8 8 0 1 1-8-8 4 4 0 0 0 4 4 4 4 0 0 0 4 4Z"/><path d="M8.5 9h.01M12 16h.01M8 16h.01"/>',
@@ -38,4 +41,5 @@ close.addEventListener('click',hide);
 overlay.addEventListener('click',e=>{if(e.target===overlay)hide()});
 document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Escape')hide();if(e.key==='Tab'){const items=[...panel.querySelectorAll('button:not(:disabled),input:not(:disabled),summary')].filter(el=>el.getClientRects().length);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 if(!getChoice())open('cookies');
+}
 })();
