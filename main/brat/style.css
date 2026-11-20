@@ -193,3 +193,12 @@ html.capacitor-app main{height:calc(100dvh - 54px - var(--native-top) - var(--na
 .brat-dialog-done{display:block;width:100%;min-height:46px;border:0;border-radius:14px;background:#8ace00;color:#141414;font:700 15px Arial,Helvetica,sans-serif;cursor:pointer}
 .brat-dialog-done:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){#toast.brat-modal,.brat-dialog{transition:none}}
+
+/* Lightweight skeleton/progress treatment; no extra animation dependencies. */
+.brat-modal-loading .brat-dialog{padding:32px 25px}
+.brat-progress-icon{display:grid;place-items:center;width:76px;height:76px;margin:0 auto 19px;border-radius:23px;background:#8ace00;color:#141414;font-size:27px;letter-spacing:-.08em;animation:bratProgressPulse 1.25s ease-in-out infinite alternate}
+.brat-progress-track{height:7px;overflow:hidden;border-radius:999px;background:var(--line);margin:18px auto 0;max-width:220px}
+.brat-progress-track>span{display:block;height:100%;width:42%;border-radius:999px;background:#8ace00;animation:bratProgressSlide 1s ease-in-out infinite alternate}
+@keyframes bratProgressPulse{from{opacity:.7;transform:scale(.96)}to{opacity:1;transform:scale(1.02)}}
+@keyframes bratProgressSlide{from{transform:translateX(-105%)}to{transform:translateX(245%)}}
+@media(prefers-reduced-motion:reduce){.brat-progress-icon,.brat-progress-track>span{animation:none}.brat-progress-track>span{width:100%}}
