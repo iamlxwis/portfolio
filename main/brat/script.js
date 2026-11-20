@@ -55,7 +55,7 @@ function fitText(){
  txt.style.left=pad+'px';
  txt.style.right='auto';
  if(!content.trim()){txt.style.fontSize='0px';return}
- const scale=Math.max(.01,Math.min(1,Number(state.fontScale)||100)/100);
+ const scale=Math.max(.01,Math.min(1,(Number(state.fontScale)||100)/100));
  const maximum=Math.min(availableWidth*.85,availableHeight*.85,400)*scale;
  // Single words use canvas glyph measurement, avoiding unreliable DOM range
  // bounds and flex layout measurements that previously forced 0.5px text.
