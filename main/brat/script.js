@@ -8,15 +8,16 @@ const key='brat-minimal-v2';let state={...defaults},photo=null,raf=0,toastTimer;
 function notify(t){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2000)}
 function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch{}}
 function update(p){state={...state,...p};save();sync();schedule()}
-function sync(){for(const [id,v] of [['mainText',state.text],['bgColor',state.bg],['textColor',state.fg],['blur',state.blur],['grain',state.grain],['canvasSize',state.size],['fontFamily',state.font],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id).value=v;document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',palettes[b.dataset.palette].join('|')===[state.bg,state.fg].join('|')))}
+function sync(){for(const [id,v] of [['mainText',state.text],['bgColor',state.bg],['textColor',state.fg],['blur',state.blur],['grain',state.grain],['canvasSize',state.size],['fontFamily',state.font],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id).value=v;document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',palettes[b.dataset.palette].join('|')===[state.bg,state.fg].join('|')));for(const [id,value] of [['blur',Math.round(state.blur/5*100)],['grain',Math.round(state.grain/35*100)],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id+'Value').textContent=value+'%'}
 function schedule(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;draw()})}
 function fitText(){
  // Same core method as bratify: browser-native justified layout, then text-fit.
  // Binary-search font size against the actual DOM box, not an approximation of wrapping.
  const width=art.clientWidth,height=art.clientHeight;if(!width||!height)return;
- txt.classList.toggle('single-word',!String(state.text||'brat').trim().includes(' '));txt.style.fontFamily=state.font;txt.style.lineHeight=String(1.12*state.lineHeight/100);
+ txt.classList.toggle('single-word',!!state.text.trim()&&!state.text.trim().includes(' '));txt.style.fontFamily=state.font;txt.style.lineHeight=String(1.12*state.lineHeight/100);
  txt.style.color=state.fg;txt.style.filter=state.blur?'blur('+(state.blur*width/1080).toFixed(2)+'px)':'none';
- txt.textContent=state.text||'brat';
+ txt.textContent=state.text;
+ if(!state.text.trim()){txt.style.fontSize='0px';return;}
  let lo=5,hi=Math.min(width*(txt.classList.contains('single-word')?.43:.72),300*width/384)*state.fontScale/100;
  for(let i=0;i<19;i++){
   const mid=(lo+hi)/2;txt.style.fontSize=mid+'px';
@@ -58,7 +59,7 @@ function exportArt(){
 function bind(id,event,key,convert=x=>x){$(id).addEventListener(event,e=>update({[key]:convert(e.target.value)}))}
 bind('mainText','input','text');bind('bgColor','input','bg');bind('textColor','input','fg');bind('blur','input','blur',Number);bind('grain','input','grain',Number);bind('canvasSize','change','size');bind('fontFamily','change','font');bind('sizeAdjust','input','fontScale',Number);bind('lineHeight','input','lineHeight',Number);
 document.querySelectorAll('.swatch').forEach(b=>b.addEventListener('click',()=>{const [bg,fg]=palettes[b.dataset.palette];update({bg,fg})}));
-$('download').addEventListener('click',exportArt);$('downloadTop').addEventListener('click',exportArt);
+$('downloadTop').addEventListener('click',exportArt);
 $('resetDesign').addEventListener('click',()=>{state={...defaults};photo=null;save();sync();schedule()});
 $('imageInput').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;$('uploadLabel').textContent=file.name.length>18?file.name.slice(0,15)+'…':file.name;if(file.size>5e6){notify('image must be under 5 MB');return}const reader=new FileReader();reader.onload=()=>{update({image:reader.result});loadPhoto()};reader.readAsDataURL(file)});
 $('removeImage').addEventListener('click',()=>{photo=null;$('imageInput').value='';$('uploadLabel').textContent='upload image';update({image:null})});
