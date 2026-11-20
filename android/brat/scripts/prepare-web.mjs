@@ -1,0 +1,11 @@
+import {cp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
+import {resolve,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'../../..');
+const source=resolve(root,'main/brat'),dest=resolve(root,'android/brat/www');
+await rm(dest,{recursive:true,force:true});await mkdir(dest,{recursive:true});await cp(source,dest,{recursive:true});
+const file=resolve(dest,'index.html');let html=await readFile(file,'utf8');
+html=html.replaceAll(/(href|src)="\/brat\//g,'$1="./');
+html=html.replace(/<head>/,'<head><meta http-equiv="Content-Security-Policy" content="default-src \'self\' data: blob:; img-src \'self\' data: blob:; style-src \'self\' \'unsafe-inline\'; script-src \'self\'; connect-src \'self\'">');
+await writeFile(file,html);
+console.log('Offline BRAT web assets copied to android/brat/www');
