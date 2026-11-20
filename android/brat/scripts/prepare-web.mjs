@@ -16,6 +16,9 @@ for(const name of ['privacy.html','cookies.html','terms.html']){
 }
 const widget=resolve(dest,'privacy.js');let js=await readFile(widget,'utf8');
 js=js.replaceAll('href="/privacy"','href="./privacy.html"').replaceAll('href="/cookies"','href="./cookies.html"').replaceAll('href="/terms"','href="./terms.html"');await writeFile(widget,js);
+// Native-only startup overlay: visible while the offline editor initializes.
+html=html.replace(/<body([^>]*)>/i, (match,attrs)=>match+'<div id="native-startup" aria-label="Loading BRAT" style="position:fixed;inset:0;z-index:2147483647;background:#8ace00;color:#141414;display:flex;align-items:center;justify-content:center;font:700 64px Arial,sans-serif">brat</div>');
+html=html.replace('</body>','<script>window.addEventListener("load",()=>{setTimeout(()=>{const el=document.getElementById("native-startup");if(el)el.remove()},550)},{once:true});</script></body>');
 html=html.replace(/<head>/,'<head><meta http-equiv="Content-Security-Policy" content="default-src \'self\' data: blob:; img-src \'self\' data: blob:; style-src \'self\' \'unsafe-inline\'; script-src \'self\'; connect-src \'self\'">');
 await writeFile(file,html);
 console.log('Offline BRAT web assets copied to android/brat/www');
