@@ -8,7 +8,7 @@ on:
       - 'android/brat/**'
       - '.github/workflows/brat-android.yml'
 permissions:
-  contents: read
+  contents: write
 jobs:
   apk:
     runs-on: ubuntu-latest
@@ -47,3 +47,16 @@ jobs:
           name: brat-debug-apk
           path: android/brat/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+      - name: Prepare direct APK download
+        run: |
+          mkdir -p release
+          cp android/app/build/outputs/apk/debug/app-debug.apk release/brat-android-debug.apk
+      - name: Publish APK to GitHub Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view brat-android-test >/dev/null 2>&1; then
+            gh release upload brat-android-test release/brat-android-debug.apk --clobber
+          else
+            gh release create brat-android-test release/brat-android-debug.apk --title "BRAT Android — test APK" --notes "Offline BRAT editor for Android. Debug-signed testing build, not a Play Store release." --prerelease
+          fi
