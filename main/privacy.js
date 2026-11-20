@@ -20,20 +20,20 @@ root.innerHTML='<nav class="lx-footer" aria-label="Legal and privacy"><button ty
 '<details data-section="cookies"><summary>'+icon('cookie')+'<span>cookies & storage<small>what gets remembered</small></span>'+icon('chevron')+'</summary><div class="lx-detail"><p>we use local storage for your cookie choice, brat designs and settings, themes, and saved favorites. local storage is not the same as a cookie.</p><p>there are no optional ad or analytics trackers controlled by this notice right now. accepting does not turn on extra tracking.</p><p>third-party services may have their own cookies or storage. these controls cannot change that.</p></div></details>'+
 '<details data-section="terms"><summary>'+icon('file')+'<span>terms & copyright<small>the basic rules</small></span>'+icon('chevron')+'</summary><div class="lx-detail"><p>use the site without abusing it or violating other people’s rights. keep backups of anything important; tools are provided as-is.</p><p>your original creations remain yours. make sure you have rights to any images or text you use.</p><p>© '+new Date().getFullYear()+' lxwis. original site content is reserved unless stated otherwise. third-party content belongs to its owners.</p></div></details>'+
 '</div>'+
-'<label class="lx-check"><input type="checkbox" data-read><span>i’ve read the privacy info and terms.</span></label>'+
+'<label class="lx-check"><input type="checkbox" data-read="privacy"><span>i’ve read the privacy and cookies info.</span></label><label class="lx-check"><input type="checkbox" data-read="terms"><span>i’ve read the terms.</span></label>'+
 '<div class="lx-actions"><button type="button" data-choice="essential">essential only</button><button type="button" class="lx-accept" data-choice="accept" disabled>accept</button></div>'+
 '<p class="lx-note">both choices currently save your preference only. no extra tracking is switched on.</p>'+
 '</section></div>';
 document.body.append(root);
-const overlay=root.querySelector('.lx-overlay'),panel=root.querySelector('.lx-panel'),read=root.querySelector('[data-read]'),accept=root.querySelector('[data-choice="accept"]'),close=root.querySelector('[data-close]');
+const overlay=root.querySelector('.lx-overlay'),panel=root.querySelector('.lx-panel'),checks=[...root.querySelectorAll('[data-read]')],accept=root.querySelector('[data-choice="accept"]'),close=root.querySelector('[data-close]');
 let lastFocus=null;
 function getChoice(){try{return JSON.parse(localStorage.getItem(key))}catch{return null}}
-function open(section){lastFocus=document.activeElement;overlay.hidden=false;root.querySelectorAll('details').forEach(d=>d.open=d.dataset.section===section);read.checked=false;accept.disabled=true;close.focus()}
+function open(section){lastFocus=document.activeElement;overlay.hidden=false;root.querySelectorAll('details').forEach(d=>d.open=d.dataset.section===section);checks.forEach(c=>c.checked=false);accept.disabled=true;close.focus()}
 function hide(){overlay.hidden=true;if(lastFocus&&lastFocus.focus)lastFocus.focus()}
 function choose(choice){try{localStorage.setItem(key,JSON.stringify({choice,version:2,at:new Date().toISOString()}))}catch{}hide()}
 root.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>open(b.dataset.open)));
-read.addEventListener('change',()=>{accept.disabled=!read.checked});
-root.querySelectorAll('[data-choice]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.choice==='accept'&&!read.checked)return;choose(b.dataset.choice)}));
+checks.forEach(c=>c.addEventListener('change',()=>{accept.disabled=!checks.every(c=>c.checked)}));
+root.querySelectorAll('[data-choice]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.choice==='accept'&&!checks.every(c=>c.checked))return;choose(b.dataset.choice)}));
 close.addEventListener('click',hide);
 overlay.addEventListener('click',e=>{if(e.target===overlay)hide()});
 document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Escape')hide();if(e.key==='Tab'){const items=[...panel.querySelectorAll('button:not(:disabled),input:not(:disabled),summary')].filter(el=>el.getClientRects().length);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
