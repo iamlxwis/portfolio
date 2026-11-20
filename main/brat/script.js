@@ -90,7 +90,23 @@ function exportArt(){
  if(state.mirror)c.setTransform(1,0,0,1,0,0);
  c.filter='none';
  if(state.grain>0){const tile=document.createElement('canvas');tile.width=96;tile.height=96;const g=tile.getContext('2d'),d=g.createImageData(96,96);for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=Math.round(state.grain*2)}g.putImageData(d,0,0);c.globalCompositeOperation='soft-light';c.fillStyle=c.createPattern(tile,'repeat');c.fillRect(0,0,out.width,out.height)}
- const type=$('exportFormat').value;out.toBlob(blob=>{if(!blob){notify('export failed');return}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='brat.'+(type==='jpeg'?'jpg':type);a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)},'image/'+type,.95)
+ const type=$('exportFormat').value;
+ out.toBlob(async blob=>{
+  if(!blob){notify('export failed');return}
+  const extension=type==='jpeg'?'jpg':type;
+  if(window.Capacitor?.isNativePlatform?.()){
+   try{
+    const Filesystem=window.Capacitor.Plugins?.Filesystem,Share=window.Capacitor.Plugins?.Share;
+    if(!Filesystem||!Share)throw new Error('Native export plugins unavailable');
+    const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(',')[1]);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(blob)});
+    const name='brat-'+Date.now()+'.'+extension;
+    const saved=await Filesystem.writeFile({path:name,data,directory:'CACHE',recursive:true});
+    await Share.share({title:'Export BRAT image',files:[saved.uri],dialogTitle:'Save or share your BRAT image'});
+    return;
+   }catch(error){console.error('Native image export failed',error);notify('could not share image');return}
+  }
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='brat.'+extension;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)
+ },'image/'+type,.95)
 }
 function bind(id,event,key,convert=x=>x){$(id).addEventListener(event,e=>update({[key]:convert(e.target.value)}))}
 bind('mainText','input','text');bind('bgColor','input','bg');bind('textColor','input','fg');bind('blur','input','blur',Number);bind('grain','input','grain',Number);bind('canvasSize','change','size');bind('fontFamily','change','font');bind('sizeAdjust','input','fontScale',Number);bind('lineHeight','input','lineHeight',Number);
