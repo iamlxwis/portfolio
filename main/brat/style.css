@@ -228,3 +228,29 @@ button:active .brat-premium-icon{transform:scale(.87) rotate(-7deg)}
 button,summary{ -webkit-tap-highlight-color:transparent }
 button:focus-visible,summary:focus-visible{outline:2px solid #8ace00;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.brat-premium-icon,.brat-dialog-symbol .brat-premium-icon,#themeToggle .brat-premium-icon{transition:none!important;animation:none!important}}
+
+/* Refined selection controls: no Android browser-native dropdowns in export. */
+.brat-choice-group{border:0;padding:0;margin:0;min-width:0}
+.brat-choice-group legend{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--ink)}
+.brat-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.brat-choice-group:nth-child(2) .brat-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.brat-choice{position:relative;min-width:0;cursor:pointer}
+.brat-choice input{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.brat-choice-content{min-height:72px;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;padding:12px 10px;border:1px solid var(--line);border-radius:15px;background:var(--page);transition:border-color .18s ease,background-color .18s ease,transform .18s ease}
+.brat-choice-content strong{font-size:14px;line-height:1.1;color:var(--ink)}
+.brat-choice-content small{font-size:10px;line-height:1.2;color:var(--muted)}
+.brat-choice input:checked+.brat-choice-content{border:2px solid #8ace00;padding:11px 9px;background:color-mix(in srgb,#8ace00 12%,var(--panel))}
+.brat-choice input:focus-visible+.brat-choice-content{outline:2px solid #8ace00;outline-offset:3px}
+.brat-choice:active .brat-choice-content{transform:scale(.97)}
+/* One circular hint treatment, not a circle around an already circled icon. */
+.hint-trigger.premium-hint{width:21px;height:21px;border:0;border-radius:6px;padding:2px;background:transparent;color:var(--muted)}
+.hint-trigger.premium-hint .brat-premium-icon{width:17px;height:17px;stroke-width:1.65}
+.hint-trigger.premium-hint:hover,.hint-trigger.premium-hint[aria-expanded=true]{background:var(--line);color:var(--ink)}
+/* Improve the remaining adjustment dropdowns. */
+.select-shell{width:154px;max-width:55%}
+.select-display{min-height:43px;padding:10px 13px;border-radius:12px;font-size:13px;font-weight:600;transition:border-color .18s,background-color .18s,transform .16s}
+.select-display[aria-expanded=true]{border-color:#8ace00}
+.select-options{min-width:170px;padding:6px;border-radius:14px;box-shadow:0 16px 45px #0004;z-index:80}
+.select-item{padding:12px;border-radius:10px;font-size:13px;min-height:42px}
+.select-item[aria-selected=true]{background:color-mix(in srgb,#8ace00 17%,var(--panel));font-weight:700}
+@media(prefers-reduced-motion:reduce){.brat-choice-content,.select-display{transition:none}}
