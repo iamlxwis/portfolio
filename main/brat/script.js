@@ -15,7 +15,7 @@ const presets=[
 {name:'blood orange',text:'talk talk',bg:'#ff642a',fg:'#191919',blur:1.8,font:'arial',fontSize:128,spacing:-5},
 {name:'clean slate',text:'your era',bg:'#eeeeec',fg:'#151515',blur:0,font:'arial',fontSize:100,spacing:-4}
 ];
-const defaults={text:'we got GTA\nVI before i\ngot a\ngirlfriend',fontFamily:'arial',fontSize:166,lineHeight:1.05,letterSpacing:-3,textAlign:'left',weight:'normal',vertical:50,horizontal:50,bgColor:'#f2a4c8',textColor:'#ffffff',sizePreset:'square',padding:0,rotation:0,blur:1.15,grain:0,distort:0,shadow:0,contrast:100,saturation:100,texture:'none',overlay:'none',imageMode:'background',imageFit:'cover',imageOpacity:100,imageScale:100,imageX:0,imageY:0,imageBlur:0,imageData:null};
+const defaults={autoFit:true,text:'we got GTA\nVI before i\ngot a\ngirlfriend',fontFamily:'arial',fontSize:166,lineHeight:1.05,letterSpacing:-3,textAlign:'left',weight:'normal',vertical:50,horizontal:50,bgColor:'#f2a4c8',textColor:'#ffffff',sizePreset:'square',padding:0,rotation:0,blur:1.15,grain:0,distort:0,shadow:0,contrast:100,saturation:100,texture:'none',overlay:'none',imageMode:'background',imageFit:'cover',imageOpacity:100,imageScale:100,imageX:0,imageY:0,imageBlur:0,imageData:null};
 let state={...defaults},image=null,undoStack=[],redoStack=[],lastSnapshot='',drawing=false,zoom=1,fitZoom=1,manuallyZoomed=false,toastTimeout,saveTimeout,drag=null;
 const fields=['fontFamily','fontSize','lineHeight','letterSpacing','vertical','horizontal','bgColor','textColor','sizePreset','padding','rotation','blur','grain','distort','shadow','contrast','saturation','texture','overlay','imageMode','imageFit','imageOpacity','imageScale','imageX','imageY','imageBlur'];
 const valueFormats={fontSize:v=>v,lineHeight:v=>Number(v).toFixed(2),letterSpacing:v=>v,vertical:v=>v+'%',horizontal:v=>v+'%',padding:v=>v+'%',rotation:v=>v+'°',blur:v=>Number(v).toFixed(1),grain:v=>v,distort:v=>v,shadow:v=>v,contrast:v=>v+'%',saturation:v=>v+'%',imageOpacity:v=>v+'%',imageScale:v=>v+'%',imageX:v=>v,imageY:v=>v,imageBlur:v=>v};
@@ -27,6 +27,12 @@ function setState(next,record=true){if(record)pushHistory();state={...state,...n
 function change(key,value,record=false){if(state[key]===value)return;if(record)pushHistory();state[key]=value;lastSnapshot=snapshot();if(key==='sizePreset')fitCanvas();if(key==='imageData')loadStateImage().then(render);else render();scheduleSave()}
 function scheduleSave(){clearTimeout(saveTimeout);saveTimeout=setTimeout(()=>{try{localStorage.setItem(storageKey,snapshot())}catch(e){}},450)}
 function syncControls(){
+ if($('simpleText'))$('simpleText').value=state.text;
+ if($('simpleBg'))$('simpleBg').value=state.bgColor;
+ if($('simpleFg'))$('simpleFg').value=state.textColor;
+ if($('simpleBlur'))$('simpleBlur').value=state.blur;
+ if($('simpleGrain'))$('simpleGrain').value=state.grain;
+ if($('simpleAutoFit'))$('simpleAutoFit').checked=state.autoFit!==false;
  $('mainText').value=state.text;
  for(const key of fields){const el=$(key);if(el)el.value=state[key];if($(key+'Val'))$(key+'Val').textContent=valueFormats[key]?.(state[key])??state[key]}
  $('bgHex').value=state.bgColor;$('textHex').value=state.textColor;
@@ -54,9 +60,26 @@ function drawSpaced(context,text,x,y,spacing,align){
  for(let i=0;i<chars.length;i++){context.fillText(chars[i],pos,y);pos+=widths[i]+spacing}
 }
 function textLayout(context,w,h){
- const k=w/1080,size=Number(state.fontSize)*k,margin=w*Number(state.padding)/100,maxWidth=w-2*margin,spacing=Number(state.letterSpacing)*k;
- context.font=fontString(size);const lines=wrapText(context,state.text,maxWidth,spacing),step=size*Number(state.lineHeight),height=(lines.length-1)*step+size;
- return {size,margin,maxWidth,spacing,lines,step,height,x:w*state.horizontal/100,y:h*state.vertical/100}
+ const k=w/1080,margin=w*Number(state.padding)/100,maxWidth=Math.max(10,w-2*margin),spacing=Number(state.letterSpacing)*k;
+ const fit=state.autoFit!==false;
+ let size=Number(state.fontSize)*k,lines=[],step=0,height=0;
+ const calc=()=>{
+  context.font=fontString(size);
+  lines=wrapText(context,state.text,maxWidth,spacing);
+  step=size*Number(state.lineHeight);
+  height=(lines.length-1)*step+size;
+ };
+ if(fit){
+  // Largest font that fits BOTH canvas dimensions; preserves manual newlines.
+  let low=8*k,high=900*k;
+  for(let n=0;n<24;n++){
+   size=(low+high)/2;calc();
+   const widest=Math.max(0,...lines.map(line=>measureText(context,line,spacing)));
+   if(height<=h*(1-2*Number(state.padding)/100)&&widest<=maxWidth+0.5)low=size;else high=size;
+  }
+  size=low;calc();
+ }else calc();
+ return {size,margin,maxWidth,spacing,lines,step,height,x:w*state.horizontal/100,y:h*state.vertical/100,fit}
 }
 function drawText(context,w,h){
  const l=textLayout(context,w,h),k=w/1080;
@@ -64,8 +87,20 @@ function drawText(context,w,h){
  context.textBaseline='middle';context.textAlign='left';context.font=fontString(l.size);context.fillStyle=state.textColor;
  const fx=Number(state.blur)*k;context.filter=fx?'blur('+fx+'px)':'none';
  if(state.shadow>0){context.shadowColor='rgba(0,0,0,.7)';context.shadowBlur=Number(state.shadow)*k;context.shadowOffsetX=2*k;context.shadowOffsetY=3*k}
- const left=state.textAlign==='left'?-l.maxWidth/2:state.textAlign==='right'?l.maxWidth/2:0,offset=(l.lines.length-1)*l.step/2;
- for(let i=0;i<l.lines.length;i++){const y=i*l.step-offset,wobble=Number(state.distort)>0?Math.sin(i*2.7+1)*Number(state.distort)*k:0;drawSpaced(context,l.lines[i],left+wobble,y,l.spacing,state.textAlign)}
+ const offset=(l.lines.length-1)*l.step/2;
+ for(let i=0;i<l.lines.length;i++){
+  const line=l.lines[i],y=i*l.step-offset,wobble=Number(state.distort)>0?Math.sin(i*2.7+1)*Number(state.distort)*k:0;
+  if(l.fit&&line.trim()){
+   // Stretch each row to the full usable width, including short lines.
+   const natural=Math.max(1,measureText(context,line,l.spacing));
+   context.save();context.scale(l.maxWidth/natural,1);
+   drawSpaced(context,line,(-l.maxWidth/2+wobble)/(l.maxWidth/natural),y,l.spacing,'left');
+   context.restore();
+  }else{
+   const left=state.textAlign==='left'?-l.maxWidth/2:state.textAlign==='right'?l.maxWidth/2:0;
+   drawSpaced(context,line,left+wobble,y,l.spacing,state.textAlign);
+  }
+ }
  context.restore()
 }
 function drawImage(context,w,h,which){
@@ -159,5 +194,13 @@ async function copyDesignLink(){const {imageData,...rest}=state,payload=btoa(une
 function saveProject(){saveBlob(new Blob([JSON.stringify({app:'BRAT Studio',version:1,settings:state},null,2)],{type:'application/json'}),filename()+'.brat.json');notify('Editable project saved')}
 function loadProject(e){const f=e.target.files?.[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(data.app!=='BRAT Studio'||!data.settings||!dimensions[data.settings.sizePreset])throw Error();setState({...defaults,...data.settings});notify('Project opened')}catch{notify('Not a valid BRAT Studio project')}};reader.readAsText(f);e.target.value=''}
 function loadFromUrl(){const match=location.hash.match(/^#design=([A-Za-z0-9_-]+)$/);if(!match)return false;try{const b64=match[1].replace(/-/g,'+').replace(/_/g,'/'),decoded=JSON.parse(decodeURIComponent(escape(atob(b64))));if(!dimensions[decoded.sizePreset])return false;state={...defaults,...decoded,imageData:null};notify('Shared design loaded');return true}catch{return false}}
-function init(){makePresets();bindControls();if(!loadFromUrl()){try{const saved=JSON.parse(localStorage.getItem(storageKey));if(saved&&dimensions[saved.sizePreset])state={...defaults,...saved}}catch{}}lastSnapshot=snapshot();syncControls();fillCustomPresets();loadStateImage().then(render);updateHistory();requestAnimationFrame(fitCanvas)}
+function initSimple(){
+ const pairs=[['simpleText','text'],['simpleBg','bgColor'],['simpleFg','textColor'],['simpleBlur','blur'],['simpleGrain','grain']];
+ for(const [id,key] of pairs){const el=$(id);if(!el)continue;el.addEventListener('input',()=>{change(key,el.type==='range'?Number(el.value):el.value);if(key==='bgColor'||key==='textColor')syncControls();});}
+ $('simpleAutoFit').addEventListener('change',e=>change('autoFit',e.target.checked,true));
+ $('advancedToggle').addEventListener('click',()=>{const open=document.body.classList.toggle('advanced-open');$('advancedToggle').textContent=open?'− Hide advanced tools':'+ Advanced tools';$('advancedToggle').setAttribute('aria-expanded',String(open));});
+ $('simplePresets').addEventListener('change',e=>{const p=presets[Number(e.target.value)];if(!p)return;setState({text:p.text,bgColor:p.bg,textColor:p.fg,blur:p.blur,fontFamily:p.font,fontSize:p.fontSize,letterSpacing:p.spacing,lineHeight:p.lineHeight??.95,textAlign:p.textAlign??'center',padding:p.padding??3,grain:p.grain??0,autoFit:true,vertical:50,horizontal:50});});
+ $('simpleDownload').addEventListener('click',download);
+}
+function init(){makePresets();bindControls();initSimple();if(!loadFromUrl()){try{const saved=JSON.parse(localStorage.getItem(storageKey));if(saved&&dimensions[saved.sizePreset])state={...defaults,...saved}}catch{}}lastSnapshot=snapshot();syncControls();fillCustomPresets();loadStateImage().then(render);updateHistory();requestAnimationFrame(fitCanvas)}
 init();
