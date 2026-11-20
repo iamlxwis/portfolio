@@ -100,3 +100,39 @@ html.capacitor-app main{height:calc(100dvh - 54px - var(--native-top) - var(--na
 .settings-panel .range-head{margin-bottom:7px}
 .brat-guide[hidden]{display:none!important}
 @media(max-width:760px){.section-heading{margin-bottom:7px}.color-option{padding:7px}.settings-panel>summary{padding:11px 12px}}
+
+/* v26: compact grouped editor */
+.editor-panel,.settings-panel{border:1px solid var(--line);border-radius:10px;background:var(--page);padding:0!important;margin:0 0 10px}
+.editor-panel>summary,.settings-panel>summary{padding:12px 13px;font-size:12px}
+.editor-panel .panel-content{border-top:1px solid var(--line);padding:12px 13px 13px}
+.editor-panel .control{margin-bottom:13px}
+.editor-panel .control:last-child{margin-bottom:0}
+.editor-panel .settings-title svg,.settings-panel .settings-title svg{width:17px;height:17px}
+.controls-inner>.control{margin:0 0 10px}
+.controls-inner{padding-top:14px}
+.percent-field{padding:2px 5px;gap:1px;border-radius:6px;min-width:0}
+.percent-field input{width:25px;min-width:25px;font-size:11px}
+.percent-field span{font-size:10px}
+.floating-hint{position:fixed;z-index:2147483630;max-width:230px;width:230px;padding:10px 12px;background:var(--ink);color:var(--page);border-radius:8px;box-shadow:0 10px 30px #0004;font-size:12px;line-height:1.5;pointer-events:none}
+.floating-hint[hidden]{display:none}
+.hint-pop{display:none!important}
+.action-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);font-size:12px;font-weight:600}
+.action-button svg{width:15px;height:15px}
+.action-button:active,.select-display:active{opacity:.7}
+.media-panel .panel-content{display:grid;gap:12px}
+.media-panel .upload-row{gap:7px}
+.reset-button{width:100%;margin:0 0 10px;color:var(--muted);background:transparent}
+.effect-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.effect-toggle{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink);padding:8px 11px;font-size:12px}
+.effect-toggle svg{width:16px;height:16px}
+.effect-toggle[aria-pressed=true]{border-color:var(--ink)}
+.select-shell{position:relative;width:138px;flex:none}
+.select-shell select{display:none!important}
+.select-display{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:35px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);font-size:12px;text-align:left}
+.select-display svg{width:15px;height:15px;flex:none}
+.select-options{position:absolute;right:0;top:calc(100% + 5px);width:100%;min-width:140px;z-index:50;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:4px;box-shadow:0 12px 30px #0002}
+.select-options[hidden]{display:none}
+.select-item{display:block;width:100%;padding:10px;border:0;border-radius:6px;text-align:left;background:transparent;color:var(--ink);font-size:12px}
+.select-item:hover,.select-item:focus-visible{background:var(--page);outline:none}
+.settings-panel .extras{padding:12px;gap:13px}
+@media(max-width:760px){.controls-inner{padding-top:12px}.editor-panel>summary,.settings-panel>summary{padding:11px 12px}.editor-panel .panel-content{padding:11px 12px}.control .text-field textarea{min-height:56px}}
