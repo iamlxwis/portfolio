@@ -96,18 +96,13 @@ function exportArt(){
   const extension=type==='jpeg'?'jpg':type;
   if(window.Capacitor?.isNativePlatform?.()){
    try{
-    const Filesystem=window.Capacitor.Plugins?.Filesystem,Share=window.Capacitor.Plugins?.Share;
-    if(!Filesystem||!Share)throw new Error('Native export plugins unavailable');
+    const Gallery=window.Capacitor.Plugins?.BratGallery;
+    if(!Gallery)throw new Error('Gallery saving is not available in this build');
     const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(',')[1]);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(blob)});
-    const name='brat-'+Date.now()+'.'+extension;
-    notify('preparing image…');
-    await Filesystem.writeFile({path:name,data,directory:'CACHE',recursive:true});
-    const saved=await Filesystem.getUri({path:name,directory:'CACHE'});
-    if(!saved?.uri)throw new Error('No file URI returned');
-    await Share.share({title:'BRAT image',files:[saved.uri],dialogTitle:'Save or share your BRAT image'});
-    notify('image ready to share');
-    return;
-   }catch(error){console.error('Native image export failed',error);notify('export failed: '+(error?.message||'please try again'));return}
+    await Gallery.saveImage({data,mimeType:'image/'+type,fileName:'brat-'+Date.now()+'.'+extension});
+    notify('saved to gallery');
+   }catch(error){console.error('Gallery export failed',error);notify('save failed: '+(error?.message||'please try again'))}
+   return;
   }
   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='brat.'+extension;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)
  },'image/'+type,.95)
