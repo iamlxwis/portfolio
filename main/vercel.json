@@ -13,8 +13,8 @@
       "destination": "/meow/index.html"
     },
     {
-      "source": "/pbb1",
-      "destination": "/pbb1/index.html"
+      "source": "/pbb",
+      "destination": "/pbb/index.html"
     },
     {
       "source": "/arf",
