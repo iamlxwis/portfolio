@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>PBB Live — PBB LIVE STREAM
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/pbb/style.css"/>
+<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.7.11/dist/shaka-player.compiled.min.js"></script>
+<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1" async></script>
+</head>
+<body data-accent="crimson" data-layout="cinema" data-card="default">
+
+<div id="wrap" class="app-shell">
+
+  <header class="topbar">
+    <div class="brand-status">
+      <span class="status-dot" id="header-dot"></span>
+      <span id="active-channel-title" class="stream-title">PBB STUDIO — LIVE</span>
+      <span id="stream-meta-pill" class="meta-badge hidden"></span>
+    </div>
+    <div class="topbar-actions">
+      <button id="focus-exit-btn" class="icon-pill-btn focus-only-btn" title="Exit Focus">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+        <span class="hide-xs">Exit Focus</span>
+      </button>
+      <button id="customize-btn" class="icon-pill-btn" title="Customize">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        <span class="hide-xs">Customize</span>
+      </button>
+      <button id="donate-btn" class="support-pill-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <span>Support</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="workspace">
+
+    <section id="stage" class="video-stage">
+      <div id="ambient-glow" class="ambient-glow"></div>
+
+      <div id="vid-container" class="single-player-wrap">
+        <video id="v" playsinline autoplay muted></video>
+      </div>
+
+      <div id="grid-container" class="multi-grid-wrap" style="display:none;">
+        <div class="grid-item" data-idx="0">
+          <video id="gv0" playsinline autoplay muted></video>
+          <div class="grid-overlay">
+            <span class="grid-label">01 · All Access</span>
+            <div class="grid-actions">
+              <button class="grid-mute-btn" data-grid-mute="0" title="Mute/Unmute">🔇</button>
+              <button class="grid-expand-btn" data-grid-exp="0" title="Expand Stream">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item" data-idx="1">
+          <video id="gv1" playsinline autoplay muted></video>
+          <div class="grid-overlay">
+            <span class="grid-label">02 · Dining Area</span>
+            <div class="grid-actions">
+              <button class="grid-mute-btn" data-grid-mute="1" title="Mute/Unmute">🔇</button>
+              <button class="grid-expand-btn" data-grid-exp="1" title="Expand Stream">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item" data-idx="2">
+          <video id="gv2" playsinline autoplay muted></video>
+          <div class="grid-overlay">
+            <span class="grid-label">03 · External Den</span>
+            <div class="grid-actions">
+              <button class="grid-mute-btn" data-grid-mute="2" title="Mute/Unmute">🔇</button>
+              <button class="grid-expand-btn" data-grid-exp="2" title="Expand Stream">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item" data-idx="3">
+          <video id="gv3" playsinline autoplay muted></video>
+          <div class="grid-overlay">
+            <span class="grid-label">04 · Main Live</span>
+            <div class="grid-actions">
+              <button class="grid-mute-btn" data-grid-mute="3" title="Mute/Unmute">🔇</button>
+              <button class="grid-expand-btn" data-grid-exp="3" title="Expand Stream">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="load" class="stage-loader">
+        <div class="spinner"></div>
+        <div class="s">Connecting to stream...</div>
+      </div>
+
+      <button id="hint" class="unmute-toast" style="display:none;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+        Tap to Unmute
+      </button>
+
+      <button id="zoom-badge" class="zoom-pill hidden">1.0x · Reset</button>
+
+      <div id="controls" class="player-hud">
+        <div class="hud-left">
+          <button id="play-btn" class="hud-btn" title="Play/Pause (Space)">
+            <svg id="play-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <div class="vol-group">
+            <button id="mute-btn" class="hud-btn" title="Mute (M)">
+              <svg id="vol-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+            <input id="vol-slider" type="range" min="0" max="1" step="0.05" value="0"/>
+          </div>
+          <button id="live-btn" class="live-sync-btn">LIVE</button>
+        </div>
+        <div class="hud-right">
+          <div class="reso-wrapper">
+            <button id="reso-btn" class="hud-text-btn"><span id="reso-label">AUTO</span></button>
+            <div id="reso-menu" class="reso-dropdown hidden"></div>
+          </div>
+          <button id="grid-btn" class="hud-btn" title="4-Cam Grid (G)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+          </button>
+          <button id="pip-btn" class="hud-btn" title="Picture-in-Picture">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="12" y="11" width="7" height="6" rx="1" fill="currentColor"/></svg>
+          </button>
+          <button id="cast-btn" class="hud-btn" disabled title="Cast">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 16.1A5 5 0 0 1 5.9 20M2 12.05A9 9 0 0 1 9.95 20M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/><line x1="2" y1="20" x2="2.01" y2="20"/></svg>
+          </button>
+          <button id="fs-btn" class="hud-btn" title="Fullscreen (F)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <aside id="side" class="feeds-panel">
+      <div class="feeds-header">
+        <span class="section-label">Camera Feeds</span>
+        <button id="quick-grid-toggle" class="text-action-btn">4-Cam Grid</button>
+      </div>
+      <div id="channels" class="feeds-grid"></div>
+    </aside>
+
+  </main>
+
+  <footer class="app-footer">
+    <a href="https://www.facebook.com/iamlxwis" target="_blank" rel="noopener noreferrer" class="creator-link">CREATED BY LXWIS</a>
+  </footer>
+</div>
+
+<div id="customize-modal" class="modal-backdrop hidden">
+  <div class="modal-card customize-card">
+    <span class="modal-drag-handle"></span>
+    <div class="modal-header">
+      <div>
+        <h3>Customize</h3>
+        <p class="modal-sub">Layout, theme & player settings</p>
+      </div>
+      <button id="close-customize" class="close-circle-btn" aria-label="Close">✕</button>
+    </div>
+
+    <div class="custom-section">
+      <label class="custom-label">Layout</label>
+      <div class="segmented-control" id="layout-selector">
+        <button class="seg-btn active" data-val="cinema">Cinema</button>
+        <button class="seg-btn" data-val="theater">Theater</button>
+        <button class="seg-btn" data-val="focus">Focus</button>
+      </div>
+    </div>
+
+    <div class="custom-section">
+      <label class="custom-label">Card Style</label>
+      <div class="segmented-control" id="card-style-selector">
+        <button class="seg-btn active" data-val="default">Default</button>
+        <button class="seg-btn" data-val="outlined">Outlined</button>
+        <button class="seg-btn" data-val="minimal">Minimal</button>
+      </div>
+    </div>
+
+    <div class="custom-section">
+      <label class="custom-label">Accent Color</label>
+      <div class="swatch-row" id="accent-selector">
+        <button class="swatch-btn active" data-val="crimson" style="--sw:#f43f5e;"><span>Red</span></button>
+        <button class="swatch-btn" data-val="violet" style="--sw:#8b5cf6;"><span>Violet</span></button>
+        <button class="swatch-btn" data-val="blue" style="--sw:#3b82f6;"><span>Blue</span></button>
+        <button class="swatch-btn" data-val="emerald" style="--sw:#10b981;"><span>Green</span></button>
+        <button class="swatch-btn" data-val="amber" style="--sw:#f59e0b;"><span>Amber</span></button>
+      </div>
+      <div class="custom-hex-row">
+        <span class="hex-label">Custom Hex</span>
+        <div class="hex-inputs">
+          <input type="color" id="custom-color-picker" value="#f43f5e"/>
+          <input type="text" id="custom-hex-input" maxlength="7" placeholder="#F43F5E"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-section">
+      <label class="custom-label">Options</label>
+      <div class="toggle-list">
+        <div class="toggle-row">
+          <div><div class="toggle-title">OLED Black</div><div class="toggle-desc">True #000 for AMOLED screens</div></div>
+          <input type="checkbox" id="opt-oled" class="switch-input"/>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-title">Ambient Glow</div><div class="toggle-desc">Accent backlight behind the player</div></div>
+          <input type="checkbox" id="opt-glow" class="switch-input" checked/>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-title">Fill & Crop</div><div class="toggle-desc">Stretch video to remove black bars</div></div>
+          <input type="checkbox" id="opt-crop" class="switch-input"/>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-title">Compact Cards</div><div class="toggle-desc">Denser feed card layout</div></div>
+          <input type="checkbox" id="opt-compact" class="switch-input"/>
+        </div>
+      </div>
+    </div>
+
+    <button id="reset-prefs-btn" class="secondary-full-btn">Reset to Defaults</button>
+  </div>
+</div>
+
+<div id="support-modal" class="modal-backdrop hidden">
+  <div class="modal-card support-card">
+    <span class="modal-drag-handle"></span>
+    <button id="close-support" class="close-circle-btn top-right" aria-label="Close">✕</button>
+    <div class="heart-badge">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    </div>
+    <h3>Support the Stream</h3>
+    <p class="support-desc">Help keep the servers live 24/7.</p>
+    <div class="donation-box">
+      <div class="donation-meta">GCash · Maya</div>
+      <div class="donation-row">
+        <span class="donation-number">09083909323</span>
+        <button class="copy-btn" data-copy="09083909323">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+      </div>
+    </div>
+    <a href="https://www.facebook.com/iamlxwis" target="_blank" rel="noopener noreferrer" class="support-creator-pill">LXWIS ↗</a>
+  </div>
+</div>
+
+<div id="cookie-banner" class="cookie-banner hidden">
+  <div class="cookie-content">
+    <div class="cookie-text">
+      <strong>Cookies & Stream Preferences</strong>
+      <p>We use browser cookies to remember your theme, layout, volume, and last active camera feed.</p>
+    </div>
+    <div class="cookie-actions">
+      <button id="cookie-manage-btn" class="cookie-btn secondary">Preferences</button>
+      <button id="cookie-accept-btn" class="cookie-btn primary">Accept All</button>
+    </div>
+  </div>
+</div>
+
+<div id="cookie-modal" class="modal-backdrop hidden">
+  <div class="modal-card cookie-card">
+    <span class="modal-drag-handle"></span>
+    <div class="modal-header">
+      <div>
+        <h3>Cookie Preferences</h3>
+        <p class="modal-sub">Manage how your stream settings are stored</p>
+      </div>
+      <button id="close-cookie-modal" class="close-circle-btn" aria-label="Close">✕</button>
+    </div>
+    <form id="cookie-form">
+      <div class="toggle-list">
+        <div class="toggle-row">
+          <div><div class="toggle-title">Essential Playback</div><div class="toggle-desc">Required for stream routing and DRM sessions</div></div>
+          <input type="checkbox" checked disabled class="switch-input"/>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-title">UI & Theme Cookies</div><div class="toggle-desc">Saves accent color, layout, and card style</div></div>
+          <input type="checkbox" id="ck-prefs" checked class="switch-input"/>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-title">Player State Cookies</div><div class="toggle-desc">Remembers last watched feed and audio levels</div></div>
+          <input type="checkbox" id="ck-state" checked class="switch-input"/>
+        </div>
+      </div>
+      <div class="cookie-form-footer">
+        <button type="button" id="cookie-reject-btn" class="secondary-full-btn">Essential Only</button>
+        <button type="submit" class="primary-full-btn">Save Preferences</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/pbb/data.js"></script>
+<script src="/pbb/script.js"></script>
+</body>
+</html>
