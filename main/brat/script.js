@@ -39,7 +39,7 @@ function fitText(){
  txt.style.fontSize=Math.max(1,low-0.4)+'px';
 }
 
-function draw(){const [w,h]=sizes[state.size];art.style.aspectRatio=w+'/'+h;art.style.background=state.bg;if(photo)art.style.backgroundImage='url('+JSON.stringify(photo.src)+')';else art.style.backgroundImage='none';art.style.backgroundSize='cover';art.style.backgroundPosition='center';fitText()}
+function draw(){const [w,h]=sizes[state.size];const area=art.closest('.art-area');const styles=getComputedStyle(area);const aw=area.clientWidth-parseFloat(styles.paddingLeft)-parseFloat(styles.paddingRight),ah=area.clientHeight-parseFloat(styles.paddingTop)-parseFloat(styles.paddingBottom);const scale=Math.min(aw/w,ah/h);if(scale>0){art.style.width=Math.floor(w*scale)+'px';art.style.height=Math.floor(h*scale)+'px'}art.style.aspectRatio=w+'/'+h;art.style.background=state.bg;if(photo)art.style.backgroundImage='url('+JSON.stringify(photo.src)+')';else art.style.backgroundImage='none';art.style.backgroundSize='cover';art.style.backgroundPosition='center';fitText()}
 function loadPhoto(){if(!state.image){photo=null;schedule();return}const im=new Image();im.onload=()=>{photo=im;schedule();notify('image added')};im.onerror=()=>{photo=null;schedule()};im.src=state.image}
 function getRows(){
  // Inspect the actual browser line boxes so exported wrapping matches the preview.
@@ -101,4 +101,4 @@ function theme(v){document.documentElement.dataset.theme=v;try{localStorage.setI
 $('themeToggle').addEventListener('click',()=>theme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
 try{const old=JSON.parse(localStorage.getItem(key));if(old&&sizes[old.size])state={...defaults,...old}}catch{}
 try{theme(localStorage.getItem('brat-ui-theme')||'light')}catch{theme('light')}
-const observer=new ResizeObserver(()=>requestAnimationFrame(draw));observer.observe(art);sync();loadPhoto();schedule();
+const observer=new ResizeObserver(()=>requestAnimationFrame(draw));observer.observe(art.closest('.art-area'));sync();loadPhoto();schedule();
