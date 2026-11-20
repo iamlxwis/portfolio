@@ -20,3 +20,6 @@
 .advanced-open .sidebar-heading{display:none}
 .advanced-open .simple-editor{border-bottom:1px solid var(--line)}
 @media(max-width:700px){.simple-editor{padding:18px 20px}.simple-heading strong{font-size:23px}.sidebar{top:65px}}
+
+.sidebar-heading{display:none}
+.simple-editor .button{font-size:12px}
