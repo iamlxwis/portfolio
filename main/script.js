@@ -92,7 +92,7 @@ document.addEventListener('keydown',function(event){if(event.key==='Escape'&&ove
 (function(){
   var loader=document.getElementById('lx-page-loader');
   var banner=document.getElementById('lx-cookie-banner');
-  if(!loader||!banner)return;
+  if(!loader)return;
   document.addEventListener('click',function(event){
     var link=event.target.closest&&event.target.closest('a[href]');
     if(!link||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
@@ -124,13 +124,5 @@ document.addEventListener('keydown',function(event){if(event.key==='Escape'&&ove
     loader.classList.remove('is-active');
     loader.setAttribute('aria-hidden','true');
   });
-  var saved=false;
-  try{saved=window.localStorage.getItem('lxwis-privacy-note')==='seen'}catch(e){}
-  if(!saved){window.setTimeout(function(){banner.classList.add('is-visible')},700)}
-  banner.querySelectorAll('[data-lx-cookie]').forEach(function(button){
-    button.addEventListener('click',function(){
-      banner.classList.remove('is-visible');
-      try{window.localStorage.setItem('lxwis-privacy-note','seen')}catch(e){}
-    });
-  });
+
 })();
