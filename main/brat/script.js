@@ -256,7 +256,44 @@ function hideHint(){hintBubble.hidden=true}
 document.querySelectorAll('.hint-trigger').forEach(b=>{b.addEventListener('click',()=>{if(b.getAttribute('aria-expanded')==='true')placeHint(b);else hideHint()});b.addEventListener('mouseenter',()=>placeHint(b));b.addEventListener('mouseleave',()=>{if(b.getAttribute('aria-expanded')!=='true')hideHint()})});
 document.addEventListener('click',e=>{if(!e.target.closest('.hint-wrap')){hideHint();}if(!e.target.closest('.hint-wrap'))document.querySelectorAll('.hint-trigger').forEach(b=>b.setAttribute('aria-expanded','false'))});
 $('mirrorToggle').addEventListener('click',()=>update({mirror:!state.mirror}));
-document.querySelectorAll('.modern-select').forEach(sel=>{const shell=document.createElement('div');shell.className='select-shell';const trigger=document.createElement('button');trigger.type='button';trigger.className='select-display';trigger.dataset.select=sel.id;trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');trigger.innerHTML='<span></span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>';const options=document.createElement('div');options.className='select-options';options.setAttribute('role','listbox');options.hidden=true;for(const option of sel.options){const item=document.createElement('button');item.type='button';item.className='select-item';item.setAttribute('role','option');item.textContent=option.textContent;item.addEventListener('click',()=>{sel.value=option.value;sel.dispatchEvent(new Event('change',{bubbles:true}));options.hidden=true;trigger.setAttribute('aria-expanded','false');trigger.querySelector('span').textContent=option.textContent;draw();trigger.focus()});options.appendChild(item)}sel.parentNode.insertBefore(shell,sel);shell.append(sel,trigger,options);trigger.addEventListener('click',()=>{const opening=options.hidden;document.querySelectorAll('.select-options').forEach(p=>p.hidden=true);document.querySelectorAll('.select-display').forEach(b=>b.setAttribute('aria-expanded','false'));options.hidden=!opening;trigger.setAttribute('aria-expanded',String(opening))});trigger.addEventListener('keydown',e=>{if(e.key==='Escape'){options.hidden=true;trigger.setAttribute('aria-expanded','false')}else if(e.key==='ArrowDown'){e.preventDefault();options.hidden=false;options.firstElementChild?.focus()}});options.addEventListener('keydown',e=>{if(e.key==='Escape'){options.hidden=true;trigger.focus()}})});
+document.querySelectorAll('.modern-select').forEach(sel=>{
+ const shell=document.createElement('div');shell.className='select-shell';
+ const trigger=document.createElement('button');trigger.type='button';trigger.className='select-display';
+ trigger.dataset.select=sel.id;trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');
+ const label=document.createElement('span');const chevron=premiumIcon('chevron',17);trigger.append(label,chevron);
+ const options=document.createElement('div');options.className='select-options';options.id=sel.id+'-choices';options.setAttribute('role','listbox');options.hidden=true;
+ trigger.setAttribute('aria-controls',options.id);
+ function close(){options.hidden=true;trigger.setAttribute('aria-expanded','false')}
+ function refresh(){
+  label.textContent=sel.selectedOptions[0]?.textContent||'';
+  options.querySelectorAll('[role="option"]').forEach(item=>{const selected=item.dataset.value===sel.value;item.setAttribute('aria-selected',String(selected));item.tabIndex=selected?0:-1});
+ }
+ for(const option of sel.options){
+  const item=document.createElement('button');item.type='button';item.className='select-item';
+  item.setAttribute('role','option');item.dataset.value=option.value;
+  const name=document.createElement('span');name.textContent=option.textContent;
+  const check=premiumIcon('check',16);item.append(name,check);
+  item.addEventListener('click',()=>{sel.value=option.value;sel.dispatchEvent(new Event('change',{bubbles:true}));refresh();close();trigger.focus()});
+  options.append(item);
+ }
+ sel.parentNode.insertBefore(shell,sel);shell.append(sel,trigger,options);
+ trigger.addEventListener('click',()=>{
+  const opening=options.hidden;
+  document.querySelectorAll('.select-options').forEach(p=>p.hidden=true);
+  document.querySelectorAll('.select-display').forEach(b=>b.setAttribute('aria-expanded','false'));
+  options.hidden=!opening;trigger.setAttribute('aria-expanded',String(opening));
+  if(opening){refresh();options.querySelector('[aria-selected="true"]')?.focus()}
+ });
+ trigger.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='Enter'||e.key===' '){e.preventDefault();if(options.hidden)trigger.click()}else if(e.key==='Escape')close()});
+ options.addEventListener('keydown',e=>{
+  const items=[...options.querySelectorAll('[role="option"]')],index=items.indexOf(document.activeElement);
+  if(e.key==='Escape'){e.preventDefault();close();trigger.focus()}
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();items[(index+(e.key==='ArrowDown'?1:items.length-1))%items.length]?.focus()}
+  if(e.key==='Home'){e.preventDefault();items[0]?.focus()}
+  if(e.key==='End'){e.preventDefault();items[items.length-1]?.focus()}
+ });
+ sel.addEventListener('change',refresh);refresh();
+});
 document.addEventListener('click',e=>{if(!e.target.closest('.select-shell')){document.querySelectorAll('.select-options').forEach(p=>p.hidden=true);document.querySelectorAll('.select-display').forEach(b=>b.setAttribute('aria-expanded','false'))}});
 document.querySelectorAll('.swatch').forEach(b=>b.addEventListener('click',()=>{const [bg,fg]=palettes[b.dataset.palette];update({bg,fg})}));
 $('downloadTop').addEventListener('click',exportOptions);
