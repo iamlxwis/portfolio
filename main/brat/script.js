@@ -17,7 +17,7 @@ function fitText(){
  txt.classList.toggle('single-word',!String(state.text||'brat').trim().includes(' '));txt.style.fontFamily=state.font;txt.style.lineHeight=String(1.12*state.lineHeight/100);
  txt.style.color=state.fg;txt.style.filter=state.blur?'blur('+(state.blur*width/1080).toFixed(2)+'px)':'none';
  txt.textContent=state.text||'brat';
- let lo=5,hi=Math.min(width*.72,300*width/384)*state.fontScale/100;
+ let lo=5,hi=Math.min(width*(txt.classList.contains('single-word')?.43:.72),300*width/384)*state.fontScale/100;
  for(let i=0;i<19;i++){
   const mid=(lo+hi)/2;txt.style.fontSize=mid+'px';
   if(txt.scrollHeight<=height+1&&txt.scrollWidth<=width+1)lo=mid;else hi=mid;
