@@ -13,30 +13,47 @@ function validHex(v){const raw=v.trim().replace(/^#/,'');return /^[0-9a-f]{6}$/i
 function syncHex(){for(const [id,color] of [['bgHex',state.bg],['textHex',state.fg]]){if(document.activeElement!==$(id))$(id).value=color.toUpperCase()}}
 function schedule(){draw()}
 function fitText(){
- const width=art.clientWidth,height=art.clientHeight;if(!width||!height)return;
- const text=String(state.text||'');
- const single=!!text.trim()&&!/\\s/.test(text.trim());
+ const width=art.clientWidth,height=art.clientHeight;
+ if(!width||!height)return;
+ const content=String(state.text??'');
+ const single=!!content.trim()&&!/\\s/.test(content.trim());
  txt.classList.toggle('single-word',single);
  txt.style.fontFamily=state.font;
- txt.style.lineHeight=String(Math.max(.55,1.12*state.lineHeight/100));
+ txt.style.lineHeight=String(Math.max(.65,1.12*state.lineHeight/100));
  txt.style.color=state.fg;
  txt.style.filter=state.blur?'blur('+(state.blur*width/1080).toFixed(2)+'px)':'none';
- txt.textContent=text;
+ txt.textContent=content;
  txt.style.transform='translateY(-50%)'+(state.mirror?' scaleX(-1)':'');
- if(!text.trim()){txt.style.fontSize='0px';return}
- const maxWidth=width*.94,maxHeight=height*.94;
- // The text's own box must be narrower than the art, otherwise a word
- // can sit flush against the edge even when scrollWidth reports no overflow.
- txt.style.width=maxWidth+'px';
- txt.style.left=(width-maxWidth)/2+'px';
+ const pad=Math.max(8,Math.round(width*.055));
+ const availableWidth=width-pad*2,availableHeight=height-Math.max(8,Math.round(height*.055))*2;
+ txt.style.width=availableWidth+'px';
+ txt.style.left=pad+'px';
  txt.style.right='auto';
- let low=1,high=Math.max(2,Math.min(width*.7,Math.max(width,height)*.8)*Math.max(.01,state.fontScale/100));
- for(let i=0;i<22;i++){
-  const mid=(low+high)/2;txt.style.fontSize=mid+'px';
-  const h=txt.scrollHeight,w=txt.scrollWidth;
-  if(h<=maxHeight&&w<=maxWidth+1)low=mid;else high=mid;
+ if(!content.trim()){txt.style.fontSize='0px';return}
+ // Bratify's textfit principle: measure actual browser line breaks in a
+ // constrained box, then binary-search the largest font that still fits.
+ const scale=Math.max(.01,Math.min(1,Number(state.fontScale)||100)/100);
+ const maximum=Math.min(availableWidth*.85,availableHeight*.85,400)*scale;
+ let low=.5,high=Math.max(1,maximum);
+ const node=txt.firstChild;
+ function fits(px){
+  txt.style.fontSize=px+'px';
+  if(txt.scrollHeight>availableHeight+.5||txt.scrollWidth>availableWidth+.5)return false;
+  // scrollWidth alone cannot detect a final glyph protruding beyond a line.
+  // Inspect the browser's actual glyph boxes, including justified lines.
+  if(!node||node.nodeType!==3)return true;
+  const parent=txt.getBoundingClientRect();
+  const range=document.createRange();
+  for(let i=0;i<node.length;i++){
+   if(/\\s/.test(node.textContent[i]))continue;
+   range.setStart(node,i);range.setEnd(node,i+1);
+   const rect=range.getBoundingClientRect();
+   if(rect.left<parent.left-1||rect.right>parent.right+1)return false;
+  }
+  return true;
  }
- txt.style.fontSize=Math.max(1,low-0.4)+'px';
+ for(let i=0;i<18;i++){const mid=(low+high)/2;if(fits(mid))low=mid;else high=mid}
+ txt.style.fontSize=Math.max(.5,low-.15)+'px';
 }
 
 function draw(){const [w,h]=sizes[state.size];const area=art.closest('.art-area');const styles=getComputedStyle(area);const aw=area.clientWidth-parseFloat(styles.paddingLeft)-parseFloat(styles.paddingRight),ah=area.clientHeight-parseFloat(styles.paddingTop)-parseFloat(styles.paddingBottom);const scale=Math.min(aw/w,ah/h);if(scale>0){art.style.width=Math.floor(w*scale)+'px';art.style.height=Math.floor(h*scale)+'px'}art.style.aspectRatio=w+'/'+h;art.style.background=state.bg;if(photo)art.style.backgroundImage='url('+JSON.stringify(photo.src)+')';else art.style.backgroundImage='none';art.style.backgroundSize='cover';art.style.backgroundPosition='center';fitText()}
