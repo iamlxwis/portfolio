@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="BRAT Studio — make bold, blurry, chaotic graphics in your browser.">
+  <title>BRAT Studio — create your own era</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Back to lxwis portfolio"><span class="brand-mark">b<span>✳</span></span><span>BRAT<span class="muted">/studio</span></span></a>
+  <div class="top-actions"><span class="autosave"><span class="dot"></span> saved locally</span><button id="undo" class="icon-btn" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button><button id="redo" class="icon-btn" title="Redo (Ctrl+Y)" aria-label="Redo">↷</button><button id="downloadTop" class="button primary top-export">↗ Export</button></div>
+</header>
+<div class="workspace">
+  <aside class="sidebar" id="sidebar" aria-label="Editing controls">
+    <div class="sidebar-heading"><div><p class="eyebrow">MAKE SOMETHING LOUD</p><h1>your era.<br><em>your rules.</em></h1></div><span class="version">01 / EDITOR</span></div>
+    <nav class="tabs" id="tabs" aria-label="Editor tabs"><button class="tab active" data-tab="text">Text</button><button class="tab" data-tab="style">Style</button><button class="tab" data-tab="effects">Effects</button><button class="tab" data-tab="image">Image</button><button class="tab" data-tab="export">Export</button></nav>
+    <div class="panel active" data-panel="text">
+      <div class="field"><label for="mainText">YOUR WORDS <small>hit enter for a new line</small></label><textarea id="mainText" rows="4" maxlength="500" spellcheck="false">brat</textarea></div>
+      <div class="field"><label for="fontFamily">TYPEFACE</label><select id="fontFamily"><option value="arial">Arial (classic)</option><option value="helvetica">Helvetica / sans</option><option value="impact">Impact</option><option value="mono">Monospace</option><option value="serif">Times / serif</option></select></div>
+      <div class="field"><label for="fontSize">FONT SIZE <output id="fontSizeVal">100</output></label><input id="fontSize" type="range" min="16" max="260" value="100"></div>
+      <div class="field"><label for="lineHeight">LINE HEIGHT <output id="lineHeightVal">0.95</output></label><input id="lineHeight" type="range" min="0.65" max="1.65" step="0.05" value="0.95"></div>
+      <div class="field"><label for="letterSpacing">LETTER SPACING <output id="letterSpacingVal">-4</output></label><input id="letterSpacing" type="range" min="-12" max="20" value="-4"></div>
+      <div class="field"><label for="textAlign">ALIGNMENT</label><div class="segmented" id="textAlign"><button data-value="left">Left</button><button data-value="center" class="chosen">Center</button><button data-value="right">Right</button></div></div>
+      <div class="field"><label for="weight">WEIGHT</label><div class="segmented" id="weight"><button data-value="normal" class="chosen">Regular</button><button data-value="bold">Bold</button></div></div>
+      <div class="field"><label for="vertical">VERTICAL POSITION <output id="verticalVal">50%</output></label><input id="vertical" type="range" min="0" max="100" value="50"></div>
+      <div class="field"><label for="horizontal">HORIZONTAL POSITION <output id="horizontalVal">50%</output></label><input id="horizontal" type="range" min="0" max="100" value="50"></div>
+      <p class="helper">Drag the text on the canvas to position it. Long lines wrap automatically.</p>
+    </div>
+    <div class="panel" data-panel="style">
+      <p class="group-title">QUICK STARTS</p><div class="preset-grid" id="presetGrid"></div>
+      <div class="two-cols"><div class="field"><label for="bgColor">BACKGROUND</label><div class="color-field"><input id="bgColor" type="color" value="#8ace00"><input id="bgHex" aria-label="Background hex color" value="#8ace00" maxlength="7"></div></div><div class="field"><label for="textColor">TEXT COLOR</label><div class="color-field"><input id="textColor" type="color" value="#111111"><input id="textHex" aria-label="Text hex color" value="#111111" maxlength="7"></div></div></div>
+      <div class="field"><label for="sizePreset">CANVAS SIZE</label><select id="sizePreset"><option value="square">Square / 1:1</option><option value="portrait">Portrait / 4:5</option><option value="story">Story / 9:16</option><option value="landscape">Landscape / 16:9</option><option value="banner">Banner / 3:1</option></select></div>
+      <div class="field"><label for="padding">SAFE MARGIN <output id="paddingVal">10%</output></label><input id="padding" type="range" min="2" max="30" value="10"></div>
+      <div class="field"><label for="rotation">TEXT ROTATION <output id="rotationVal">0°</output></label><input id="rotation" type="range" min="-35" max="35" value="0"></div>
+      <button id="swapColors" class="button secondary stretch">⇄ Swap colors</button><button id="randomize" class="button secondary stretch">✳ Surprise me</button>
+      <p class="group-title spaced">MY PRESETS</p><div class="two-cols"><button id="savePreset" class="button secondary">+ Save look</button><select id="customPreset" aria-label="Saved preset"><option value="">Load saved…</option></select></div><button id="deletePreset" class="link-button">Delete selected preset</button>
+    </div>
+    <div class="panel" data-panel="effects">
+      <p class="helper intro-helper">Make it lo-fi, messy, or crystal clear. Effects render directly into the exported image.</p>
+      <div class="field"><label for="blur">BLUR <output id="blurVal">1.6</output></label><input id="blur" type="range" min="0" max="12" value="1.6" step="0.2"></div>
+      <div class="field"><label for="grain">GRAIN <output id="grainVal">7</output></label><input id="grain" type="range" min="0" max="60" value="7"></div>
+      <div class="field"><label for="distort">WARP <output id="distortVal">0</output></label><input id="distort" type="range" min="0" max="35" value="0"></div>
+      <div class="field"><label for="shadow">SHADOW <output id="shadowVal">0</output></label><input id="shadow" type="range" min="0" max="35" value="0"></div>
+      <div class="field"><label for="contrast">CONTRAST <output id="contrastVal">100%</output></label><input id="contrast" type="range" min="40" max="200" value="100"></div>
+      <div class="field"><label for="saturation">SATURATION <output id="saturationVal">100%</output></label><input id="saturation" type="range" min="0" max="220" value="100"></div>
+      <div class="field"><label for="texture">TEXTURE</label><select id="texture"><option value="none">None</option><option value="scanlines">Scanlines</option><option value="halftone">Halftone dots</option><option value="noise">Heavy noise</option></select></div>
+      <div class="field"><label for="overlay">OVERLAY</label><select id="overlay"><option value="none">None</option><option value="border">Thin frame</option><option value="crosshair">Crop marks</option><option value="stamp">BRAT STUDIO stamp</option></select></div>
+      <button id="resetEffects" class="button secondary stretch">↺ Reset effects</button>
+    </div>
+    <div class="panel" data-panel="image">
+      <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload image"><span class="upload-symbol">↥</span><strong>drop an image here</strong><span>or tap to browse • JPG, PNG, WebP</span></div><input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+      <div id="imageTools" hidden><div class="field"><label for="imageMode">IMAGE MODE</label><select id="imageMode"><option value="background">Behind text</option><option value="foreground">Over text</option></select></div><div class="field"><label for="imageFit">FIT</label><select id="imageFit"><option value="cover">Cover</option><option value="contain">Contain</option><option value="stretch">Stretch</option></select></div><div class="field"><label for="imageOpacity">OPACITY <output id="imageOpacityVal">100%</output></label><input id="imageOpacity" type="range" min="0" max="100" value="100"></div><div class="field"><label for="imageScale">IMAGE ZOOM <output id="imageScaleVal">100%</output></label><input id="imageScale" type="range" min="25" max="300" value="100"></div><div class="field"><label for="imageX">MOVE X <output id="imageXVal">0</output></label><input id="imageX" type="range" min="-100" max="100" value="0"></div><div class="field"><label for="imageY">MOVE Y <output id="imageYVal">0</output></label><input id="imageY" type="range" min="-100" max="100" value="0"></div><div class="field"><label for="imageBlur">IMAGE BLUR <output id="imageBlurVal">0</output></label><input id="imageBlur" type="range" min="0" max="20" value="0"></div><button id="removeImage" class="button secondary stretch">✕ Remove image</button></div><p class="helper">Uploaded photos stay in your browser; they are never sent to a server.</p>
+    </div>
+    <div class="panel" data-panel="export"><p class="group-title">MAKE IT REAL</p><div class="field"><label for="exportFormat">FORMAT</label><select id="exportFormat"><option value="png">PNG — best quality</option><option value="jpeg">JPG — smaller file</option><option value="webp">WebP — modern</option></select></div><div class="field"><label for="exportScale">RESOLUTION</label><select id="exportScale"><option value="1">Standard / 1080px</option><option value="2">High / 2160px</option><option value="3">Ultra / 3240px</option></select></div><div class="field"><label for="fileName">FILE NAME</label><input id="fileName" type="text" value="my-brat-era" maxlength="70"></div><button id="download" class="button primary stretch large">↗ DOWNLOAD IMAGE</button><button id="share" class="button secondary stretch">⇧ Share image</button><button id="copyLink" class="button secondary stretch">⛓ Copy design link</button><button id="saveProject" class="button secondary stretch">↓ Save editable project</button><button id="loadProject" class="button secondary stretch">↑ Open editable project</button><input id="projectInput" type="file" accept="application/json,.json" hidden><p class="helper">A design link includes your settings, but not uploaded photos. For images, save an editable project file instead.</p></div>
+    <div class="sidebar-footer"><span>MADE FOR THE MOMENT.</span><a href="/">← BACK TO PORTFOLIO</a></div>
+  </aside>
+  <main class="stage"><div class="stage-top"><div><span class="stage-label">LIVE PREVIEW</span><span class="stage-sub">every change, instantly.</span></div><div class="preview-actions"><button id="zoomOut" class="icon-btn" title="Zoom out">−</button><span id="zoomLabel">Fit</span><button id="zoomIn" class="icon-btn" title="Zoom in">+</button><button id="zoomFit" class="icon-btn" title="Fit to screen">⤢</button></div></div><div class="stage-body" id="stageBody"><div class="canvas-wrap" id="canvasWrap"><canvas id="artCanvas" width="1080" height="1080" aria-label="BRAT graphic preview"></canvas></div></div><div class="stage-bottom"><span id="canvasInfo">1080 × 1080 px</span><span>✳ drag text to move</span><button id="shuffle" title="Random preset">randomize ↗</button></div></main>
+</div>
+<div class="mobile-dock"><button id="mobileTools" aria-expanded="false" aria-controls="sidebar">☷ EDIT TOOLS</button><button id="mobileExport">↗ EXPORT</button></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
