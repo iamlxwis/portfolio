@@ -1,7 +1,10 @@
 (()=>{
 'use strict';
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',()=>{window.__lxPrivacyInit?.()}, {once:true});window.__lxPrivacyInit=init;return;}
-init();
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+else init();
+window.addEventListener('pageshow',()=>{if(!document.getElementById('lx-privacy-widget'))init();else if(!hasSavedChoice())showPendingNotice()});
+function hasSavedChoice(){try{const value=JSON.parse(localStorage.getItem('lxwis-consent-v4'));return value&&value.version===4&&['accept','essential'].includes(value.choice)}catch{return false}}
+function showPendingNotice(){const widget=document.getElementById('lx-privacy-widget');if(!widget)return;const layer=widget.querySelector('.lx-overlay');if(layer){layer.hidden=false;layer.style.setProperty('display','flex','important')}}
 function init(){
 if(document.getElementById('lx-privacy-widget'))return;
 const key='lxwis-consent-v4';
@@ -32,14 +35,14 @@ const overlay=root.querySelector('.lx-overlay'),panel=root.querySelector('.lx-pa
 let lastFocus=null;
 function getChoice(){try{const value=JSON.parse(localStorage.getItem(key));return value&&value.version===4&&['accept','essential'].includes(value.choice)?value:null}catch{return null}}
 function open(section){lastFocus=document.activeElement;overlay.hidden=false;overlay.style.setProperty('display','flex','important');root.querySelectorAll('details').forEach(d=>d.open=d.dataset.section===section);checks.forEach(c=>c.checked=false);accept.disabled=true;close.focus()}
-function hide(){overlay.hidden=true;overlay.style.setProperty('display','none','important');if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+function hide(){if(!getChoice())return;overlay.hidden=true;overlay.style.setProperty('display','none','important');if(lastFocus&&lastFocus.focus)lastFocus.focus()}
 function choose(choice){try{localStorage.setItem(key,JSON.stringify({choice,version:4,at:new Date().toISOString()}))}catch{}hide()}
 root.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>open(b.dataset.open)));
 checks.forEach(c=>c.addEventListener('change',()=>{accept.disabled=!checks.every(c=>c.checked)}));
 root.querySelectorAll('[data-choice]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.choice==='accept'&&!checks.every(c=>c.checked))return;choose(b.dataset.choice)}));
-close.addEventListener('click',hide);
-overlay.addEventListener('click',e=>{if(e.target===overlay)hide()});
-document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Escape')hide();if(e.key==='Tab'){const items=[...panel.querySelectorAll('button:not(:disabled),input:not(:disabled),summary')].filter(el=>el.getClientRects().length);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+close.addEventListener('click',()=>{if(getChoice())hide();else root.querySelector('[data-choice="essential"]').focus()});
+overlay.addEventListener('click',e=>{if(e.target===overlay&&getChoice())hide()});
+document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Escape'&&getChoice())hide();if(e.key==='Tab'){const items=[...panel.querySelectorAll('button:not(:disabled),input:not(:disabled),summary')].filter(el=>el.getClientRects().length);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 if(!getChoice())open('cookies');else hide();
 }
 })();
