@@ -1,0 +1,11 @@
+{
+  "appId": "site.lxwis.brat",
+  "appName": "brat",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#8ace00"
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
