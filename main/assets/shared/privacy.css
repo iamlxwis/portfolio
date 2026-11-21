@@ -49,3 +49,23 @@ body:has(.art-area) #lx-privacy-widget .lx-footer button{color:inherit}
  @keyframes lx-route-out{to{opacity:0}}
  @keyframes lx-route-in{from{opacity:0}to{opacity:1}}
 }
+
+/* Privacy consent UI v2: focused, readable, responsive */
+#lx-privacy-widget .lx-panel{border-radius:19px;padding:clamp(17px,3vw,25px);background:#1c201b;border:1px solid #4b5349;box-shadow:0 26px 100px #000b}
+#lx-privacy-widget .lx-overlay{background:rgba(5,7,5,.76);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+#lx-privacy-widget h2{font-size:clamp(22px,3vw,27px);letter-spacing:-.045em}
+#lx-privacy-widget .lx-eyebrow{letter-spacing:.1em;text-transform:uppercase}
+#lx-privacy-widget .lx-sections{border-radius:12px}
+#lx-privacy-widget .lx-sections summary{min-height:64px;transition:background-color .18s}
+#lx-privacy-widget .lx-sections summary:hover{background:#272e25}
+#lx-privacy-widget .lx-check{gap:12px;min-height:30px}
+#lx-privacy-widget .lx-check input{width:19px;height:19px;accent-color:#a5d55c}
+#lx-privacy-widget .lx-actions{gap:11px;margin-top:12px}
+#lx-privacy-widget .lx-actions button{min-height:46px;border-radius:11px;transition:transform .2s,background-color .2s,border-color .2s}
+#lx-privacy-widget .lx-actions button:not(:disabled):active{transform:scale(.97)}
+#lx-privacy-widget .lx-actions .lx-accept{background:#a4d650;border-color:#a4d650}
+#lx-privacy-widget .lx-actions .lx-accept:not(:disabled):hover{background:#b6e76a}
+#lx-privacy-widget .lx-footer{gap:9px 16px}
+#lx-privacy-widget .lx-footer button{min-height:34px}
+@media(prefers-reduced-motion:no-preference){#lx-privacy-widget .lx-overlay:not([hidden]) .lx-panel{animation:lx-consent-enter .23s cubic-bezier(.2,.8,.2,1) both}@keyframes lx-consent-enter{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}}
+@media(prefers-reduced-motion:reduce){#lx-privacy-widget .lx-panel,#lx-privacy-widget .lx-actions button{animation:none!important;transition:none!important}}
