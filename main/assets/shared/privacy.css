@@ -40,3 +40,12 @@ body:has(.art-area) #lx-privacy-widget .lx-footer button{color:inherit}
 .lx-editor-footer #lx-privacy-widget .lx-footer button{display:inline-flex;align-items:center;min-height:32px;color:var(--muted,#999);font-size:12px}
 .lx-editor-footer #lx-privacy-widget .lx-footer button:hover{color:var(--ink,#fff)}
 .lx-editor-footer #lx-privacy-widget .lx-overlay{position:fixed;z-index:2147483640}
+
+/* Small, progressive cross-page transitions for the multi-page website. */
+@media(prefers-reduced-motion:no-preference){
+ @view-transition{navigation:auto}
+ ::view-transition-old(root){animation:lx-route-out .16s ease both}
+ ::view-transition-new(root){animation:lx-route-in .2s ease both}
+ @keyframes lx-route-out{to{opacity:0}}
+ @keyframes lx-route-in{from{opacity:0}to{opacity:1}}
+}
