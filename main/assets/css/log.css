@@ -1,0 +1,63 @@
+/* Changelog — compact repository timeline */
+*{box-sizing:border-box}
+html{background:#111210}
+body.lx-log-page{margin:0;background:radial-gradient(ellipse 80% 24% at 50% -5%,#262a22,transparent),#111210;color:#f1f3ea;min-height:100svh;font:14px/1.7 'Inter',Arial,Helvetica,sans-serif}
+.lx-log-shell{width:min(100% - 44px,1060px);margin:0 auto}
+.lx-log-header{display:flex;align-items:center;gap:22px;padding:20px 0;border-bottom:1px solid #363a33}
+.lx-log-header .logo{font:700 24px/.95 'Fraunces',Georgia,serif;letter-spacing:-.065em;color:#eee;text-decoration:none}
+.lx-log-header .logo em{color:#aaa;font-style:italic;font-weight:500}
+.lx-log-header .lx-header-note{font:11px 'JetBrains Mono',monospace;color:#a4aba0;letter-spacing:.1em}
+.lx-log-header .lx-route-menu{margin-left:auto}
+.lx-log-hero{padding:clamp(75px,11vh,145px) 0 clamp(50px,7vh,90px);border-bottom:1px solid #363a33}
+.lx-log-hero .lx-eyebrow{margin-bottom:19px}
+.lx-log-hero h1{font:700 clamp(78px,12vw,145px)/.9 'Fraunces',Georgia,serif;letter-spacing:-.085em;margin:0 0 23px}
+.lx-log-hero h1 em{color:#adb9a4;font-weight:500}
+.lx-log-hero p:last-child{font:13px/1.6 'JetBrains Mono',monospace;color:#b0b8aa;margin:0}
+.lx-log-body{padding:38px 0 95px}
+.lx-log-bar{display:flex;align-items:center;justify-content:space-between;gap:17px;flex-wrap:wrap;margin-bottom:16px}
+.lx-log-bar h2{font-size:12px;text-transform:uppercase;letter-spacing:.13em;font-weight:600;color:#e0e4d9}
+.lx-log-controls{display:flex;align-items:center;gap:18px}
+.lx-log-updated{font:11px 'JetBrains Mono',monospace;color:#aeb5aa}
+.lx-log-refresh{min-width:42px;min-height:42px;padding:9px 12px;display:inline-flex;gap:9px;align-items:center;justify-content:center;cursor:pointer;border:1px solid #454b40;border-radius:11px;background:#1c211b;color:#e9efe3;font:600 12px 'Inter',sans-serif;transition:background .2s,transform .2s}
+.lx-log-refresh:hover{background:#2a3028}
+.lx-log-refresh:active{transform:scale(.97)}
+.lx-log-refresh:disabled{opacity:.6;cursor:progress}
+.lx-log-list{margin:0;padding:0;list-style:none;border-top:1px solid #343831}
+.lx-log-entry{display:grid;grid-template-columns:minmax(105px,160px) minmax(0,1fr) 24px;gap:clamp(18px,4vw,50px);align-items:start;padding:27px 12px 27px 5px;border-bottom:1px solid #343831;transition:background-color .2s;animation:lx-enter .43s var(--lx-ease) both}
+.lx-log-entry:hover{background:#1b201a}
+.lx-log-date{font:11px/1.7 'JetBrains Mono',monospace;color:#b3bbac;white-space:nowrap;padding-top:5px}
+.lx-log-message{color:#e4e7de;font-size:clamp(14px,1.7vw,17px);font-weight:500;letter-spacing:-.022em;line-height:1.5;overflow-wrap:anywhere}
+.lx-log-detail{display:flex;align-items:center;flex-wrap:wrap;gap:8px 15px;margin-top:10px;font:11px/1.6 'JetBrains Mono',monospace;color:#a5aea1}
+.lx-log-detail a{color:#c3d4ba;text-decoration:none}
+.lx-log-detail a:hover{text-decoration:underline;text-underline-offset:4px}
+.lx-log-link{color:#b4bfad;text-decoration:none;width:24px;height:24px;display:grid;place-items:center;margin-top:1px}
+.lx-log-link:hover{color:#fff}
+.lx-log-state{padding:30px 6px;display:flex;flex-direction:column;gap:12px;color:#bec6b7;font:13px/1.6 'Inter',sans-serif;border-bottom:1px solid #343831}
+.lx-log-state a{color:#e4e9dc;text-underline-offset:3px}
+.lx-log-skeleton{border-bottom:1px solid #343831;padding:28px 6px;display:grid;grid-template-columns:130px 1fr;gap:27px}
+.lx-log-skeleton span{display:block;max-width:580px;height:15px;border-radius:7px;background:linear-gradient(90deg,#1e221d,#33382e,#1e221d);background-size:200% 100%;animation:lx-skeleton-shift 1.25s linear infinite}
+.lx-log-skeleton span:first-child{width:85px;height:10px;margin-top:4px}
+@keyframes lx-skeleton-shift{to{background-position:-200% 0}}
+.lx-log-actions{display:flex;justify-content:flex-end;gap:15px;margin-top:23px}
+.lx-log-actions a{font:12px 'Inter',sans-serif;color:#d9e0d2;display:inline-flex;gap:8px;align-items:center;text-decoration:none;padding:9px 0}
+.lx-log-actions a:hover{text-decoration:underline;text-underline-offset:4px}
+.lx-log-footer{padding:24px 0 40px;border-top:1px solid #383a34;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#a8afa2;font:12px/1.6 'JetBrains Mono',monospace}
+.lx-log-footer #lx-privacy-widget{flex-basis:100%}
+.lx-log-footer #lx-privacy-widget .lx-footer{justify-content:flex-start}
+.lx-log-footer #lx-privacy-widget .lx-footer>span{display:none}
+@media(max-width:600px){
+.lx-log-shell{width:calc(100% - 36px)}
+.lx-log-header .lx-header-note{display:none}
+.lx-log-hero{padding:70px 0 55px}
+.lx-log-body{padding:27px 0 62px}
+.lx-log-entry{grid-template-columns:minmax(0,1fr) 22px;gap:3px 9px;padding:21px 5px}
+.lx-log-date{grid-column:1;grid-row:1;margin-bottom:3px}
+.lx-log-message{grid-column:1;grid-row:2}
+.lx-log-detail{grid-column:1;grid-row:3}
+.lx-log-link{grid-column:2;grid-row:2}
+.lx-log-skeleton{grid-template-columns:1fr;gap:12px}
+.lx-log-bar{align-items:flex-start}
+.lx-log-controls{gap:8px}
+.lx-log-updated{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.lx-log-entry,.lx-log-skeleton span{animation:none!important}}
