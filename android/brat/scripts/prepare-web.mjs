@@ -16,7 +16,8 @@ for(const name of ['privacy.html','cookies.html','terms.html']){
 }
 // The APK uses a one-time consent dialog, never the site's persistent legal footer.
 const widget=resolve(dest,'privacy.js');let js=await readFile(widget,'utf8');
-js=js.replace('document.body.append(root);','document.body.append(root);root.querySelector(\'.lx-footer\')?.remove();');
+js=js.replace('const existingFooter=document.querySelector(\'.wrap > footer, body > footer, main + footer\');','const existingFooter=null;');
+js=js.replace('(document.querySelector(\'main\')||document.body).after(footer)','(document.querySelector(\'main\')||document.body).after(footer);footer.remove()');
 js=js.replaceAll('href="/privacy"','href="./privacy.html"').replaceAll('href="/cookies"','href="./cookies.html"').replaceAll('href="/terms"','href="./terms.html"');await writeFile(widget,js);
 // One native-only startup overlay, with a short animation and guaranteed timeout.
 html=html.replace(/<head>/, `<head><meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'">`);
