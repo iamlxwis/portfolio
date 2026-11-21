@@ -58,7 +58,7 @@ async function checks(page,width,label){
    textField:bounds('.text-field'),bg:bounds('.color-option'),
    bgEntry:bounds('.color-entry'),colors:bounds('.color-pickers'),
    panel:bounds('.editor-panel'),swatches:bounds('.swatches'),
-   optionBorder:border('.color-option'),entryBorder:border('.color-entry'),
+   optionBorder:border('.color-option'),labelBorder:border('.color-option>label'),entryBorder:border('.color-entry'),
    preview:bounds('#art'),logo:bounds('.brat-brand .logo'),
    menuInHeader:!!document.querySelector('.header-actions>.brat-route-menu'),
    menuNotByLogo:!document.querySelector('.brat-brand>.brat-route-menu'),
@@ -76,6 +76,7 @@ async function checks(page,width,label){
  assert.ok(props.heading&&props.save&&Math.abs(props.heading.y-props.save.y)<16,'Save colors not on same row as heading '+label+': '+JSON.stringify(props));
  assert.ok(props.textarea.height<=80&&props.textField.height<=102,'Text editor too tall '+label);
  assert.equal(props.optionBorder,'0px','Color field has redundant outer box '+label);
+ assert.equal(props.labelBorder,'0px','Color field label still looks like an input '+label);
  assert.equal(props.entryBorder,'1px','Compact input border missing '+label);
  assert.ok(props.bgEntry.height<=50,'Color input oversized '+label);
  assert.equal(props.colorFieldCount,2,'Color controls missing '+label);
@@ -123,6 +124,7 @@ async function interactions(page){
  await page.locator('#downloadTop').click();
  assert.ok(await page.locator('.brat-export-dialog').isVisible(),'Export dialog regression');
  await page.keyboard.press('Escape');
+ await page.locator('.brat-export-dialog').waitFor({state:'hidden',timeout:1400});
  assert.ok(await page.locator('.brat-export-dialog').isHidden(),'Export dialog did not dismiss');
  console.log('PASS interactions | palettes, HEX fields, persistence, text and export');
 }

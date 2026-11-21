@@ -512,3 +512,21 @@ html.capacitor-app .brat-route-menu{display:none!important}
 .header-actions{position:relative}
 .brat-route-menu{position:static}
 .brat-route-menu>nav{right:0;left:auto;top:calc(100% + 8px)}
+
+
+/* Remove the inherited label-box borders (the screenshot's remaining double frame). */
+.color-option>label{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+/* Hidden dialogs must leave the interaction and accessibility tree after fade-out. */
+#toast.brat-modal{visibility:hidden;transition:opacity .2s ease,visibility 0s linear .2s}
+#toast.brat-modal.show{visibility:visible;transition:opacity .2s ease,visibility 0s}
+@media(max-width:760px){
+ .editor-panel .panel-content{gap:11px}
+ .editor-panel .text-field{padding:8px 11px}
+ .controls .control .text-field textarea{min-height:49px;height:49px}
+ .swatches{margin-bottom:8px}
+ .color-pickers{padding-top:10px}
+ .color-entry{min-height:39px}
+}
+@media(prefers-reduced-motion:reduce){
+ #toast.brat-modal,#toast.brat-modal.show{transition:none!important}
+}
