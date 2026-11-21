@@ -3,7 +3,7 @@ const $=id=>document.getElementById(id),art=$('art'),txt=$('artText');
 if(window.Capacitor?.isNativePlatform?.())document.documentElement.classList.add('capacitor-app');
 const sizes={square:[1080,1080],portrait:[1080,1350],story:[1080,1920],landscape:[1920,1080]};
 const palettes={classic:['#8ace00','#141414'],pink:['#f1a6c9','#ffffff'],white:['#f4f4f0','#141414'],blue:['#1766ef','#ffffff'],black:['#141414','#ffffff']};
-const defaults={text:'brat',bg:'#8ace00',fg:'#141414',blur:1,grain:.35,mirror:false,size:'square',font:'Arial, Helvetica, sans-serif',fontScale:100,lineHeight:100,image:null};
+const defaults={text:'brat',bg:'#8ace00',fg:'#141414',blur:1,grain:.35,mirror:false,size:'square',font:'Arial, Helvetica, sans-serif',fontScale:100,lineHeight:100,wrapMode:'classic',image:null};
 const key='brat-minimal-v2';let state={...defaults},photo=null,raf=0,toastTimer;
 
 const iconPaths={
@@ -131,7 +131,7 @@ function notify(t){
 
 function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch{}}
 function update(p){state={...state,...p};save();sync();schedule()}
-function sync(){for(const [id,v] of [['mainText',state.text],['bgColor',state.bg],['textColor',state.fg],['blur',state.blur],['grain',state.grain],['canvasSize',state.size],['fontFamily',state.font],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id).value=v;document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',palettes[b.dataset.palette].join('|')===[state.bg,state.fg].join('|')));for(const [id,value] of [['blur',Math.max(1,Math.round(state.blur/5*100))],['grain',Math.max(1,Math.round(state.grain/35*100))],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id+'Value').value=Math.max(1,Math.min(100,value));$('mirrorToggle').setAttribute('aria-pressed',String(!!state.mirror));$('mirrorToggle').querySelector('span').textContent=state.mirror?'on':'off';syncHex();document.querySelectorAll('.select-display').forEach(b=>{const sel=$(b.dataset.select);b.querySelector('span').textContent=sel.options[sel.selectedIndex]?.textContent||''})}
+function sync(){for(const [id,v] of [['mainText',state.text],['bgColor',state.bg],['textColor',state.fg],['blur',state.blur],['grain',state.grain],['canvasSize',state.size],['fontFamily',state.font],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight],['wrapMode',state.wrapMode||'classic']]){if($(id))$(id).value=v;}document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',palettes[b.dataset.palette].join('|')===[state.bg,state.fg].join('|')));for(const [id,value] of [['blur',Math.max(1,Math.round(state.blur/5*100))],['grain',Math.max(1,Math.round(state.grain/35*100))],['sizeAdjust',state.fontScale],['lineHeight',state.lineHeight]])$(id+'Value').value=Math.max(1,Math.min(100,value));$('mirrorToggle').setAttribute('aria-pressed',String(!!state.mirror));$('mirrorToggle').querySelector('span').textContent=state.mirror?'on':'off';syncHex();document.querySelectorAll('.select-display').forEach(b=>{const sel=$(b.dataset.select);b.querySelector('span').textContent=sel.options[sel.selectedIndex]?.textContent||''})}
 function validHex(v){const raw=v.trim().replace(/^#/,'');return /^[0-9a-f]{6}$/i.test(raw)?'#'+raw.toLowerCase():/^[0-9a-f]{3}$/i.test(raw)?'#'+raw.split('').map(c=>c+c).join('').toLowerCase():null}
 function syncHex(){for(const [id,color] of [['bgHex',state.bg],['textHex',state.fg]]){if(document.activeElement!==$(id))$(id).value=color.toUpperCase()}}
 function schedule(){draw()}
@@ -141,6 +141,9 @@ function fitText(){
  const content=String(state.text??'');
  const single=!!content.trim()&&!/\s/.test(content.trim());
  txt.classList.toggle('single-word',single);
+ txt.dataset.wrapMode=state.wrapMode==='natural'?'natural':'classic';
+ txt.style.textAlign=state.wrapMode==='natural'?'left':'justify';
+ txt.style.textAlignLast='left';
  txt.style.fontFamily=state.font;
  txt.style.lineHeight=String(Math.max(.65,1.12*state.lineHeight/100));
  txt.style.color=state.fg;
@@ -184,7 +187,7 @@ function fitText(){
  txt.style.fontSize=Math.max(1,low-.1)+'px';
 }
 
-function draw(){const [w,h]=sizes[state.size];const area=art.closest('.art-area');const styles=getComputedStyle(area);const aw=area.clientWidth-parseFloat(styles.paddingLeft)-parseFloat(styles.paddingRight),ah=area.clientHeight-parseFloat(styles.paddingTop)-parseFloat(styles.paddingBottom);const scale=Math.min(aw/w,ah/h);if(scale>0){art.style.width=Math.floor(w*scale)+'px';art.style.height=Math.floor(h*scale)+'px'}art.style.aspectRatio=w+'/'+h;art.style.background=state.bg;if(photo)art.style.backgroundImage='url('+JSON.stringify(photo.src)+')';else art.style.backgroundImage='none';art.style.backgroundSize='cover';art.style.backgroundPosition='center';fitText()}
+function draw(){const [w,h]=sizes[state.size];const area=art.closest('.art-shell');const styles=getComputedStyle(area);const aw=area.clientWidth-parseFloat(styles.paddingLeft)-parseFloat(styles.paddingRight),ah=area.clientHeight-parseFloat(styles.paddingTop)-parseFloat(styles.paddingBottom);const scale=Math.min(aw/w,ah/h);if(scale>0){art.style.width=Math.floor(w*scale)+'px';art.style.height=Math.floor(h*scale)+'px'}art.style.aspectRatio=w+'/'+h;art.style.background=state.bg;if(photo)art.style.backgroundImage='url('+JSON.stringify(photo.src)+')';else art.style.backgroundImage='none';art.style.backgroundSize='cover';art.style.backgroundPosition='center';fitText()}
 function loadPhoto(){if(!state.image){photo=null;schedule();return}const im=new Image();im.onload=()=>{photo=im;schedule();if(progressActive)notify('image added')};im.onerror=()=>{photo=null;schedule();if(progressActive)notify('image failed to load')};im.src=state.image}
 function getRows(){
  // Inspect the actual browser line boxes so exported wrapping matches the preview.
