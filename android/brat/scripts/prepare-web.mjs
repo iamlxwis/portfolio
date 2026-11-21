@@ -14,6 +14,8 @@ html=html.replace(/<a href="\/" class="logo">brat\.<\/a>/,'<span class="logo" ar
 for(const name of ['privacy.html','cookies.html','terms.html']){
  const path=resolve(dest,name);let page=await readFile(path,'utf8');
  page=page.replaceAll(/(href|src)="\/(legal\.css|privacy\.css|privacy\.js)/g,'$1="./$2').replaceAll('href="/"','href="./index.html"');
+ page=page.replaceAll(/(href|src)="\/assets\/shared\/(site\.css|site\.js)/g,'$1="./$2');
+ for(const policy of ['privacy','cookies','terms'])page=page.replaceAll('href="/'+policy+'"','href="./'+policy+'.html"');
  await writeFile(path,page);
 }
 // Keep the same non-floating legal/credit footer as the website, inside editor controls.
