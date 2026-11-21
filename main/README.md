@@ -1,36 +1,12 @@
-# lxwis.site
+# Website source (`main/`)
 
-A lightweight static website. Each page keeps its own structure, styles, and behavior in separate files.
+This directory is the **Vercel root directory**. Keep `index.html`, `vercel.json`, and public legal URLs in place.
 
-## Project structure
+- `brat/index.html` — BRAT editor; its styles and scripts live under `brat/assets/`.
+- `meow/`, `arf/` — independent mini-apps.
+- `api/` — API endpoints.
+- `privacy.js`, `privacy.css` — shared consent UI used by multiple pages.
+- `privacy.html`, `cookies.html`, `terms.html`, `legal.css` — legal pages.
+- `log.html`, `404.html` — standalone pages.
 
-```text
-/
-├── index.html
-├── style.css
-├── script.js
-├── 404.html
-├── log.html
-├── vercel.json
-├── meow/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-├── arf/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-└── student/
-    ├── index.html
-    ├── style.css
-    └── script.js
-```
-
-## Editing
-
-- Root `index.html`, `style.css`, and `script.js` are the homepage.
-- `404.html` and `log.html` are intentionally standalone pages.
-- Each folder contains the HTML, CSS, and JavaScript for that page.
-- The clean `/log` URL is routed to `log.html` by `vercel.json`.
-
-The site is deployed on Vercel as a static site. No build step is required.
+For project-wide architecture and build details, see [the root README](../README.md).

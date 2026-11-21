@@ -43,6 +43,18 @@
     {
       "source": "/terms",
       "destination": "/terms.html"
+    },
+    {
+      "source": "/brat/style.css",
+      "destination": "/brat/assets/css/style.css"
+    },
+    {
+      "source": "/brat/script.js",
+      "destination": "/brat/assets/js/script.js"
+    },
+    {
+      "source": "/brat/enhancements.js",
+      "destination": "/brat/assets/js/enhancements.js"
     }
   ],
   "headers": [
