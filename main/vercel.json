@@ -55,6 +55,30 @@
     {
       "source": "/brat/enhancements.js",
       "destination": "/brat/assets/js/enhancements.js"
+    },
+    {
+      "source": "/style.css",
+      "destination": "/assets/css/home.css"
+    },
+    {
+      "source": "/script.js",
+      "destination": "/assets/js/home.js"
+    },
+    {
+      "source": "/meow/style.css",
+      "destination": "/meow/assets/style.css"
+    },
+    {
+      "source": "/meow/script.js",
+      "destination": "/meow/assets/script.js"
+    },
+    {
+      "source": "/arf/style.css",
+      "destination": "/arf/assets/style.css"
+    },
+    {
+      "source": "/arf/script.js",
+      "destination": "/arf/assets/script.js"
     }
   ],
   "headers": [
