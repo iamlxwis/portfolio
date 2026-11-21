@@ -1,14 +1,14 @@
 name: Website UI smoke
 on:
   push:
-    branches: [feat/home-ux-2026]
+    branches: [feat/home-ux-2026, feat/site-wide-redesign-v2]
   pull_request:
-    paths: ['main/**', 'tests/**', '.github/workflows/site-ui-smoke.yml']
+    paths: ['main/**', 'android/brat/scripts/**', 'tests/**', '.github/workflows/site-ui-smoke.yml']
   workflow_dispatch:
 jobs:
   chromium:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,24 +18,39 @@ jobs:
         run: |
           node --check main/assets/js/home.js
           node --check main/assets/js/ux.js
+          node --check main/assets/js/log.js
           node --check main/assets/shared/privacy.js
+          node --check main/assets/shared/site.js
+          node --check main/assets/shared/gallery.js
           node --check main/brat/assets/js/script.js
           node --check main/brat/assets/js/enhancements.js
           node --check main/meow/assets/script.js
           node --check main/arf/assets/script.js
-      - name: Install browser dependencies
+          node --check tests/site-v2.cjs
+      - name: Validate Android offline package
+        run: |
+          node android/brat/scripts/prepare-web.mjs
+          node --check android/brat/www/site.js
+          node -e "const f=require('fs'),s=f.readFileSync('android/brat/www/index.html','utf8');for(const a of ['./site.css','./site.js','./assets/css/style.css'])if(!s.includes(a))throw Error('Missing offline path '+a)"
+          test -f android/brat/www/site.css
+          test -f android/brat/www/privacy.html
+          test -f android/brat/www/legal.css
+      - name: Install browser test dependencies
         working-directory: tests
         run: npm install --no-audit --no-fund
       - name: Install Chromium
         working-directory: tests
         run: npx playwright install --with-deps chromium
-      - name: Run responsive and accessibility smoke tests
+      - name: Homepage baseline smoke
         working-directory: tests
         run: npm run smoke
-      - name: Attach visual screenshots
+      - name: Full-site visual and interaction fidelity
+        working-directory: tests
+        run: npm run fidelity
+      - name: Upload all screenshots for manual review
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: website-ui-screenshots
+          name: full-site-fidelity-screenshots
           path: tests/artifacts/
           if-no-files-found: ignore
