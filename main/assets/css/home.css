@@ -430,3 +430,6 @@ html.lx-motion-ready .lx-reveal:not(.is-visible){opacity:1;transform:translateY(
 @media(prefers-reduced-motion:reduce){
  .vinyl-controls button,.vinyl-reopen{transition:none!important}
 }
+
+/* Tiny widget rail fits within its own focus / pointer footprint. */
+.vinyl-widget.is-minimized{width:138px}
