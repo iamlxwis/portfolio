@@ -395,3 +395,41 @@ body .wrap>footer #lx-privacy-widget .lx-footer button{min-height:30px}
 @media(prefers-reduced-motion:no-preference){
 html.lx-motion-ready .lx-reveal:not(.is-visible){opacity:1;transform:translateY(9px)}
 }
+
+/* Floating vinyl controls — draggable, dismissible, with a small restore dock. */
+.vinyl-widget{width:142px;height:112px;touch-action:auto;user-select:none;-webkit-user-select:none}
+.vinyl-widget[hidden],.vinyl-widget.is-closed{display:none!important}
+.vinyl-widget.is-minimized{width:132px;height:46px}
+.vinyl-widget .vinyl-toggle{left:0;bottom:0}
+.vinyl-widget.is-minimized .vinyl-toggle{width:42px;height:42px}
+.vinyl-controls{position:absolute;left:105px;top:0;display:flex;flex-direction:column;gap:5px;z-index:10}
+.vinyl-controls button{width:27px;height:27px;min-width:27px;border:1px solid #555;border-radius:9px;color:#e7e7e7;background:#1d1e1c;display:grid;place-items:center;cursor:pointer;transition:background-color .18s,border-color .18s,transform .18s}
+.vinyl-controls button:hover{background:#343632;border-color:#858780}
+.vinyl-controls button:active{transform:scale(.94)}
+.vinyl-controls button:focus-visible,.vinyl-reopen:focus-visible{outline:2px solid #eef3e4;outline-offset:3px}
+.vinyl-controls button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.vinyl-controls .vinyl-grab{cursor:grab;touch-action:none}
+.vinyl-controls .vinyl-grab svg circle{fill:currentColor;stroke:none}
+.vinyl-widget.is-dragging .vinyl-grab{cursor:grabbing;background:#50524c;border-color:#b3b6ad}
+.vinyl-widget.is-dragging,.vinyl-widget.is-dragging .vinyl-toggle{transition:none!important}
+.vinyl-widget .vinyl-minimize{position:static;z-index:auto;box-shadow:none;font-size:inherit}
+.vinyl-widget .vinyl-minimize:hover{transform:none}
+.vinyl-widget.is-minimized .vinyl-minimize{position:static;width:27px;height:27px}
+.vinyl-widget.is-minimized .vinyl-controls{left:50px;top:7px;flex-direction:row;gap:5px}
+.vinyl-widget.is-minimized .vinyl-controls button{width:25px;height:28px;min-width:25px}
+.vinyl-reopen{position:fixed;left:12px;bottom:max(16px,env(safe-area-inset-bottom));z-index:9000;display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:8px 13px;border:1px solid #50534c;border-radius:12px;background:#1a1d18;color:#f1f3ed;font:600 12px 'Inter',Arial,sans-serif;box-shadow:0 9px 25px #0007;cursor:pointer;transition:background .2s,transform .2s}
+.vinyl-reopen:hover{background:#30352c;transform:translateY(-2px)}
+.vinyl-reopen svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7}
+.vinyl-reopen[hidden]{display:none!important}
+@media(max-width:600px){
+ .vinyl-widget:not(.is-minimized){width:138px;height:102px}
+ .vinyl-widget:not(.is-minimized) .vinyl-controls{left:91px;top:0}
+ .vinyl-widget:not(.is-minimized) .vinyl-controls button{width:28px;height:27px}
+ .vinyl-widget.is-minimized{width:132px;height:46px}
+}
+@media(prefers-reduced-motion:reduce){
+ .vinyl-controls button,.vinyl-reopen{transition:none!important}
+}
+
+/* Tiny widget rail fits within its own focus / pointer footprint. */
+.vinyl-widget.is-minimized{width:138px}

@@ -51,6 +51,34 @@ const saveConsent=()=>{try{localStorage.setItem('lxwis-consent-v4',JSON.stringif
    assert.ok(footer.length===2&&Math.abs(footer[0]-footer[1])<5,'Footer credits wrapped awkwardly at '+width);
 
    if(width<600)assert.ok(metrics.vinyl,'Mobile vinyl should start compact');
+   // Floating vinyl: drag by the grip, move with keys, dismiss, persist and restore.
+   const origin=await page.locator('#vinyl-widget').boundingBox();
+   const grip=await page.locator('#vinyl-grab').boundingBox();
+   await page.mouse.move(grip.x+grip.width/2,grip.y+grip.height/2);
+   await page.mouse.down();
+   await page.mouse.move(grip.x+grip.width/2+64,grip.y+grip.height/2-90,{steps:6});
+   await page.mouse.up();
+   const moved=await page.locator('#vinyl-widget').boundingBox();
+   assert.ok(moved.x>origin.x+30&&moved.y<origin.y-45,'Vinyl drag failed at '+width);
+   await page.locator('#vinyl-grab').focus();
+   await page.keyboard.press('ArrowRight');
+   const keyed=await page.locator('#vinyl-widget').boundingBox();
+   assert.ok(keyed.x>moved.x+5,'Vinyl keyboard movement failed at '+width);
+   await page.locator('#vinyl-close').click();
+   assert.ok(await page.locator('#vinyl-widget').isHidden(),'Vinyl close failed');
+   assert.ok(await page.locator('#vinyl-reopen').isVisible(),'Music restore dock missing');
+   await page.reload({waitUntil:'domcontentloaded'});
+   assert.ok(await page.locator('#vinyl-widget').isHidden(),'Closed player did not persist');
+   await page.locator('#vinyl-reopen').click();
+   assert.ok(await page.locator('#vinyl-widget').isVisible(),'Vinyl failed to reopen');
+   const restored=await page.locator('#vinyl-widget').boundingBox();
+   assert.ok(Math.abs(restored.x-keyed.x)<30,'Saved vinyl position not restored at '+width);
+   await page.locator('#vinyl-minimize').click();
+   assert.ok(!await page.locator('#vinyl-widget').evaluate(el=>el.classList.contains('is-minimized')),'Expand action failed');
+   await page.locator('#vinyl-minimize').click();
+   assert.ok(await page.locator('#vinyl-widget').evaluate(el=>el.classList.contains('is-minimized')),'Minimize action failed');
+   console.log('PASS vinyl',width,'px | drag, keyboard move, close, persist, reopen, minimize');
+
    await page.locator('#terminal-trigger').click();
    await page.waitForTimeout(80);
    assert.equal(await page.locator('#terminal-modal').getAttribute('aria-hidden'),'false');
