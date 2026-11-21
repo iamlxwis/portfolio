@@ -372,3 +372,6 @@ html.brat-handset .editor-panel>summary,html.brat-handset .settings-panel>summar
 html.brat-handset .editor-panel .panel-content,html.brat-handset .settings-panel .extras{padding:10px 12px}
 html.brat-handset .art-area>.brat-quick-actions{padding:3px 5px;gap:2px;border-radius:14px}
 html.brat-handset .art-area>.brat-quick-actions .brat-quick-button{width:39px;height:39px;min-width:39px;min-height:39px}
+
+/* Preserve Android system-bar safe areas when handset layout overrides desktop mode. */
+html.capacitor-app.brat-handset main{height:calc(100dvh - 54px - var(--native-top,28px) - var(--native-bottom,18px))}
