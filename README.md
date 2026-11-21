@@ -1,33 +1,68 @@
 # lxwis.site
 
-Personal website and mini-apps: https://lxwis.site
+My personal space on the internet — [**visit lxwis.site**](https://lxwis.site).
 
-## Repository layout
+## Website preview
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <a href="https://lxwis.site"><img src="docs/screenshots/homepage.webp" alt="lxwis.site homepage, selected work, and contact sections" width="440"></a>
+      <br><strong><a href="https://lxwis.site">Homepage</a></strong>
+    </td>
+    <td align="center" width="50%">
+      <a href="https://lxwis.site/brat"><img src="docs/screenshots/brat.webp" alt="BRAT Studio editor with its green canvas and editing controls" width="440"></a>
+      <br><strong><a href="https://lxwis.site/brat">BRAT Studio</a></strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://lxwis.site/meow"><img src="docs/screenshots/meow.webp" alt="Meow gallery with cat photo grid and full image preview" width="440"></a>
+      <br><strong><a href="https://lxwis.site/meow">Meow Gallery</a></strong>
+    </td>
+    <td align="center">
+      <a href="https://lxwis.site/arf"><img src="docs/screenshots/arf.webp" alt="Arf gallery with dog photo grid and full image preview" width="440"></a>
+      <br><strong><a href="https://lxwis.site/arf">Arf Gallery</a></strong>
+    </td>
+  </tr>
+</table>
+
+*Mobile screenshots from the website. Click any preview to open that page.*
+
+## Projects
+
+- [**BRAT Studio**](https://lxwis.site/brat) — create and export BRAT-style graphics, with an [Android APK](https://github.com/iamlxwis/portfolio/releases).
+- [**Meow**](https://lxwis.site/meow) — browse and save cat photos.
+- [**Arf**](https://lxwis.site/arf) — browse and save dog photos.
+- [**LibNav**](https://libnav.lxwis.site) — search and manage library books.
+- [**AllinOneTools_Bot**](https://t.me/AllinOneTools_Bot) — Telegram utilities.
+
+## Repository structure
 
 ```text
-.github/workflows/          CI and Android APK workflow
-android/brat/               Capacitor Android app, native plugin, build scripts
-main/                       Vercel deployment root
-  index.html                 Homepage
-  assets/css/home.css        Homepage styles
-  assets/js/home.js          Homepage behavior
-  assets/shared/             Shared privacy and legal CSS/JS
-  legal/                     Privacy, cookies, and terms pages
-  brat/                      BRAT editor (assets/css and assets/js)
-  meow/                      Cat mini-app (assets/)
-  arf/                       Dog mini-app (assets/)
-  api/                       Serverless API handlers
-  pages/log.html             Changelog page
-  404.html                   Not-found fallback (must stay here)
-  vercel.json                Vercel routing config (must stay here)
+.github/workflows/    CI & Android builds
+android/brat/         Capacitor Android app
+docs/                 Documentation and screenshots
+main/                 Website (Vercel root)
+  assets/             Homepage and shared styles/scripts
+  brat/               BRAT editor
+  meow/               Cat gallery
+  arf/                Dog gallery
+  legal/              Privacy, cookies and terms
+  pages/              Changelog
+  api/                Backend functions
+  index.html          Homepage entry
+  404.html            Not-found page
+  vercel.json         Routes and cache rules
 ```
 
-## URLs and deployments
+## Development & deployment
 
-Vercel **Root Directory must remain `main/`**. Existing public routes (`/brat`, `/meow`, `/arf`, `/privacy`, `/cookies`, `/terms`, `/log`) are preserved. Legacy asset URLs have rewrite aliases to avoid breaking cached HTML. `/student` and `/pbb` currently point to missing source directories and are retained only as existing route definitions.
+The Vercel **Root Directory** is `main/`. Keep it unchanged unless Vercel settings and routing are updated too.
 
-Website source documentation: [docs/website.md](docs/website.md).\n\nThe Android build copies `main/brat/` and shared legal resources into its offline WebView bundle. See [Android build guide](android/brat/README.md).
+- [Website source guide](docs/website.md)
+- [Build the BRAT Android APK](android/brat/README.md)
 
-[BRAT](https://lxwis.site/brat) · [Meow](https://lxwis.site/meow) · [Arf](https://lxwis.site/arf) · [Privacy](https://lxwis.site/privacy)
+[Privacy](https://lxwis.site/privacy) · [Cookies](https://lxwis.site/cookies) · [Terms](https://lxwis.site/terms)
 
-© 2026 lxwis
+<sub>© 2026 lxwis</sub>
