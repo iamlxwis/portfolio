@@ -1,12 +1,20 @@
-# Website source (`main/`)
+# Website source
 
-This directory is the **Vercel root directory**. Keep `index.html`, `vercel.json`, and public legal URLs in place.
+**Vercel root: `main/`** — do not change without reconfiguring the project.
 
-- `brat/index.html` — BRAT editor; its styles and scripts live under `brat/assets/`.
-- `meow/`, `arf/` — independent mini-apps.
-- `api/` — API endpoints.
-- `privacy.js`, `privacy.css` — shared consent UI used by multiple pages.
-- `privacy.html`, `cookies.html`, `terms.html`, `legal.css` — legal pages.
-- `log.html`, `404.html` — standalone pages.
+| Path | Purpose |
+| --- | --- |
+| `index.html` | Homepage |
+| `assets/css/home.css` | Homepage styles |
+| `assets/js/home.js` | Homepage behavior |
+| `assets/shared/` | Privacy UI and shared legal stylesheet |
+| `legal/` | Privacy, cookies and terms HTML pages |
+| `brat/` | BRAT editor with `assets/css/` and `assets/js/` |
+| `meow/`, `arf/` | Self-contained mini-apps with `assets/` |
+| `api/` | Serverless handlers |
+| `log.html`, `404.html` | Standalone pages |
+| `vercel.json` | URL aliases and caching |
 
-For project-wide architecture and build details, see [the root README](../README.md).
+All existing public URLs are maintained through `vercel.json` rewrites. The Android build script copies shared resources from `assets/shared/` and `legal/` into its offline bundle.
+
+See [project README](../README.md).

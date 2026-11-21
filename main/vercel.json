@@ -34,15 +34,15 @@
     },
     {
       "source": "/privacy",
-      "destination": "/privacy.html"
+      "destination": "/legal/privacy.html"
     },
     {
       "source": "/cookies",
-      "destination": "/cookies.html"
+      "destination": "/legal/cookies.html"
     },
     {
       "source": "/terms",
-      "destination": "/terms.html"
+      "destination": "/legal/terms.html"
     },
     {
       "source": "/brat/style.css",
@@ -79,6 +79,30 @@
     {
       "source": "/arf/script.js",
       "destination": "/arf/assets/script.js"
+    },
+    {
+      "source": "/privacy.js",
+      "destination": "/assets/shared/privacy.js"
+    },
+    {
+      "source": "/privacy.css",
+      "destination": "/assets/shared/privacy.css"
+    },
+    {
+      "source": "/legal.css",
+      "destination": "/assets/shared/legal.css"
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "/legal/privacy.html"
+    },
+    {
+      "source": "/cookies.html",
+      "destination": "/legal/cookies.html"
+    },
+    {
+      "source": "/terms.html",
+      "destination": "/legal/terms.html"
     }
   ],
   "headers": [

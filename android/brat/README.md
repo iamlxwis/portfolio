@@ -28,3 +28,7 @@ The APK is created at `android/brat/android/app/build/outputs/apk/debug/app-debu
 ## Offline design
 
 The build copies the full `main/brat/` directory (including `assets/css/` and `assets/js/`) into the Capacitor web directory, then changes absolute `/brat/` asset URLs to relative URLs. No live website or remote server is loaded. Images can be selected from the device; generated images are exported using the existing browser download implementation. Gallery-saving behavior depends on the Capacitor integration and Android permissions; verify it on a device.
+
+## Shared assets
+
+The offline packaging script copies shared privacy styles and scripts from `main/assets/shared/` and legal pages from `main/legal/`. The BRAT editor itself is copied recursively from `main/brat/`.
