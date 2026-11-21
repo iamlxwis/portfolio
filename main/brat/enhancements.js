@@ -54,7 +54,7 @@
  preview.addEventListener('click',e=>{if(e.target===preview||e.target===stage)close.click()});
  preview.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.min(3,Math.max(1,zoom+(e.deltaY<0?.15:-.15)));paintPreview()},{passive:false});
  let pinch=0;preview.addEventListener('touchmove',e=>{if(e.touches.length!==2)return;e.preventDefault();const [a,b]=e.touches,d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);if(pinch)zoom=Math.max(1,Math.min(3,zoom*d/pinch));pinch=d;paintPreview()},{passive:false});preview.addEventListener('touchend',()=>pinch=0);
- window.addEventListener('resize',paintPreview);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!preview.hidden)close.click()});
+ window.addEventListener('resize',paintPreview);document.addEventListener('keydown',e=>{if(preview.hidden)return;if(e.key==='Escape')close.click();else if(e.key==='Tab'){e.preventDefault();close.focus()}});
  // Local saved-design library: small, bounded, and private to this device/browser.
  const galleryKey='brat-design-library-v1',colorsKey='brat-color-presets-v1';
  const read=(k)=>{try{const v=JSON.parse(localStorage.getItem(k));return Array.isArray(v)?v:[]}catch{return []}};
@@ -84,7 +84,7 @@
  function openGallery(){list.replaceChildren();const designs=read(galleryKey);if(!designs.length){const empty=document.createElement('p');empty.className='brat-library-empty';empty.textContent='No saved designs yet. Tap the bookmark button to save one.';list.append(empty)}
   designs.forEach((entry,i)=>{const row=document.createElement('div');row.className='brat-library-row';const swatch=document.createElement('span');swatch.className='brat-library-swatch';swatch.style.background=entry.design.bg;swatch.style.color=entry.design.fg;swatch.textContent=(entry.title||'brat').slice(0,12);const info=document.createElement('span');info.className='brat-library-info';const title=document.createElement('strong');title.textContent=entry.title||'Untitled';const date=document.createElement('small');date.textContent=new Date(entry.created).toLocaleDateString();info.append(title,date);const open=document.createElement('button');open.type='button';open.textContent='Open';open.addEventListener('click',()=>{history.splice(position+1);state={...defaults,...entry.design};history.push(clone(state));position=history.length-1;photo=null;sync();loadPhoto();schedule();save();refreshHistory();library.hidden=true;galleryButton.focus()});const remove=document.createElement('button');remove.type='button';remove.textContent='Delete';remove.setAttribute('aria-label','Delete '+(entry.title||'design'));remove.addEventListener('click',()=>{const d=read(galleryKey);d.splice(i,1);write(galleryKey,d);openGallery()});row.append(swatch,info,open,remove);list.append(row)});
   library.hidden=false;exit.focus()}
- library.addEventListener('click',e=>{if(e.target===library)exit.click()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!library.hidden)exit.click()});
+ library.addEventListener('click',e=>{if(e.target===library)exit.click()});document.addEventListener('keydown',e=>{if(library.hidden)return;if(e.key==='Escape')exit.click();else if(e.key==='Tab'){const focusable=[...panel.querySelectorAll('button:not(:disabled)')];if(!focusable.length)return;const i=focusable.indexOf(document.activeElement);e.preventDefault();focusable[(i+(e.shiftKey?-1:1)+focusable.length)%focusable.length].focus()}});
  // Native sharing uses a temporary cache file, not Gallery permission.
  const share=button('Share image','share',async()=>{
   try{
@@ -113,5 +113,6 @@
  // Fix reset history and keep the preview keyboard accessible.
  $('resetDesign')?.addEventListener('click',()=>{history.splice(position+1);history.push(clone(defaults));position=history.length-1;refreshHistory();persist()});
  art.setAttribute('tabindex','0');art.setAttribute('role','button');art.setAttribute('aria-label','Artwork preview, activate for fullscreen');art.addEventListener('click',()=>fullscreenButton.click());art.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fullscreenButton.click()}});
- if(localStorage.getItem(key))setTimeout(()=>{const indicator=document.createElement('span');indicator.className='brat-draft-restored';indicator.textContent='Draft restored';indicator.setAttribute('role','status');actions.append(indicator);setTimeout(()=>indicator.remove(),2200)},350);
+ let hasDraft=false;try{hasDraft=!!localStorage.getItem(key)}catch{}
+ if(hasDraft)setTimeout(()=>{const indicator=document.createElement('span');indicator.className='brat-draft-restored';indicator.textContent='Draft restored';indicator.setAttribute('role','status');actions.append(indicator);setTimeout(()=>indicator.remove(),2200)},350);
 })();
