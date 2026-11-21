@@ -8,6 +8,7 @@ function showPendingNotice(){const widget=document.getElementById('lx-privacy-wi
 function init(){
 if(document.getElementById('lx-privacy-widget'))return;
 const key='lxwis-consent-v4';
+const reviewKey='lxwis-consent-reviewed-v1';
 const icon=(name)=>{const paths={
 shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>',
 cookie:'<path d="M20 12a8 8 0 1 1-8-8 4 4 0 0 0 4 4 4 4 0 0 0 4 4Z"/><path d="M8.5 9h.01M12 16h.01M8 16h.01"/>',
@@ -19,7 +20,7 @@ close:'<path d="M18 6 6 18M6 6l12 12"/>'
 const root=document.createElement('div');root.id='lx-privacy-widget';
 root.innerHTML='<nav class="lx-footer" aria-label="Legal and privacy"><button type="button" data-open="privacy">privacy</button><button type="button" data-open="cookies">cookies</button><button type="button" data-open="terms">terms</button><span>© '+new Date().getFullYear()+' lxwis</span><button type="button" data-open="settings">'+icon('settings')+' settings</button></nav>'+
 '<div class="lx-overlay" hidden><section class="lx-panel" role="dialog" aria-modal="true" aria-labelledby="lx-consent-title">'+
-'<div class="lx-panel-head"><div><span class="lx-eyebrow">lxwis.site</span><h2 id="lx-consent-title">your privacy.</h2></div><button type="button" class="lx-close" aria-label="Close privacy settings" data-close>'+icon('close')+'</button></div>'+
+'<div class="lx-panel-head"><div><span class="lx-eyebrow">lxwis.site</span><h2 id="lx-consent-title">your privacy.</h2></div></div>'+
 '<p class="lx-intro">the short version: we save some things in your browser. read what you want below.</p>'+
 '<div class="lx-sections">'+
 '<details data-section="privacy"><summary>'+icon('shield')+'<span>privacy policy<small>your data and uploads</small></span>'+icon('chevron')+'</summary><div class="lx-detail"><p>favorites, brat settings and designs, and your cookie choice can be saved in your browser. you can clear them in your browser settings.</p><p>our hosting provider may process your ip address, browser info, and visit times to run and protect the site.</p><p>some pages load fonts, images, or content from outside services like google fonts, github, and image hosts. they may receive request details under their own policies.</p><p>brat edits uploaded images in your browser. we don’t intentionally send them to our server. exports and shares are up to you.</p></div></details>'+
@@ -30,19 +31,22 @@ root.innerHTML='<nav class="lx-footer" aria-label="Legal and privacy"><button ty
 '<div class="lx-actions"><button type="button" data-choice="essential">essential only</button><button type="button" class="lx-accept" data-choice="accept" disabled>accept</button></div>'+
 '<p class="lx-note">both choices currently save your preference only. no extra tracking is switched on.</p>'+
 '</section></div>';
-document.body.append(root);
-const overlay=root.querySelector('.lx-overlay'),panel=root.querySelector('.lx-panel'),checks=[...root.querySelectorAll('[data-read]')],accept=root.querySelector('[data-choice="accept"]'),close=root.querySelector('[data-close]');
+const existingFooter=document.querySelector('.wrap > footer, body > footer, main + footer');
+if(existingFooter){existingFooter.append(root)}else{const footer=document.createElement('footer');footer.className='lx-site-footer';footer.append(root);(document.querySelector('main')||document.body).after(footer)}
+const overlay=root.querySelector('.lx-overlay'),panel=root.querySelector('.lx-panel'),checks=[...root.querySelectorAll('[data-read]')],accept=root.querySelector('[data-choice="accept"]'),close=null;
 let lastFocus=null;
 function getChoice(){try{const value=JSON.parse(localStorage.getItem(key));return value&&value.version===4&&['accept','essential'].includes(value.choice)?value:null}catch{return null}}
-function open(section){lastFocus=document.activeElement;overlay.hidden=false;overlay.style.setProperty('display','flex','important');root.querySelectorAll('details').forEach(d=>d.open=d.dataset.section===section);checks.forEach(c=>c.checked=false);accept.disabled=true;close.focus()}
+function open(section){lastFocus=document.activeElement;overlay.hidden=false;overlay.style.setProperty('display','flex','important');root.querySelectorAll('details').forEach(d=>d.open=d.dataset.section===section);const reviewed=getReviewed();checks.forEach(c=>c.checked=reviewed.includes(c.dataset.read));accept.disabled=!checks.every(c=>c.checked);panel.querySelector('summary')?.focus()}
 function hide(){if(!getChoice())return;overlay.hidden=true;overlay.style.setProperty('display','none','important');if(lastFocus&&lastFocus.focus)lastFocus.focus()}
-function choose(choice){try{localStorage.setItem(key,JSON.stringify({choice,version:4,at:new Date().toISOString()}))}catch{}hide()}
+function getReviewed(){try{const value=JSON.parse(localStorage.getItem(reviewKey));return Array.isArray(value)?value:[]}catch{return []}}
+function saveReviewed(){try{localStorage.setItem(reviewKey,JSON.stringify(checks.filter(c=>c.checked).map(c=>c.dataset.read)))}catch{}}
+function choose(choice){saveReviewed();try{localStorage.setItem(key,JSON.stringify({choice,version:4,at:new Date().toISOString()}))}catch{}hide()}
 root.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>open(b.dataset.open)));
-checks.forEach(c=>c.addEventListener('change',()=>{accept.disabled=!checks.every(c=>c.checked)}));
+checks.forEach(c=>c.addEventListener('change',()=>{saveReviewed();accept.disabled=!checks.every(c=>c.checked)}));
 root.querySelectorAll('[data-choice]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.choice==='accept'&&!checks.every(c=>c.checked))return;choose(b.dataset.choice)}));
-close.addEventListener('click',()=>{if(getChoice())hide();else root.querySelector('[data-choice="essential"]').focus()});
+
 overlay.addEventListener('click',e=>{if(e.target===overlay&&getChoice())hide()});
-document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Escape'&&getChoice())hide();if(e.key==='Tab'){const items=[...panel.querySelectorAll('button:not(:disabled),input:not(:disabled),summary')].filter(el=>el.getClientRects().length);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+document.addEventListener('keydown',e=>{if(overlay.hidden)return;if(e.key==='Escape'){e.preventDefault();if(getChoice())hide();}if(e.key==='Tab'){const items=[...panel.querySelectorAll('button:not(:disabled),input:not(:disabled),summary')].filter(el=>el.getClientRects().length);if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 if(!getChoice())open('cookies');else hide();
 }
 })();
