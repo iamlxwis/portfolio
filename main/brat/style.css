@@ -295,3 +295,23 @@ body.brat-preview-open{overflow:hidden}
 .brat-library-row>button{border:1px solid var(--line);border-radius:9px;background:var(--page);color:var(--ink);min-height:36px;padding:0 9px;font-size:12px}
 @media(max-width:430px){.brat-quick-actions{gap:2px;padding:4px}.brat-quick-button{width:37px;height:37px}.brat-library-row{gap:6px}.brat-library-swatch{width:45px;height:45px}.brat-library-row>button{padding:0 7px}}
 @media(prefers-reduced-motion:reduce){.brat-quick-button,.brat-draft-restored{animation:none;transition:none}}
+
+/* Fullscreen positioning fix: center the scaled artwork by its visual center. */
+.brat-fullscreen-stage{display:block;position:absolute;inset:0;overflow:hidden}
+.brat-fullscreen-art{position:absolute!important;left:50%!important;top:50%!important;transform-origin:center center!important;max-width:none!important;max-height:none!important;flex:none!important;box-sizing:border-box;will-change:transform}
+@media(prefers-reduced-motion:no-preference){
+ .brat-fullscreen{opacity:0;transition:opacity .2s ease}
+ .brat-fullscreen.brat-fullscreen-visible{opacity:1}
+ .brat-fullscreen-art{transition:transform .18s cubic-bezier(.2,.8,.2,1)}
+ .brat-library-panel{animation:bratPanelReveal .25s cubic-bezier(.2,.8,.2,1) both}
+ .brat-library-row{animation:bratRowReveal .25s ease both}
+ .brat-library-row:nth-child(2){animation-delay:35ms}
+ .brat-library-row:nth-child(3){animation-delay:70ms}
+ .brat-library-row:nth-child(4){animation-delay:105ms}
+ .brat-palette-apply,.brat-palette-save,.brat-library-row>button{transition:transform .16s ease,box-shadow .16s ease,background-color .16s ease}
+ .brat-palette-apply:active,.brat-palette-save:active,.brat-library-row>button:active{transform:scale(.94)}
+ .brat-quick-button:not(:disabled):active{transform:scale(.9)}
+ @keyframes bratPanelReveal{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+ @keyframes bratRowReveal{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+}
+@media(prefers-reduced-motion:reduce){.brat-fullscreen{opacity:1!important}.brat-fullscreen-art,.brat-library-panel,.brat-library-row{transition:none!important;animation:none!important}}
