@@ -4,8 +4,8 @@ var toggle=document.getElementById('vinyl-toggle');
 var minimize=document.getElementById('vinyl-minimize');
 try{
  var preference=sessionStorage.getItem('lxwis-vinyl-view');
- if(preference==='min'||(!preference&&matchMedia('(max-width:600px)').matches))widget.classList.add('is-minimized');
-}catch(e){if(matchMedia('(max-width:600px)').matches)widget.classList.add('is-minimized')}
+ if(preference!=='full')widget.classList.add('is-minimized');
+}catch(e){widget.classList.add('is-minimized')}
 minimize.addEventListener('click',function(event){
  event.stopPropagation();
  widget.classList.toggle('is-minimized');

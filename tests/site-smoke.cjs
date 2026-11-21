@@ -30,6 +30,7 @@ const saveConsent=()=>{try{localStorage.setItem('lxwis-consent-v4',JSON.stringif
    await page.route('**/*',route=>route.request().url().startsWith(base)?route.continue():route.abort());
    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>!document.documentElement.classList.contains('lx-booting'),null,{timeout:3000});
+   await page.waitForFunction(()=>getComputedStyle(document.getElementById('lx-page-loader')).visibility==='hidden',null,{timeout:3300});
    await page.waitForTimeout(350);
    const metrics=await page.evaluate(()=>({
     screen:document.documentElement.clientWidth,
@@ -43,6 +44,12 @@ const saveConsent=()=>{try{localStorage.setItem('lxwis-consent-v4',JSON.stringif
    assert.ok(metrics.width<=metrics.screen+2,'Horizontal overflow '+width+' '+JSON.stringify(metrics));
    assert.ok(metrics.dismissed&&metrics.seen,'Loader failed to dismiss '+width+' '+JSON.stringify(metrics));
    assert.ok(metrics.nav===3&&metrics.sections,'Navigation missing '+width);
+   const footer=await page.evaluate(()=>{
+    const spans=[...document.querySelectorAll('.wrap>footer>span')];
+    return spans.slice(0,2).map(x=>x.getBoundingClientRect().top);
+   });
+   assert.ok(footer.length===2&&Math.abs(footer[0]-footer[1])<5,'Footer credits wrapped awkwardly at '+width);
+
    if(width<600)assert.ok(metrics.vinyl,'Mobile vinyl should start compact');
    await page.locator('#terminal-trigger').click();
    await page.waitForTimeout(80);
