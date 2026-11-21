@@ -3,6 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function(){
+ try{
+  if(!sessionStorage.getItem('lxwis-intro-seen-v1')&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+   document.documentElement.classList.add('lx-booting');
+   window.setTimeout(function(){document.documentElement.classList.remove('lx-booting');},1800);
+  }
+ }catch(e){}
+})();
+</script>
 <title>lxwis — Personal Portfolio</title>
 <meta name="description" content="The personal portfolio of lxwis, featuring web projects, tools, and experiments.">
 <meta name="theme-color" content="#111111">
@@ -18,17 +28,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="/assets/css/home.css?v=1"><link rel="stylesheet" href="/privacy.css?v=7"><script src="/privacy.js?v=7" defer></script></head>
+<link rel="stylesheet" href="/assets/css/home.css?v=2"><link rel="stylesheet" href="/privacy.css?v=8"><script src="/privacy.js?v=7" defer></script></head>
 <body>
+<a class="skip-link" href="#content">Skip to content</a>
+<div class="lx-progress" id="lx-scroll-progress" aria-hidden="true"></div>
 <div class="wrap">
-<header>
-<a class="logo" href="/">lx<em>wis</em></a>
-<div class="header-side"><span class="header-note">personal site / 2026</span><button class="terminal-trigger" id="terminal-trigger" type="button" aria-haspopup="dialog" aria-controls="terminal-modal"><span class="terminal-mark">&gt;_</span><span>Terminal</span><kbd>Ctrl K</kbd></button></div>
+<header class="site-header">
+<a class="logo" href="/" aria-label="lxwis — home">lx<em>wis</em></a>
+<nav class="site-nav" aria-label="On this page"><a href="#work">work</a><a href="#explore">explore</a><a href="#contact">contact</a></nav>
+<div class="header-side"><span class="header-note">personal site / 2026</span><button class="terminal-trigger" id="terminal-trigger" type="button" aria-expanded="false" aria-haspopup="dialog" aria-controls="terminal-modal"><span class="terminal-mark">&gt;_</span><span>Terminal</span><kbd>Ctrl K</kbd></button></div>
 </header>
-<main>
-<section class="hero">
-<h1>lx<em>wis</em></h1>
-<p class="intro">I'm a student</p>
+<main id="content" tabindex="-1">
+<section class="hero" aria-labelledby="hero-title">
+<p class="hero-meta">personal site <span aria-hidden="true">/</span> 2026</p>
+<h1 id="hero-title">lx<em>wis</em></h1>
+<p class="intro">I'm a student. I build things for the web.</p>
+<div class="hero-foot"><a href="#work">browse selected work <span aria-hidden="true">↘</span></a><span>scroll to explore ↓</span></div>
 </section>
 <section class="content-section" id="work">
 <div class="section-head"><h2 class="section-title">Selected work</h2><span class="section-index">01 — 03</span></div>
@@ -37,7 +52,7 @@
 <article class="project"><span class="project-number">02</span><h3><a href="https://t.me/AllinOneTools_Bot" target="_blank" rel="noopener noreferrer">AllinOneTools_Bot</a></h3><div><p>A Telegram bot packed with useful tools.</p></div></article>
 <article class="project"><span class="project-number">03</span><h3><a href="https://lxwis.site">lxwis.site</a></h3><div><p>My personal space on the internet.</p></div></article>
 </section>
-<section class="content-section">
+<section class="content-section" id="explore">
 <div class="section-head"><h2 class="section-title">Other things</h2><span class="section-index">SIDE PROJECTS</span></div>
 <p class="interaction-hint">↳ Select a page to explore</p>
 <ul class="other-links">
@@ -46,7 +61,7 @@
 <li><a href="/arf">Arf <span>Open gallery ↗</span></a></li>
 </ul>
 </section>
-<section class="content-section">
+<section class="content-section" id="contact">
 <div class="section-head"><h2 class="section-title">Contact</h2><span class="section-index">SAY HELLO</span></div>
 <p class="interaction-hint">↳ Select a platform to connect</p>
 <ul class="contact-list">
@@ -59,7 +74,7 @@
 <footer><span>© 2026 lxwis</span><span><a href="/log">log ↗</a></span></footer>
 </div>
 
-<div class="vinyl-widget" id="vinyl-widget">
+<div class="vinyl-widget is-minimized" id="vinyl-widget">
 <button class="vinyl-toggle" id="vinyl-toggle" type="button" aria-label="Play music" aria-pressed="false">
 <span class="vinyl-disc" aria-hidden="true"><span class="vinyl-label"><img src="https://cdn-images.dzcdn.net/images/cover/0d571082af7c78114321031d7f84d331/1200x1200-000000-81-0-0.webp" alt=""></span></span><span class="vinyl-tonearm" aria-hidden="true"><svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="arm-metal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#333"/><stop offset=".22" stop-color="#eee"/><stop offset=".48" stop-color="#888"/><stop offset=".68" stop-color="#f7f7f7"/><stop offset="1" stop-color="#3b3b3b"/></linearGradient><radialGradient id="arm-pivot" cx=".3" cy=".25"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#aaa"/><stop offset="1" stop-color="#252525"/></radialGradient></defs><circle cx="42" cy="8" r="7" fill="url(#arm-pivot)" stroke="#080808" stroke-width="1.5"/><circle cx="42" cy="8" r="2" fill="#444"/><path d="M39 12 L35 18 Q33 20 31 23 L18 44" fill="none" stroke="#090909" stroke-width="7" stroke-linecap="round"/><path d="M39 12 L35 18 Q33 20 31 23 L18 44" fill="none" stroke="url(#arm-metal)" stroke-width="4.2" stroke-linecap="round"/><path d="M19 41 L12 48 L17 53 L23 46 Z" fill="url(#arm-metal)" stroke="#111" stroke-width="1"/><path d="M15 51 L12 56 L15 58 L18 53 Z" fill="#171717" stroke="#aaa" stroke-width=".6"/><path d="M13 56 L11 60" stroke="#ddd" stroke-width="1"/></svg></span>
 </button>
@@ -79,10 +94,16 @@
 
 
 
-<div id="lx-page-loader" aria-hidden="true"><span class="lx-loader-ring" aria-hidden="true"></span><span class="lx-loader-label">Loading page</span></div>
+<div id="lx-page-loader" role="status" aria-live="polite" aria-hidden="false" aria-label="Loading lxwis.site">
+<span class="lx-loader-word" aria-hidden="true">lx<em>wis</em></span>
+<span class="lx-loader-track" aria-hidden="true"><span></span></span>
+<span class="lx-loader-label">loading lxwis.site</span>
+</div>
+<button id="lx-back-to-top" class="lx-back-to-top" type="button" aria-label="Back to top" title="Back to top">↑</button>
 
 
 
-<script src="/assets/js/home.js?v=1" defer></script>
+<script src="/assets/js/home.js?v=2" defer></script>
+<script src="/assets/js/ux.js?v=1" defer></script>
 </body>
 </html>
