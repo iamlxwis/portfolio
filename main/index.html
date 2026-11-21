@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="/assets/shared/site.css?v=1"><link rel="stylesheet" href="/assets/css/home.css?v=3"><link rel="stylesheet" href="/privacy.css?v=8"><script src="/privacy.js?v=7" defer></script></head>
+<link rel="stylesheet" href="/assets/shared/site.css?v=1"><link rel="stylesheet" href="/assets/css/home.css?v=4"><link rel="stylesheet" href="/privacy.css?v=8"><script src="/privacy.js?v=7" defer></script></head>
 <body class="lx-site-page lx-home-v2">
 <a class="skip-link" href="#content">Skip to content</a>
 <div class="lx-progress" id="lx-scroll-progress" aria-hidden="true"></div>
@@ -77,9 +77,14 @@
 <button class="vinyl-toggle" id="vinyl-toggle" type="button" aria-label="Play music" aria-pressed="false">
 <span class="vinyl-disc" aria-hidden="true"><span class="vinyl-label"><img src="https://cdn-images.dzcdn.net/images/cover/0d571082af7c78114321031d7f84d331/1200x1200-000000-81-0-0.webp" alt=""></span></span><span class="vinyl-tonearm" aria-hidden="true"><svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="arm-metal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#333"/><stop offset=".22" stop-color="#eee"/><stop offset=".48" stop-color="#888"/><stop offset=".68" stop-color="#f7f7f7"/><stop offset="1" stop-color="#3b3b3b"/></linearGradient><radialGradient id="arm-pivot" cx=".3" cy=".25"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#aaa"/><stop offset="1" stop-color="#252525"/></radialGradient></defs><circle cx="42" cy="8" r="7" fill="url(#arm-pivot)" stroke="#080808" stroke-width="1.5"/><circle cx="42" cy="8" r="2" fill="#444"/><path d="M39 12 L35 18 Q33 20 31 23 L18 44" fill="none" stroke="#090909" stroke-width="7" stroke-linecap="round"/><path d="M39 12 L35 18 Q33 20 31 23 L18 44" fill="none" stroke="url(#arm-metal)" stroke-width="4.2" stroke-linecap="round"/><path d="M19 41 L12 48 L17 53 L23 46 Z" fill="url(#arm-metal)" stroke="#111" stroke-width="1"/><path d="M15 51 L12 56 L15 58 L18 53 Z" fill="#171717" stroke="#aaa" stroke-width=".6"/><path d="M13 56 L11 60" stroke="#ddd" stroke-width="1"/></svg></span>
 </button>
-<button class="vinyl-minimize" id="vinyl-minimize" type="button" aria-label="Minimize vinyl player" title="Minimize player">−</button>
+<div class="vinyl-controls" aria-label="Music widget controls">
+<button class="vinyl-grab" id="vinyl-grab" type="button" aria-label="Drag player to reposition. Arrow keys move it." title="Drag to move" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg></button>
+<button class="vinyl-minimize" id="vinyl-minimize" type="button" aria-label="Expand vinyl player" title="Expand player"><svg class="vinyl-resize-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10M12 7v10"/></svg></button>
+<button class="vinyl-close" id="vinyl-close" type="button" aria-label="Close music player" title="Close player"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</div>
 <div class="vinyl-player" id="vinyl-player" aria-hidden="true"><div id="vinyl-embed"></div></div>
 </div>
+<button class="vinyl-reopen" id="vinyl-reopen" type="button" hidden aria-label="Show music player"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3a9 9 0 0 1 9 9"/></svg><span>music</span></button>
 
 
 <div class="terminal-overlay" id="terminal-modal" aria-hidden="true">
@@ -103,7 +108,7 @@
 
 
 <script src="/assets/shared/site.js?v=1" defer></script>
-<script src="/assets/js/home.js?v=3" defer></script>
+<script src="/assets/js/home.js?v=4" defer></script>
 <script src="/assets/js/ux.js?v=1" defer></script>
 </body>
 </html>
