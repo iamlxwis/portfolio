@@ -530,3 +530,25 @@ html.capacitor-app .brat-route-menu{display:none!important}
 @media(prefers-reduced-motion:reduce){
  #toast.brat-modal,#toast.brat-modal.show{transition:none!important}
 }
+
+/* Mobile menu hotfix: compact trailing overflow instead of oversized canvas overlay. */
+.header-actions{position:relative}
+.brat-route-menu{order:10;position:static;padding:0!important;margin:0!important;min-width:0}
+.brat-route-menu>summary{height:37px;width:37px;min-height:37px;border-radius:10px;background:transparent;border-color:transparent}
+.brat-route-menu>summary:hover,.brat-route-menu[open]>summary{background:var(--panel);border-color:var(--line)}
+.brat-route-menu>nav{
+ position:absolute;top:calc(100% + 10px);left:auto;right:0;
+ box-sizing:border-box;width:174px;max-width:calc(100vw - 24px);
+ padding:5px;gap:1px;border:1px solid #444840;border-radius:12px;
+ background:#1c1f1b;box-shadow:0 13px 35px #0007;
+ max-height:min(260px,calc(100dvh - 78px));overflow:auto;
+}
+.brat-route-menu>nav a{min-height:35px;padding:7px 10px;border-radius:7px;font-size:12px;line-height:1.3}
+.brat-route-menu>nav a[aria-current="page"]::after{width:5px;height:5px}
+@media(max-width:400px){
+ .header-actions{gap:4px}
+ .brat-route-menu>summary{width:33px;height:36px;min-height:36px}
+ .brat-route-menu>nav{width:164px}
+ .brat-route-menu>nav a{min-height:34px;padding:7px 9px}
+}
+@media(prefers-reduced-motion:reduce){.brat-route-menu>nav{animation:none!important}}

@@ -88,6 +88,12 @@ async function checks(page,width,label){
  const menu=await page.locator('.brat-route-menu>nav').boundingBox();
  assert.ok(menu&&menu.x>=0&&menu.x+menu.width<=width+2,'Menu off-screen '+label+': '+JSON.stringify(menu));
  assert.equal(await page.locator('.brat-route-menu>nav a').count(),5,'Menu lost page links '+label);
+ assert.ok(menu.width<=182&&menu.height<=230,'Mobile menu is too large '+label+': '+JSON.stringify(menu));
+ const order=await page.evaluate(()=>{
+  const actions=document.querySelector('.header-actions');
+  return actions?.lastElementChild?.matches('.brat-route-menu')||false;
+ });
+ assert.ok(order,'Overflow menu should appear at trailing edge '+label);
  await page.keyboard.press('Escape');
  assert.ok(!await page.locator('.brat-route-menu').evaluate(el=>el.open),'Escape did not close menu '+label);
  await page.screenshot({path:path.join(artifact,'brat-'+label+'.png'),animations:'disabled'});
