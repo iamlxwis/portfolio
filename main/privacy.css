@@ -30,3 +30,13 @@ body:has(.art-area) #lx-privacy-widget .lx-footer button{color:inherit}
 #lx-privacy-widget .lx-overlay{overscroll-behavior:contain}
 #lx-privacy-widget .lx-panel{overscroll-behavior:contain}
 @media(prefers-reduced-motion:reduce){#lx-privacy-widget .lx-footer button{transition:none}}
+
+/* Editor legal links and credits belong in the scrollable controls, never a floating pill. */
+#lx-privacy-widget .lx-footer{position:static!important;inset:auto!important;bottom:auto!important;right:auto!important;left:auto!important;transform:none!important}
+.lx-editor-footer{width:100%;max-width:none;margin:22px 0 0;padding:16px 0 8px;border-top:1px solid var(--line,#393c36);background:transparent}
+.lx-editor-footer #lx-privacy-widget{position:static;isolation:auto;z-index:auto;width:100%}
+.lx-editor-footer #lx-privacy-widget .lx-footer{display:flex;justify-content:flex-start;align-items:center;flex-wrap:wrap;gap:8px 15px;padding:0;background:none!important;border:0;border-radius:0;box-shadow:none;font-size:12px;color:var(--muted,#999)}
+.lx-editor-footer #lx-privacy-widget .lx-footer>span{display:inline!important;color:var(--muted,#999);order:-1;flex-basis:100%;margin-bottom:2px}
+.lx-editor-footer #lx-privacy-widget .lx-footer button{display:inline-flex;align-items:center;min-height:32px;color:var(--muted,#999);font-size:12px}
+.lx-editor-footer #lx-privacy-widget .lx-footer button:hover{color:var(--ink,#fff)}
+.lx-editor-footer #lx-privacy-widget .lx-overlay{position:fixed;z-index:2147483640}
