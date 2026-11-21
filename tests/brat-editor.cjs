@@ -20,9 +20,12 @@ const server=http.createServer((req,res)=>{
 const prepare=()=>{
  try{
   localStorage.setItem('lxwis-consent-v4',JSON.stringify({choice:'essential',version:4,at:new Date().toISOString()}));
-  localStorage.removeItem('brat-color-presets-v1');
-  localStorage.removeItem('brat-minimal-v2');
-  localStorage.setItem('brat-ui-theme','light');
+  if(!sessionStorage.getItem('lxwis-brat-test-initialized')){
+   localStorage.removeItem('brat-color-presets-v1');
+   localStorage.removeItem('brat-minimal-v2');
+   localStorage.setItem('brat-ui-theme','light');
+   sessionStorage.setItem('lxwis-brat-test-initialized','1');
+  }
  }catch(e){}
 };
 const androidUserAgent='Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36';
