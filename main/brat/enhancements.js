@@ -45,11 +45,26 @@
  document.addEventListener('keydown',e=>{if(!(e.ctrlKey||e.metaKey)||e.altKey)return;const el=e.target;if(el?.matches?.('textarea,input,[contenteditable]'))return;if(e.key.toLowerCase()==='z'){e.preventDefault();restore(position+(e.shiftKey?1:-1))}else if(e.key.toLowerCase()==='y'){e.preventDefault();restore(position+1)}});
  // Fullscreen uses a scaled snapshot of the live preview; original DOM remains intact.
  const preview=document.createElement('div');preview.className='brat-fullscreen';preview.hidden=true;preview.setAttribute('role','dialog');preview.setAttribute('aria-modal','true');preview.setAttribute('aria-label','Fullscreen artwork preview');
- const close=button('Close fullscreen preview','close',()=>{preview.hidden=true;document.body.classList.remove('brat-preview-open');fullscreenButton.focus()});close.classList.add('brat-fullscreen-close');
+ const close=button('Close fullscreen preview','close',()=>{preview.classList.remove('brat-fullscreen-visible');preview.hidden=true;document.body.classList.remove('brat-preview-open');fullscreenButton.focus()});close.classList.add('brat-fullscreen-close');
  const stage=document.createElement('div');stage.className='brat-fullscreen-stage';preview.append(stage,close);document.body.append(preview);
  let zoom=1;
- function paintPreview(){if(preview.hidden)return;stage.replaceChildren();const copy=art.cloneNode(true);copy.removeAttribute('id');copy.querySelector('#artText')?.removeAttribute('id');copy.classList.add('brat-fullscreen-art');const [w,h]=sizes[state.size],factor=Math.min((window.innerWidth-28)/w,(window.innerHeight-120)/h);copy.style.width=w+'px';copy.style.height=h+'px';copy.style.transform='scale('+factor*zoom+')';stage.append(copy)}
- const fullscreenButton=button('Fullscreen preview','expand',()=>{zoom=1;preview.hidden=false;document.body.classList.add('brat-preview-open');paintPreview();close.focus()});
+ let fullscreenCopy=null;
+ function paintPreview(){
+  if(preview.hidden)return;
+  // Clone at the exact preview dimensions: text positions and font sizes are
+  // measured in CSS pixels by fitText(), not the 1080px export resolution.
+  const w=art.clientWidth,h=art.clientHeight;if(!w||!h)return;
+  const factor=Math.min((window.innerWidth-32)/w,(window.innerHeight-110)/h);
+  const copy=art.cloneNode(true);copy.removeAttribute('id');
+  copy.querySelector('#artText')?.removeAttribute('id');
+  copy.removeAttribute('tabindex');copy.removeAttribute('role');
+  copy.classList.add('brat-fullscreen-art');
+  copy.style.width=w+'px';copy.style.height=h+'px';
+  copy.style.position='absolute';copy.style.left='50%';copy.style.top='50%';
+  copy.style.transform='translate(-50%,-50%) scale('+(factor*zoom)+')';
+  stage.replaceChildren(copy);fullscreenCopy=copy;
+ }
+ const fullscreenButton=button('Fullscreen preview','expand',()=>{zoom=1;preview.hidden=false;document.body.classList.add('brat-preview-open');requestAnimationFrame(()=>{paintPreview();preview.classList.add('brat-fullscreen-visible')});close.focus()});
  actions.append(fullscreenButton);
  preview.addEventListener('click',e=>{if(e.target===preview||e.target===stage)close.click()});
  preview.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.min(3,Math.max(1,zoom+(e.deltaY<0?.15:-.15)));paintPreview()},{passive:false});
