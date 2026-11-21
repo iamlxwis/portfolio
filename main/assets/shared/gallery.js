@@ -99,15 +99,26 @@ async function load(){
  try{
   let urls=[];
   if(cat){
-   // Four concurrent metadata requests, not 30 simultaneous network connections.
-   const amount=12;
-   let cursor=0;
-   const tasks=Array.from({length:4},async()=>{
-    while(cursor<amount){
-     cursor++;try{const url=await catURL();if(!items.includes(url))urls.push(url)}catch{}
+   // Prefer Cataas' list endpoint (one request), fall back to bounded random requests.
+   try{
+    const response=await fetchJSON('https://cataas.com/api/cats?limit=12',8500);
+    if(Array.isArray(response)){
+     urls=response.map(entry=>{
+      const raw=entry?.url||entry?._id||entry?.id;
+      if(!raw)return null;
+      try{const u=new URL(String(raw).includes('/')?String(raw):'/cat/'+raw,'https://cataas.com');return u.protocol==='https:'&&u.hostname==='cataas.com'?u.href:null}catch{return null}
+     }).filter(Boolean);
     }
-   });
-   await Promise.all(tasks);
+   }catch{}
+   if(!urls.length){
+    const amount=12;let cursor=0;
+    const tasks=Array.from({length:5},async()=>{
+     while(cursor<amount){
+      cursor++;try{const url=await catURL();if(!items.includes(url))urls.push(url)}catch{}
+     }
+    });
+    await Promise.all(tasks);
+   }
   }else urls=await dogURLs();
   if(!urls.length)throw Error('No photos returned');
   items.push(...urls.filter(url=>!items.includes(url)));
@@ -150,7 +161,7 @@ function toggleFavorite(){
  if(current<0)return;const url=active[current],index=favorites.indexOf(url);
  if(index<0){favorites.unshift(url);if(favorites.length>250)favorites.pop()}
  else favorites.splice(index,1);
- persist();updateFavorite();countUpdate();if(mode==='saved')render();inform(index<0?'Saved':'Removed from saved');
+ persist();updateFavorite();countUpdate();if(mode==='saved'&&index>=0){dismiss();render();saved.focus({preventScroll:true})}inform(index<0?'Saved':'Removed from saved');
 }
 async function savePhoto(){
  if(current<0)return;
@@ -160,7 +171,7 @@ async function savePhoto(){
   const res=await fetch(url);
   if(!res.ok)throw Error('Download unavailable');
   const blob=await res.blob();
-  const extension=blob.type.includes('png')?'png':blob.type.includes('webp')?'webp':'jpg';
+  const mime=blob.type.toLowerCase();const extension=mime.includes('png')?'png':mime.includes('webp')?'webp':mime.includes('gif')?'gif':mime.includes('svg')?'svg':'jpg';
   const local=URL.createObjectURL(blob),link=document.createElement('a');
   link.href=local;link.download='lxwis-'+type+'-'+Date.now()+'.'+extension;document.body.append(link);link.click();link.remove();
   setTimeout(()=>URL.revokeObjectURL(local),30000);
