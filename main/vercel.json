@@ -6,7 +6,7 @@
     },
     {
       "source": "/log",
-      "destination": "/log.html"
+      "destination": "/pages/log.html"
     },
     {
       "source": "/meow",
@@ -103,6 +103,10 @@
     {
       "source": "/terms.html",
       "destination": "/legal/terms.html"
+    },
+    {
+      "source": "/log.html",
+      "destination": "/pages/log.html"
     }
   ],
   "headers": [

@@ -17,16 +17,16 @@ main/                       Vercel deployment root
   meow/                      Cat mini-app (assets/)
   arf/                       Dog mini-app (assets/)
   api/                       Serverless API handlers
-  log.html                   Changelog page
-  404.html                   Not-found page
-  vercel.json                URL rewrites and caching headers
+  pages/log.html             Changelog page
+  404.html                   Not-found fallback (must stay here)
+  vercel.json                Vercel routing config (must stay here)
 ```
 
 ## URLs and deployments
 
 Vercel **Root Directory must remain `main/`**. Existing public routes (`/brat`, `/meow`, `/arf`, `/privacy`, `/cookies`, `/terms`, `/log`) are preserved. Legacy asset URLs have rewrite aliases to avoid breaking cached HTML. `/student` and `/pbb` currently point to missing source directories and are retained only as existing route definitions.
 
-The Android build copies `main/brat/` and shared legal resources into its offline WebView bundle. See [Android build guide](android/brat/README.md).
+Website source documentation: [docs/website.md](docs/website.md).\n\nThe Android build copies `main/brat/` and shared legal resources into its offline WebView bundle. See [Android build guide](android/brat/README.md).
 
 [BRAT](https://lxwis.site/brat) · [Meow](https://lxwis.site/meow) · [Arf](https://lxwis.site/arf) · [Privacy](https://lxwis.site/privacy)
 
