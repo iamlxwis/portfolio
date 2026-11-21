@@ -31,8 +31,11 @@ root.innerHTML='<nav class="lx-footer" aria-label="Legal and privacy"><button ty
 '<div class="lx-actions"><button type="button" data-choice="essential">essential only</button><button type="button" class="lx-accept" data-choice="accept" disabled>accept</button></div>'+
 '<p class="lx-note">both choices currently save your preference only. no extra tracking is switched on.</p>'+
 '</section></div>';
+const editorControls=document.querySelector('.controls-inner');
 const existingFooter=document.querySelector('.wrap > footer, body > footer, main + footer');
-if(existingFooter){existingFooter.append(root)}else{const footer=document.createElement('footer');footer.className='lx-site-footer';footer.append(root);(document.querySelector('main')||document.body).after(footer)}
+if(editorControls){const footer=document.createElement('footer');footer.className='lx-site-footer lx-editor-footer';footer.append(root);editorControls.append(footer)}
+else if(existingFooter){existingFooter.append(root)}
+else{const footer=document.createElement('footer');footer.className='lx-site-footer';footer.append(root);(document.querySelector('main')||document.body).after(footer)}
 const overlay=root.querySelector('.lx-overlay'),panel=root.querySelector('.lx-panel'),checks=[...root.querySelectorAll('[data-read]')],accept=root.querySelector('[data-choice="accept"]'),close=null;
 let lastFocus=null;
 function getChoice(){try{const value=JSON.parse(localStorage.getItem(key));return value&&value.version===4&&['accept','essential'].includes(value.choice)?value:null}catch{return null}}
