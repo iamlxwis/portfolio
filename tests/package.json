@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "smoke": "node site-smoke.cjs",
-    "fidelity": "node site-v2.cjs"
+    "fidelity": "node site-v2.cjs",
+    "brat": "node brat-editor.cjs"
   },
   "devDependencies": {
     "playwright": "1.56.1",

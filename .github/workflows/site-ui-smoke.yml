@@ -47,6 +47,9 @@ jobs:
       - name: Full-site visual and interaction fidelity
         working-directory: tests
         run: npm run fidelity
+      - name: BRAT editor responsive fidelity and interaction checks
+        working-directory: tests
+        run: npm run brat
       - name: Upload all screenshots for manual review
         if: always()
         uses: actions/upload-artifact@v4
