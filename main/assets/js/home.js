@@ -4,7 +4,7 @@ var toggle=document.getElementById('vinyl-toggle');
 var minimize=document.getElementById('vinyl-minimize');
 try{
  var preference=sessionStorage.getItem('lxwis-vinyl-view');
- if(preference!=='full')widget.classList.add('is-minimized');
+ widget.classList.toggle('is-minimized',preference!=='full');
 }catch(e){widget.classList.add('is-minimized')}
 minimize.addEventListener('click',function(event){
  event.stopPropagation();

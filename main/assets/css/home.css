@@ -308,3 +308,10 @@ body .wrap>footer #lx-privacy-widget .lx-footer button{min-height:30px}
 /* Readable secondary labels without losing the restrained grayscale palette. */
 .section-index,.project-number,.interaction-hint,.other-links a span{color:#9b9b9b}
 .site-nav a{min-width:42px}
+
+/* Invisible controls must not receive keyboard focus; compact audio stays tappable. */
+.lx-back-to-top{visibility:hidden}
+.lx-back-to-top.is-visible{visibility:visible}
+.vinyl-widget.is-minimized{width:42px;height:42px}
+.vinyl-widget.is-minimized .vinyl-toggle{width:42px;height:42px}
+.vinyl-widget.is-minimized .vinyl-minimize{width:24px;height:24px;right:-6px;top:-6px}
