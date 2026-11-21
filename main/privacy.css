@@ -9,3 +9,24 @@
 #lx-privacy-widget>.lx-overlay:not([hidden]){display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
 #lx-privacy-widget>.lx-overlay[hidden]{display:none!important}
 #lx-privacy-widget .lx-panel{position:relative;z-index:1}
+
+/* v6: one semantic footer, no floating legal navigation over editor. */
+body:has(.art-area) #lx-privacy-widget .lx-footer,
+body:has(.lx-404-page) #lx-privacy-widget .lx-footer{
+ position:static;inset:auto;bottom:auto;left:auto;right:auto;z-index:auto;
+ width:auto;max-width:none;margin:0;background:transparent;border:0;
+ border-radius:0;padding:16px 12px;gap:14px;font-size:12px;
+}
+body:has(.art-area) #lx-privacy-widget .lx-footer span{display:inline}
+body:has(.art-area) #lx-privacy-widget .lx-footer button{color:inherit}
+.lx-site-footer{display:block;position:relative;margin:0 auto;padding:12px 18px 24px;width:100%;max-width:1160px;box-sizing:border-box}
+.lx-site-footer #lx-privacy-widget .lx-footer{justify-content:center;gap:14px}
+.wrap>footer #lx-privacy-widget{display:block;width:100%;margin-top:10px}
+.wrap>footer #lx-privacy-widget .lx-footer{padding:6px 0;justify-content:flex-start;gap:16px}
+.wrap>footer #lx-privacy-widget .lx-footer>span{display:none}
+#lx-privacy-widget .lx-footer button{min-height:30px;text-underline-offset:3px;transition:color .16s ease}
+#lx-privacy-widget .lx-footer button:hover{color:#8ace00}
+#lx-privacy-widget .lx-panel-head{padding-right:0}
+#lx-privacy-widget .lx-overlay{overscroll-behavior:contain}
+#lx-privacy-widget .lx-panel{overscroll-behavior:contain}
+@media(prefers-reduced-motion:reduce){#lx-privacy-widget .lx-footer button{transition:none}}
