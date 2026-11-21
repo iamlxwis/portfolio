@@ -14,11 +14,10 @@ for(const name of ['privacy.html','cookies.html','terms.html']){
  page=page.replaceAll(/(href|src)="\/(legal\.css|privacy\.css|privacy\.js)/g,'$1="./$2').replaceAll('href="/"','href="./index.html"');
  await writeFile(path,page);
 }
-// The APK uses a one-time consent dialog, never the site's persistent legal footer.
+// Keep the same non-floating legal/credit footer as the website, inside editor controls.
 const widget=resolve(dest,'privacy.js');let js=await readFile(widget,'utf8');
-js=js.replace('const existingFooter=document.querySelector(\'.wrap > footer, body > footer, main + footer\');','const existingFooter=null;');
-js=js.replace('(document.querySelector(\'main\')||document.body).after(footer)','document.body.append(root);root.querySelector(\'.lx-footer\')?.remove()');
-js=js.replaceAll('href="/privacy"','href="./privacy.html"').replaceAll('href="/cookies"','href="./cookies.html"').replaceAll('href="/terms"','href="./terms.html"');await writeFile(widget,js);
+js=js.replaceAll('href="/privacy"','href="./privacy.html"').replaceAll('href="/cookies"','href="./cookies.html"').replaceAll('href="/terms"','href="./terms.html"');
+await writeFile(widget,js);
 // One native-only startup overlay, with a short animation and guaranteed timeout.
 html=html.replace(/<head>/, `<head><meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'">`);
 html=html.replace(/<body([^>]*)>/i, match=>match+'<div id="brat-startup" role="status" aria-label="Loading BRAT" style="position:fixed;inset:0;z-index:2147483647;background:#8ace00;color:#141414;display:flex;flex-direction:column;align-items:center;justify-content:center;font:700 64px Arial,sans-serif;transition:opacity .28s ease"><span id="brat-startup-word" style="animation:bratEnter .55s cubic-bezier(.2,.8,.2,1) both">brat</span><span style="position:absolute;bottom:12%;width:48px;height:3px;background:#14141433;overflow:hidden;border-radius:4px"><span style="display:block;width:40%;height:100%;background:#141414;animation:bratLoad .8s ease-in-out infinite alternate"></span></span></div>');
@@ -43,7 +42,7 @@ await writeFile(resolve(dest,'startup.js'),`(() => {
   window.addEventListener('load', ready, {once:true});
   setTimeout(dismiss, 2200);
 })();`);
-// Native-only refinements: no persistent footer, and the logo does not reload the editor.
+// Native-only refinements: the logo does not reload the editor.
 html=html.replace('</head>','<style>html,body{overscroll-behavior:none}.logo{cursor:default}.editor-panel>summary,.settings-panel>summary{transition:background-color .18s ease}.editor-panel>summary:active,.settings-panel>summary:active{background-color:var(--line)}.editor-panel .panel-content{animation:bratPanelIn .18s ease-out}@keyframes bratPanelIn{from{opacity:.5;transform:translateY(-5px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.editor-panel .panel-content{animation:none}}</style></head>');
 await writeFile(file,html);
 console.log('Offline BRAT web assets copied to android/brat/www');
