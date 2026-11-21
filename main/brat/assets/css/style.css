@@ -507,3 +507,8 @@ header{position:relative;z-index:40}
 
 /* Web-only site menu does not belong in the installed Android app. */
 html.capacitor-app .brat-route-menu{display:none!important}
+
+/* Keep the page dropdown inside narrow handset viewports by anchoring it to the action group. */
+.header-actions{position:relative}
+.brat-route-menu{position:static}
+.brat-route-menu>nav{right:0;left:auto;top:calc(100% + 8px)}
