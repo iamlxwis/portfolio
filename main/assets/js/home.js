@@ -113,6 +113,8 @@ function play(){
 var oldView=read(preferenceKey,sessionStorage);
 widget.classList.toggle('is-minimized',oldView!=='full');
 syncMinimize();
+// Measure the element while it is visible; hidden elements have zero-sized bounds.
+restorePosition();
 if(read(closedKey,localStorage)==='1'){
  widget.classList.add('is-closed');
  widget.hidden=true;
@@ -175,7 +177,6 @@ window.addEventListener('pageshow',function(event){
 document.addEventListener('keydown',function(event){
  if(event.key==='Escape'&&playing)pause();
 });
-restorePosition();
 })();
 
 (function(){
