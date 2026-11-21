@@ -6,7 +6,7 @@
     },
     {
       "source": "/log",
-      "destination": "/log.html"
+      "destination": "/pages/log.html"
     },
     {
       "source": "/meow",
@@ -34,15 +34,79 @@
     },
     {
       "source": "/privacy",
-      "destination": "/privacy.html"
+      "destination": "/legal/privacy.html"
     },
     {
       "source": "/cookies",
-      "destination": "/cookies.html"
+      "destination": "/legal/cookies.html"
     },
     {
       "source": "/terms",
-      "destination": "/terms.html"
+      "destination": "/legal/terms.html"
+    },
+    {
+      "source": "/brat/style.css",
+      "destination": "/brat/assets/css/style.css"
+    },
+    {
+      "source": "/brat/script.js",
+      "destination": "/brat/assets/js/script.js"
+    },
+    {
+      "source": "/brat/enhancements.js",
+      "destination": "/brat/assets/js/enhancements.js"
+    },
+    {
+      "source": "/style.css",
+      "destination": "/assets/css/home.css"
+    },
+    {
+      "source": "/script.js",
+      "destination": "/assets/js/home.js"
+    },
+    {
+      "source": "/meow/style.css",
+      "destination": "/meow/assets/style.css"
+    },
+    {
+      "source": "/meow/script.js",
+      "destination": "/meow/assets/script.js"
+    },
+    {
+      "source": "/arf/style.css",
+      "destination": "/arf/assets/style.css"
+    },
+    {
+      "source": "/arf/script.js",
+      "destination": "/arf/assets/script.js"
+    },
+    {
+      "source": "/privacy.js",
+      "destination": "/assets/shared/privacy.js"
+    },
+    {
+      "source": "/privacy.css",
+      "destination": "/assets/shared/privacy.css"
+    },
+    {
+      "source": "/legal.css",
+      "destination": "/assets/shared/legal.css"
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "/legal/privacy.html"
+    },
+    {
+      "source": "/cookies.html",
+      "destination": "/legal/cookies.html"
+    },
+    {
+      "source": "/terms.html",
+      "destination": "/legal/terms.html"
+    },
+    {
+      "source": "/log.html",
+      "destination": "/pages/log.html"
     }
   ],
   "headers": [
