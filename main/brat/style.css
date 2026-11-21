@@ -259,3 +259,39 @@ button:focus-visible,summary:focus-visible{outline:2px solid #8ace00;outline-off
 .select-item .brat-premium-icon{opacity:0;width:16px;height:16px}
 .select-item[aria-selected=true] .brat-premium-icon{opacity:1;color:#8ace00}
 .select-display[aria-expanded=true]>.brat-premium-icon{transform:rotate(180deg)}
+
+/* BRAT studio v2: compact editor actions and local collections */
+.art-area{position:relative}
+.brat-quick-actions{position:absolute;z-index:3;left:50%;bottom:12px;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;gap:5px;padding:6px;border:1px solid var(--line);border-radius:16px;background:var(--panel);box-shadow:0 5px 25px #0002;max-width:calc(100% - 20px)}
+.brat-quick-button{width:38px;height:38px;display:inline-grid;place-items:center;border:0;border-radius:11px;background:transparent;color:var(--ink);transition:transform .16s ease,background .16s ease}
+.brat-quick-button:hover{background:var(--line)}
+.brat-quick-button:active{transform:scale(.88)}
+.brat-quick-button:disabled{opacity:.3;cursor:not-allowed}
+.brat-quick-button .brat-premium-icon{width:19px;height:19px}
+.brat-draft-restored{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);white-space:nowrap;padding:7px 12px;border-radius:10px;background:var(--panel);color:var(--ink);box-shadow:0 5px 20px #0002;font-size:12px;animation:bratIconArrive .25s ease}
+.brat-custom-palette{margin-top:11px;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.brat-palette-save{min-height:34px;padding:6px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);font-size:12px;font-weight:600}
+.brat-palette-list{display:flex;gap:8px;flex-wrap:wrap}
+.brat-palette-item{display:inline-flex;align-items:center;gap:2px}
+.brat-palette-apply{width:31px;height:31px;border-radius:10px;border:1px solid var(--line)}
+.brat-palette-remove{width:20px;height:26px;padding:0;border:0;background:transparent;color:var(--muted);font-size:18px}
+.brat-fullscreen[hidden],.brat-library-overlay[hidden]{display:none!important}
+.brat-fullscreen{position:fixed;inset:0;z-index:2147483600;display:grid;place-items:center;background:var(--page);overscroll-behavior:contain;touch-action:none}
+.brat-fullscreen-stage{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}
+.brat-fullscreen-art{flex-shrink:0;transform-origin:center center;pointer-events:none}
+.brat-fullscreen-close{position:absolute;right:22px;top:max(22px,env(safe-area-inset-top));z-index:2;background:var(--panel);border:1px solid var(--line);width:44px;height:44px}
+body.brat-preview-open{overflow:hidden}
+.brat-library-overlay{position:fixed;inset:0;z-index:2147483600;background:#0009;display:flex;align-items:center;justify-content:center;padding:18px}
+.brat-library-panel{width:min(100%,480px);max-height:min(78vh,650px);display:flex;flex-direction:column;overflow:hidden;border-radius:24px;background:var(--panel);color:var(--ink);box-shadow:0 20px 80px #0005}
+.brat-library-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 12px}
+.brat-library-header h2{font-size:22px;margin:0}
+.brat-library-list{overflow:auto;overscroll-behavior:contain;padding:8px 16px 20px}
+.brat-library-empty{padding:30px 10px;text-align:center;color:var(--muted);line-height:1.5}
+.brat-library-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.brat-library-swatch{display:flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:12px;overflow:hidden;font-size:11px;flex-shrink:0}
+.brat-library-info{display:flex;flex:1;min-width:0;flex-direction:column;gap:5px}
+.brat-library-info strong{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brat-library-info small{font-size:11px;color:var(--muted)}
+.brat-library-row>button{border:1px solid var(--line);border-radius:9px;background:var(--page);color:var(--ink);min-height:36px;padding:0 9px;font-size:12px}
+@media(max-width:430px){.brat-quick-actions{gap:2px;padding:4px}.brat-quick-button{width:37px;height:37px}.brat-library-row{gap:6px}.brat-library-swatch{width:45px;height:45px}.brat-library-row>button{padding:0 7px}}
+@media(prefers-reduced-motion:reduce){.brat-quick-button,.brat-draft-restored{animation:none;transition:none}}
