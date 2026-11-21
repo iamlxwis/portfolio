@@ -298,6 +298,7 @@ document.querySelectorAll('.modern-select').forEach(sel=>{
  sel.addEventListener('change',refresh);refresh();
 });
 document.addEventListener('click',e=>{if(!e.target.closest('.select-shell')){document.querySelectorAll('.select-options').forEach(p=>p.hidden=true);document.querySelectorAll('.select-display').forEach(b=>b.setAttribute('aria-expanded','false'))}});
+$('wrapMode')?.addEventListener('change',e=>update({wrapMode:e.target.value==='natural'?'natural':'classic'}));
 document.querySelectorAll('.swatch').forEach(b=>b.addEventListener('click',()=>{const [bg,fg]=palettes[b.dataset.palette];update({bg,fg})}));
 $('downloadTop').addEventListener('click',exportOptions);
 $('resetDesign').addEventListener('click',()=>{state={...defaults};photo=null;save();sync();schedule()});
@@ -320,4 +321,4 @@ $('themeToggle').addEventListener('click',()=>theme(document.documentElement.dat
 try{const old=JSON.parse(localStorage.getItem(key));if(old&&sizes[old.size])state={...defaults,...old}}catch{}
 try{theme(localStorage.getItem('brat-ui-theme')||'light')}catch{theme('light')}
 upgradeIcons();
-const observer=new ResizeObserver(()=>requestAnimationFrame(draw));observer.observe(art.closest('.art-area'));sync();loadPhoto();schedule();
+const observer=new ResizeObserver(()=>requestAnimationFrame(draw));observer.observe(art.closest('.art-area'));observer.observe(art.closest('.art-shell'));sync();loadPhoto();schedule();
