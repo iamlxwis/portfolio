@@ -37,6 +37,9 @@ function mockServices(page,base){
    }
    return route.continue();
   }
+  if(u.includes('cataas.com/api/cats?limit=12')){
+   return route.fulfill({status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify(Array.from({length:12},(_,i)=>({_id:'bulk-cat-'+i})))});
+  }
   if(u.includes('cataas.com/cat?json=true')){
    cats++;return route.fulfill({status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify({_id:'mock-cat-'+cats})});
   }
@@ -84,7 +87,26 @@ async function run(){
      assert.ok(!(await page.locator('body').innerText()).includes("I build things for the web"),'Homepage filler copy returned');
      assert.equal(await page.locator('.lx-showcase a').count(),3);
      assert.ok(await page.locator('.lx-route-menu').count());
+     const sectionVisibility=await page.locator('.content-section').evaluateAll(nodes=>nodes.map(el=>({
+      id:el.id,opacity:Number(getComputedStyle(el).opacity),rect:el.getBoundingClientRect().height
+     })));
+     assert.ok(sectionVisibility.every(item=>item.opacity>=.95&&item.rect>100),
+      'Homepage contains invisible or collapsed sections at '+width+' '+JSON.stringify(sectionVisibility));
      const icons=await page.locator('.lx-icon svg').count();assert.ok(icons>=4,'Homepage icons not mounted');
+    }
+    if(route==='/log'){
+     await page.waitForFunction(()=>document.querySelectorAll('.lx-log-entry').length>=2,null,{timeout:5000});
+     const textBoxes=await page.locator('.lx-log-entry .lx-log-description').evaluateAll(nodes=>nodes.map(el=>({
+      width:el.getBoundingClientRect().width,text:el.textContent
+     })));
+     assert.ok(textBoxes.every(item=>item.width>=Math.min(width*.47,380)),
+      'Log text cramped at '+width+' '+JSON.stringify(textBoxes));
+    }
+    if(route==='/meow'||route==='/arf'){
+     const peek=page.locator('.lx-gallery-peek img');
+     assert.ok(await peek.count()===1,'Missing gallery preview '+route);
+     await peek.evaluate(img=>img.decode());
+     assert.ok(await peek.evaluate(img=>img.naturalWidth>0),'Gallery preview not loaded '+route);
     }
     await checkOverflow(page,route+' @ '+width);
     if(route==='/brat'){
@@ -181,14 +203,14 @@ async function run(){
   const audit=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
   await audit.addInitScript(consent);
   const ap=await audit.newPage();mockServices(ap,base);
-  for(const route of ['/','/meow','/privacy','/404.html']){
+  for(const route of ['/','/meow','/arf','/log','/privacy','/cookies','/terms','/404.html','/brat']){
    await navigate(ap,base,route);
    await checkAxe(ap,route);
    console.log('PASS accessibility audit',route);
   }
   await audit.close();
   assert.deepEqual(errors,[],'Uncaught browser errors');
-  console.log('PASS full site regression, 9 pages x 4 widths + interactions + axe');
+  console.log('PASS full site regression, 9 pages x 4 widths + interactions + axe + visibility + readable log');
  }finally{await browser.close();server.close()}
 }
 run().catch(e=>{console.error(e);server.close();process.exitCode=1});
