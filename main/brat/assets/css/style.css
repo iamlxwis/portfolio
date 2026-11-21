@@ -504,3 +504,6 @@ header{position:relative;z-index:40}
 @media(prefers-reduced-motion:reduce){
  .brat-route-menu>summary,.brat-palette-save,.color-entry,.editor-panel .text-field{transition:none!important}
 }
+
+/* Web-only site menu does not belong in the installed Android app. */
+html.capacitor-app .brat-route-menu{display:none!important}
