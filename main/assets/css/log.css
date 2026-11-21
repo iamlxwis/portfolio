@@ -61,3 +61,12 @@ body.lx-log-page{margin:0;background:radial-gradient(ellipse 80% 24% at 50% -5%,
 .lx-log-updated{font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.lx-log-entry,.lx-log-skeleton span{animation:none!important}}
+
+/* Fidelity fix: keep the message and its metadata together on narrow screens. */
+.lx-log-description{min-width:0;overflow-wrap:anywhere}
+@media(max-width:600px){
+.lx-log-entry .lx-log-description{grid-column:1;grid-row:2}
+.lx-log-entry .lx-log-link{grid-column:2;grid-row:2}
+.lx-log-entry .lx-log-date{grid-column:1;grid-row:1}
+.lx-log-message,.lx-log-detail{grid-column:auto;grid-row:auto}
+}

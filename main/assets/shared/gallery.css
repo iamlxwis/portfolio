@@ -102,3 +102,23 @@ body.lx-lightbox-open{overflow:hidden}
 .lx-lightbox-actions .lx-lightbox-button{padding:10px}
 }
 @media(prefers-reduced-motion:reduce){.lx-gallery-skeleton,.lx-gallery-lightbox{animation:none!important}.lx-gallery-tile img{transition:none!important}.lx-gallery-tile{transition:none!important}}
+
+/* Preview a real gallery image without fetching third-party content before interaction. */
+.lx-gallery-hero{min-height:clamp(430px,56vh,600px);display:flex;flex-direction:column;justify-content:center;padding-right:38%}
+.lx-gallery-peek{position:absolute;right:2%;top:50%;width:min(31%,310px);aspect-ratio:4/5;border:1px solid #555e4f;border-radius:19px;box-shadow:0 32px 75px #0008;overflow:hidden;background:#1a1e17;transform:translateY(-50%) rotate(2deg);transition:transform .4s var(--lx-ease),box-shadow .4s}
+.lx-gallery-peek:hover{transform:translateY(-50%) rotate(0) scale(1.01);box-shadow:0 37px 83px #0009}
+.lx-gallery-peek img{display:block;position:absolute;max-width:none;width:310%;height:auto;top:-23%;left:-206%;filter:saturate(.9);pointer-events:none}
+.lx-gallery-peek::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 77%,#0009 100%);pointer-events:none}
+.lx-gallery-peek .lx-peek-label{position:absolute;left:18px;bottom:16px;z-index:2;color:#f3f5eb;font:10px/1.6 'JetBrains Mono',monospace;letter-spacing:.13em;text-transform:uppercase}
+.lx-gallery-hero.is-compact{min-height:0;padding-right:0}
+.lx-gallery-hero.is-compact .lx-gallery-peek{display:none}
+.lx-gallery-footer #lx-privacy-widget .lx-footer>span{display:none}
+body.lx-lightbox-open .lx-gallery-footer{visibility:hidden}
+@media(max-width:760px){
+.lx-gallery-hero{min-height:0;padding-right:0;display:block}
+.lx-gallery-peek{position:relative;right:auto;top:auto;width:100%;height:240px;aspect-ratio:auto;transform:none;margin-top:33px;border-radius:14px}
+.lx-gallery-peek:hover{transform:none}
+.lx-gallery-peek img{width:150%;top:-13%;left:-23%}
+}
+@media(max-width:480px){.lx-gallery-peek{height:215px;margin-top:26px}.lx-gallery-peek img{width:160%;left:-30%;top:-14%}}
+@media(prefers-reduced-motion:reduce){.lx-gallery-peek{transition:none!important}}

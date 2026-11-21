@@ -390,3 +390,8 @@ body .wrap>footer #lx-privacy-widget .lx-footer button{min-height:30px}
 .lx-home-v2 .lx-menu-word{display:none}
 .lx-home-v2 .lx-route-menu>summary{gap:6px;padding:8px 10px}
 }
+
+/* Fidelity fix: sections remain readable before entering the viewport. */
+@media(prefers-reduced-motion:no-preference){
+html.lx-motion-ready .lx-reveal:not(.is-visible){opacity:1;transform:translateY(9px)}
+}
