@@ -82,12 +82,12 @@
   if(write(galleryKey,designs))notify('design saved to your gallery');
  });
  actions.append(galleryButton,saveDesign);
- const paletteBar=document.createElement('div');paletteBar.className='brat-custom-palette';
- const paletteSave=document.createElement('button');paletteSave.type='button';paletteSave.className='brat-palette-save';paletteSave.textContent='+ save colors';
- const paletteList=document.createElement('div');paletteList.className='brat-palette-list';paletteList.setAttribute('role','group');paletteList.setAttribute('aria-label','Saved color combinations');
- paletteBar.append(paletteSave,paletteList);document.querySelector('.swatches')?.after(paletteBar);
+ // These controls are in the HTML next to the color heading, not injected below the swatches.
+ const paletteSave=$('saveColors');
+ const paletteBar=$('bratSavedPalette');
+ const paletteList=$('bratPaletteList');
  paletteSave.addEventListener('click',()=>{const colors=read(colorsKey);if(colors.some(c=>c.bg===state.bg&&c.fg===state.fg)){notify('colors already saved');return}if(colors.length>=12){notify('color presets full: remove one first');return}colors.push({bg:state.bg,fg:state.fg});if(write(colorsKey,colors)){renderColors();notify('color preset saved')}});
- function renderColors(){paletteList.replaceChildren();read(colorsKey).forEach((c,i)=>{const item=document.createElement('span');item.className='brat-palette-item';const apply=document.createElement('button');apply.type='button';apply.className='brat-palette-apply';apply.title='Apply saved colors';apply.setAttribute('aria-label','Apply saved color combination '+(i+1));apply.style.background='linear-gradient(135deg,'+c.bg+' 50%,'+c.fg+' 50%)';apply.addEventListener('click',()=>update({bg:c.bg,fg:c.fg}));const remove=document.createElement('button');remove.type='button';remove.className='brat-palette-remove';remove.setAttribute('aria-label','Remove saved colors '+(i+1));remove.textContent='×';remove.addEventListener('click',()=>{const list=read(colorsKey);list.splice(i,1);write(colorsKey,list);renderColors()});item.append(apply,remove);paletteList.append(item)})}
+ function renderColors(){paletteList.replaceChildren();read(colorsKey).forEach((c,i)=>{const item=document.createElement('span');item.className='brat-palette-item';const apply=document.createElement('button');apply.type='button';apply.className='brat-palette-apply';apply.title='Apply saved colors';apply.setAttribute('aria-label','Apply saved color combination '+(i+1));apply.style.background='linear-gradient(135deg,'+c.bg+' 50%,'+c.fg+' 50%)';apply.addEventListener('click',()=>update({bg:c.bg,fg:c.fg}));const remove=document.createElement('button');remove.type='button';remove.className='brat-palette-remove';remove.setAttribute('aria-label','Remove saved colors '+(i+1));remove.title='Remove saved colors';remove.append(premiumIcon('close',14));remove.addEventListener('click',()=>{const list=read(colorsKey);list.splice(i,1);write(colorsKey,list);renderColors()});item.append(apply,remove);paletteList.append(item)});paletteBar.hidden=paletteList.childElementCount===0}
  renderColors();
  // Accessible modal with explicit controls and no untrusted HTML.
  const library=document.createElement('div');library.className='brat-library-overlay';library.hidden=true;
