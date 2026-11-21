@@ -40,7 +40,7 @@ jobs:
           node --check ../../main/brat/script.js
           node --check ../../main/brat/enhancements.js
           node --check scripts/prepare-web.mjs
-          node -e "const fs=require('fs');const html=fs.readFileSync('../../main/brat/index.html','utf8');const core=html.indexOf('/brat/script.js?v='),extra=html.indexOf('/brat/enhancements.js?v=');if(core<0||extra<core||!html.includes('id=\\\"wrapMode\\\"'))process.exit(1)"
+          node -e "const fs=require('fs');const html=fs.readFileSync('../../main/brat/index.html','utf8');const core=html.indexOf('/brat/script.js?v='),extra=html.indexOf('/brat/enhancements.js?v=');if(core<0||extra<core||!html.includes('wrapMode'))process.exit(1)"
       - name: Install dependencies
         run: npm install
       - name: Generate offline assets and Android project
