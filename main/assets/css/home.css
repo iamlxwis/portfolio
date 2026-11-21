@@ -291,3 +291,8 @@ html.lx-motion-ready .lx-reveal{transition:opacity .62s var(--ease-out),transfor
 .lx-loader-track>span{width:100%}
 }
 @media(max-width:600px){.vinyl-widget{bottom:max(16px,env(safe-area-inset-bottom));left:12px}}
+
+/* Prior blanket animations interfered with viewport-based section reveals.
+   Keep the background grid static to avoid continuous paint work. */
+body::before{animation:none}
+.content-section{animation:none}
