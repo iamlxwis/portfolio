@@ -359,7 +359,6 @@ header{height:54px;padding:0 17px}
 .art-area>.brat-quick-actions .brat-quick-button{width:39px;height:39px;min-width:39px;min-height:39px}
 }
 html.brat-handset body{overflow:hidden}
-html.brat-handset 
 html.brat-handset main{display:flex;flex-direction:column;height:calc(100dvh - 54px);min-height:0}
 html.brat-handset header{height:54px;padding:0 17px}
 html.brat-handset .art-area{flex:1 1 auto;min-height:0;min-width:0;padding:10px 14px 9px;overflow:hidden;gap:8px}
@@ -368,8 +367,8 @@ html.brat-handset .art-area>.art-shell>.art{max-width:100%;max-height:100%}
 html.brat-handset .controls{flex:0 0 auto;height:clamp(250px,43dvh,440px);min-height:0;max-height:56dvh;overflow-y:auto;border-left:0;border-top:1px solid var(--line)}
 html.brat-handset .controls-inner{padding:12px 16px max(24px,env(safe-area-inset-bottom))}
 html.brat-handset .controls-inner>.control{margin-bottom:12px}
-html.brat-handset .editor-panel,.settings-panel{margin-bottom:9px}
-html.brat-handset .editor-panel>summary,.settings-panel>summary{padding:10px 12px}
-html.brat-handset .editor-panel .panel-content,.settings-panel .extras{padding:10px 12px}
+html.brat-handset .editor-panel,html.brat-handset .settings-panel{margin-bottom:9px}
+html.brat-handset .editor-panel>summary,html.brat-handset .settings-panel>summary{padding:10px 12px}
+html.brat-handset .editor-panel .panel-content,html.brat-handset .settings-panel .extras{padding:10px 12px}
 html.brat-handset .art-area>.brat-quick-actions{padding:3px 5px;gap:2px;border-radius:14px}
 html.brat-handset .art-area>.brat-quick-actions .brat-quick-button{width:39px;height:39px;min-width:39px;min-height:39px}
