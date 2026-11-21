@@ -4,11 +4,12 @@ import {fileURLToPath} from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'../../..');
 const source=resolve(root,'main/brat'),dest=resolve(root,'android/brat/www');
 await rm(dest,{recursive:true,force:true});await mkdir(dest,{recursive:true});await cp(source,dest,{recursive:true});
-for(const name of ['privacy.css','privacy.js','legal.css'])await cp(resolve(root,'main/assets/shared',name),resolve(dest,name));
+for(const name of ['privacy.css','privacy.js','legal.css','site.css','site.js'])await cp(resolve(root,'main/assets/shared',name),resolve(dest,name));
 for(const name of ['privacy.html','cookies.html','terms.html'])await cp(resolve(root,'main/legal',name),resolve(dest,name));
 const file=resolve(dest,'index.html');let html=await readFile(file,'utf8');
 html=html.replaceAll(/(href|src)="\/brat\//g,'$1="./');
 html=html.replaceAll(/(href|src)="\/(privacy\.css|privacy\.js)/g,'$1="./$2');
+html=html.replaceAll(/(href|src)="\/assets\/shared\/(site\.css|site\.js)/g,'$1="./$2');
 html=html.replace(/<a href="\/" class="logo">brat\.<\/a>/,'<span class="logo" aria-label="BRAT editor">brat.</span>');
 for(const name of ['privacy.html','cookies.html','terms.html']){
  const path=resolve(dest,name);let page=await readFile(path,'utf8');
