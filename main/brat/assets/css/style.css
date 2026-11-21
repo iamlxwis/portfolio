@@ -375,3 +375,65 @@ html.brat-handset .art-area>.brat-quick-actions .brat-quick-button{width:39px;he
 
 /* Preserve Android system-bar safe areas when handset layout overrides desktop mode. */
 html.capacitor-app.brat-handset main{height:calc(100dvh - 54px - var(--native-top,28px) - var(--native-bottom,18px))}
+
+/* BRAT Studio v2 — polished tool surfaces, stays usable as an offline Android editor */
+.brat-brand{display:flex;align-items:center;gap:13px;min-width:0}
+.brat-brand .lx-route-menu{font-family:Arial,Helvetica,sans-serif}
+.brat-brand .lx-route-menu>summary{background:var(--panel);color:var(--ink);border-color:var(--line);border-radius:11px;min-height:38px;padding:7px 11px;gap:7px;font-size:12px}
+.brat-brand .lx-route-menu>summary .lx-icon{width:15px;height:15px}
+.brat-brand .lx-route-menu>nav{left:0;right:auto;background:#1c201b;color:#f2f2ec;border-color:#424940}
+.brat-brand .lx-route-menu>nav a{color:#e2e7dc}
+.brat-brand .lx-route-menu>nav a:hover{color:#fff;background:#30382d}
+.brat-brand .lx-route-menu[open]>summary{border-color:#8ace00}
+header{backdrop-filter:saturate(1.1);-webkit-backdrop-filter:saturate(1.1)}
+.header-actions{gap:10px}
+.export{border-radius:12px;min-height:43px;transition:transform .2s,box-shadow .2s,background .2s}
+.export:hover{box-shadow:0 6px 22px #0002;transform:translateY(-1px)}
+.export:active{transform:scale(.97)}
+#themeToggle{border-radius:12px;transition:background-color .2s,transform .23s}
+#themeToggle:hover{transform:rotate(-10deg);background:var(--line)}
+#themeToggle:active{transform:scale(.92)}
+.art-area{position:relative}
+.art-shell{filter:drop-shadow(0 14px 25px #00000017)}
+.art{transition:background-color .22s ease,box-shadow .3s ease}
+.editor-panel,.settings-panel{border-radius:14px!important;overflow:hidden}
+.editor-panel>summary,.settings-panel>summary{transition:background-color .2s,color .2s}
+.editor-panel>summary:hover,.settings-panel>summary:hover{background:var(--line)}
+.editor-panel>summary:focus-visible,.settings-panel>summary:focus-visible{outline:2px solid #8ace00;outline-offset:-3px}
+.controls .control textarea,.controls .color-option input.hex-input{transition:border-color .2s,box-shadow .2s}
+.controls .control textarea:focus-visible,.controls .color-option input.hex-input:focus-visible{outline:0;border-color:#85b628!important;box-shadow:0 0 0 2px #8ace0040}
+.brat-quick-actions{border-radius:15px!important;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px)}
+.brat-quick-button{border-radius:10px!important;transition:transform .2s,background .18s,color .18s}
+.brat-quick-button:not(:disabled):hover{background:var(--line);transform:translateY(-2px)}
+.brat-quick-button:not(:disabled):active{transform:scale(.93)}
+.brat-quick-button:focus-visible{outline:2px solid #8ace00;outline-offset:1px}
+.swatch{transition:transform .2s,box-shadow .2s}
+.swatch:hover{transform:scale(1.1)}
+.swatch:active{transform:scale(.94)}
+.select-shell .select-display{border-radius:11px!important;transition:border-color .18s,background-color .18s,transform .18s}
+.select-shell .select-display:hover{border-color:#8ace00}
+.select-item{transition:background-color .15s,color .15s}
+.brat-dialog,.brat-library-panel{border-radius:19px!important}
+.brat-dialog button,.brat-library-panel button{min-height:42px}
+.brat-palette-save,.action-button,.upload-button{border-radius:11px;transition:border-color .18s,background-color .18s,transform .18s}
+.action-button:active,.upload-button:active{transform:scale(.985)}
+.hint-trigger{flex:none}
+.hint-trigger .brat-premium-icon{width:13px!important;height:13px!important}
+.hint-trigger:focus-visible{outline:2px solid #8ace00;outline-offset:3px}
+html.capacitor-app .brat-brand .lx-route-menu{display:none!important}
+html.capacitor-app .lx-editor-footer{display:none!important}
+@media(max-width:760px){
+.brat-brand{gap:7px}
+.brat-brand .lx-route-menu>summary{padding:7px 9px;min-height:36px}
+.brat-brand .brat-menu-label{display:none}
+.brat-brand .lx-route-menu>summary .lx-chevron{width:12px;height:12px}
+.export{min-height:40px;padding:9px 11px}
+.art-shell{filter:none}
+.art-area>.brat-quick-actions{max-width:calc(100% - 12px)}
+}
+@media(prefers-reduced-motion:reduce){
+.art,.export,#themeToggle,.swatch,.brat-quick-button,.select-shell .select-display{transition:none!important}
+}
+
+/* Accessibility: label contrast on light and dark theme */
+.color-option>label{color:var(--ink)!important;font-weight:600}

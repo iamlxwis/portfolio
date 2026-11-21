@@ -1,0 +1,33 @@
+/* lxwis 404 page */
+*{box-sizing:border-box}
+html{background:#111210}
+body.lx-not-found{margin:0;min-height:100svh;background:radial-gradient(ellipse at 70% 10%,#242a21 0,transparent 55%),#111210;color:#f1f3ea;font-family:'Inter',Arial,Helvetica,sans-serif}
+.lx-404-shell{width:min(100% - 44px,1030px);margin:0 auto}
+.lx-404-header{display:flex;align-items:center;gap:18px;min-height:80px;border-bottom:1px solid #353a31}
+.lx-404-header .logo{font:700 24px/.95 'Fraunces',Georgia,serif;letter-spacing:-.065em;color:#e9ece4;text-decoration:none}
+.lx-404-header .logo em{font-weight:500;font-style:italic;color:#a7b0a3}
+.lx-404-header .lx-404-route{font:11px 'JetBrains Mono',monospace;color:#a9b1a2;letter-spacing:.08em}
+.lx-404-header .lx-route-menu{margin-left:auto}
+.lx-404-main{padding:clamp(74px,10vh,150px) 0 clamp(70px,9vh,125px)}
+.lx-404-main .lx-eyebrow{margin-bottom:26px}
+.lx-404-main h1{font:700 clamp(110px,26vw,290px)/.75 'Fraunces',Georgia,serif;letter-spacing:-.1em;color:#e1e9d7;margin:0 0 48px}
+.lx-404-main h2{font-size:clamp(22px,3vw,34px);line-height:1.2;letter-spacing:-.05em;font-weight:600;margin:0 0 14px}
+.lx-404-main p{font-size:14px;line-height:1.7;color:#bbc4b5;max-width:480px;margin:0}
+.lx-404-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:27px 0 0}
+.lx-404-links{border-top:1px solid #383d35;margin-top:clamp(65px,10vh,120px);padding:22px 0;display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.lx-404-links>span{font:11px 'JetBrains Mono',monospace;letter-spacing:.12em;color:#a7afa1;text-transform:uppercase;margin-right:auto}
+.lx-404-links a{font-size:12px;color:#d9e0d3;text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:38px}
+.lx-404-links a:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+.lx-404-footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;border-top:1px solid #353a31;padding:23px 0 36px;color:#a5ac9f;font:12px 'JetBrains Mono',monospace}
+.lx-404-footer #lx-privacy-widget{flex-basis:100%}
+.lx-404-footer #lx-privacy-widget .lx-footer{justify-content:flex-start}
+.lx-404-footer #lx-privacy-widget .lx-footer>span{display:none}
+@media(max-width:600px){
+.lx-404-shell{width:calc(100% - 36px)}
+.lx-404-header{min-height:70px}
+.lx-404-header .lx-404-route{display:none}
+.lx-404-main{padding:85px 0 70px}
+.lx-404-main h1{font-size:clamp(125px,33vw,220px);margin-bottom:43px}
+.lx-404-links{gap:14px}
+.lx-404-links>span{flex-basis:100%}
+}

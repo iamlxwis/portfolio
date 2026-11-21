@@ -1,15 +1,55 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Arf — Dog Gallery | lxwis</title><meta name="description" content="A simple dog gallery by lxwis. Browse a collection of dogs." /><meta name="theme-color" content="#111111" />
-<meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://lxwis.site/arf" />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="Arf — Dog Gallery | lxwis" />
-<meta property="og:description" content="A simple dog gallery by lxwis. Browse a collection of dogs." />
-<meta property="og:url" content="https://lxwis.site/arf" />
-<meta name="twitter:card" content="summary" /><link rel="icon" type="image/webp" href="https://i.imgur.com/9jrzHF1_d.webp?maxwidth=64&fidelity=grand" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/arf/assets/style.css?v=1"><link rel="stylesheet" href="/privacy.css?v=8"><script src="/privacy.js?v=5" defer></script></head><body><header><span class="logo">lx<em>wis</em></span><a href="/" class="nav-back">Home</a></header><div class="hero" id="hero"><p class="hero-eyebrow">Gallery</p><h1 class="hero-title">Arf <em>gallery.</em></h1><p class="hero-sub">Dog photos from Dog CEO. Select a photo to view it larger.</p><button class="hero-btn" id="startBtn">Load dogs</button></div><div class="stats-bar" id="statsBar" style="display:none"><span class="stat-text" id="statText"><span class="stat-count">0</span> dogs loaded</span><div class="stats-actions"><button class="load-more-btn" id="loadMoreBtn">Load more</button><button class="fav-toggle-btn" id="favToggleBtn">Saved (0)</button></div></div><div class="gallery" id="gallery"><div class="grid" id="grid"></div></div><footer><span>lxwis.site · Arf Gallery</span><a href="https://dog.ceo" target="_blank">Images via dog.ceo</a></footer><div class="lightbox" id="lightbox"><span class="lb-counter" id="lbCounter">1 / 1</span><span class="lb-close" id="lbClose">ESC / CLOSE</span><button class="lb-nav lb-prev" id="lbPrev">‹</button><img id="lbImg" src="" alt="dog" /><button class="lb-nav lb-next" id="lbNext">›</button><button class="lb-download" id="lbDownload">SAVE IMAGE</button><button class="lb-favorite" id="lbFavorite">SAVE</button></div>
-
-<div id="lx-page-loader" aria-hidden="true"><span class="lx-loader-ring" aria-hidden="true"></span><span class="lx-loader-label">Loading page</span></div>
-
-
-
-<script src="/arf/assets/script.js?v=1" defer></script>
-</body></html>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Arf Gallery — lxwis</title>
+<meta name="description" content="Arf photo gallery. Browse and save dogs.">
+<meta name="theme-color" content="#111210"><meta name="robots" content="index, follow">
+<link rel="canonical" href="https://lxwis.site/arf">
+<meta property="og:type" content="website"><meta property="og:title" content="Arf Gallery — lxwis">
+<meta property="og:description" content="Browse and save dogs."><meta property="og:url" content="https://lxwis.site/arf">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/shared/site.css?v=1">
+<link rel="stylesheet" href="/assets/shared/gallery.css?v=1">
+<link rel="stylesheet" href="/privacy.css?v=8">
+<script src="/privacy.js?v=7" defer></script><script src="/assets/shared/site.js?v=1" defer></script>
+<script src="/assets/shared/gallery.js?v=1" defer></script>
+</head><body class="lx-site-page lx-gallery-page" data-gallery="dog" style="--gallery-accent:#dadccb">
+<a class="lx-skip" href="#galleryMain">Skip to gallery</a>
+<header class="lx-gallery-header">
+<a href="/" class="logo" aria-label="lxwis home">lx<em>wis</em></a>
+<span class="lx-page-title">arf / gallery</span>
+<nav class="lx-gallery-links" aria-label="Gallery navigation">
+<a href="/meow">Meow</a>
+<details class="lx-route-menu"><summary aria-label="Open site menu"><span data-lx-icon="grid-2x2"></span> Pages <span class="lx-chevron" data-lx-icon="chevron-down"></span></summary>
+<nav aria-label="Pages"><a href="/">Home</a><a href="/brat">BRAT Studio</a><a href="/meow">Meow</a><a href="/arf" aria-current="page">Arf</a><a href="/log">Log</a></nav></details>
+</nav>
+</header>
+<main class="lx-gallery-main" id="galleryMain">
+<section class="lx-gallery-hero lx-enter" id="hero" aria-labelledby="galleryTitle">
+<p class="lx-eyebrow">photo gallery / dog</p>
+<h1 id="galleryTitle">Arf <em>gallery.</em></h1>
+<p class="lx-gallery-description">Images via <a href="https://dog.ceo" target="_blank" rel="noopener noreferrer">dog.ceo</a>.</p>
+<button class="lx-btn lx-gallery-launch" id="startBtn" type="button"><span data-lx-icon="grid-2x2"></span> Browse dogs</button>
+<div class="lx-gallery-peek" aria-hidden="true"><img src="/assets/media/arf.webp" alt="" width="1100" height="700" loading="lazy" decoding="async"><span class="lx-peek-label">arf / preview</span></div>
+</section>
+<section class="lx-gallery-section" id="gallerySection" hidden aria-label="Arf images">
+<div class="lx-gallery-controls"><span id="statText" aria-live="polite">0 dogs</span>
+<div class="lx-gallery-actions"><button type="button" id="loadMoreBtn"><span data-lx-icon="refresh-cw"></span> Load more</button>
+<button type="button" id="favToggleBtn" aria-pressed="false"><span data-lx-icon="bookmark"></span> Saved (0)</button></div></div>
+<p class="lx-gallery-status" id="galleryStatus" role="status" aria-live="polite"></p>
+<div class="lx-gallery-grid" id="grid"></div></section>
+</main>
+<footer class="lx-gallery-footer"><span>© 2026 lxwis</span><a href="https://dog.ceo" target="_blank" rel="noopener noreferrer">Photo source: dog.ceo</a></footer>
+<div class="lx-gallery-lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Arf photo viewer" hidden>
+<div class="lx-lightbox-head"><span class="lx-lightbox-counter" id="lbCounter">01 / 01</span>
+<button type="button" class="lx-lightbox-button" id="lbClose" aria-label="Close photo"><span data-lx-icon="x"></span></button></div>
+<div class="lx-lightbox-stage"><button type="button" class="lx-lightbox-button lb-prev" id="lbPrev" aria-label="Previous photo"><span data-lx-icon="chevron-left"></span></button>
+<img id="lbImg" alt="" decoding="async">
+<button type="button" class="lx-lightbox-button lb-next" id="lbNext" aria-label="Next photo"><span data-lx-icon="chevron-right"></span></button></div>
+<div class="lx-lightbox-actions"><button type="button" class="lx-lightbox-button" id="lbFavorite" aria-pressed="false"><span data-lx-icon="bookmark"></span> Save</button>
+<button type="button" class="lx-lightbox-button" id="lbDownload"><span data-lx-icon="download"></span> Download</button>
+<button type="button" class="lx-lightbox-button" id="lbShare"><span data-lx-icon="share-2"></span> Share</button></div>
+<div id="galleryNotice" class="lx-gallery-notice" role="status" aria-live="polite"></div>
+</div></body></html>

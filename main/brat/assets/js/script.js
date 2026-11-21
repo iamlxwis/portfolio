@@ -253,7 +253,7 @@ for(const [id,keyName,min,max,fromPercent] of [['blurValue','blur',1,100,v=>v*5/
 document.querySelectorAll('.hint-trigger').forEach(button=>{
  button.addEventListener('click',e=>{e.stopPropagation();const active=button.getAttribute('aria-expanded')==='true';document.querySelectorAll('.hint-trigger').forEach(b=>b.setAttribute('aria-expanded','false'));button.setAttribute('aria-expanded',String(!active))});
 });
-const hintBubble=document.createElement('div');hintBubble.className='floating-hint';hintBubble.setAttribute('role','tooltip');document.body.appendChild(hintBubble);
+const hintBubble=document.createElement('div');hintBubble.className='floating-hint';hintBubble.setAttribute('role','tooltip');hintBubble.setAttribute('aria-label','Editor control help');hintBubble.hidden=true;document.body.appendChild(hintBubble);
 function placeHint(button){const box=button.getBoundingClientRect();hintBubble.textContent=button.nextElementSibling?.textContent||'';hintBubble.style.left=Math.max(12,Math.min(window.innerWidth-244,box.left-8))+'px';hintBubble.style.top=Math.max(12,Math.min(window.innerHeight-75,box.bottom+10))+'px';hintBubble.hidden=false}
 function hideHint(){hintBubble.hidden=true}
 document.querySelectorAll('.hint-trigger').forEach(b=>{b.addEventListener('click',()=>{if(b.getAttribute('aria-expanded')==='true')placeHint(b);else hideHint()});b.addEventListener('mouseenter',()=>placeHint(b));b.addEventListener('mouseleave',()=>{if(b.getAttribute('aria-expanded')!=='true')hideHint()})});

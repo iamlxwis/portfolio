@@ -315,3 +315,83 @@ body .wrap>footer #lx-privacy-widget .lx-footer button{min-height:30px}
 .vinyl-widget.is-minimized{width:42px;height:42px}
 .vinyl-widget.is-minimized .vinyl-toggle{width:42px;height:42px}
 .vinyl-widget.is-minimized .vinyl-minimize{width:24px;height:24px;right:-6px;top:-6px}
+
+/* Homepage v2 — gallery-like work index, restrained design, no extra hero copy */
+.lx-home-v2 .site-header{gap:clamp(8px,1.5vw,22px)}
+.lx-home-v2 .header-side{gap:10px}
+.lx-home-v2 .site-nav{gap:clamp(8px,1.6vw,18px)}
+.lx-home-v2 .terminal-trigger .lx-icon{width:17px;height:17px}
+.lx-home-v2 .hero{min-height:min(61vh,590px);padding:clamp(76px,10vh,150px) 0 95px;gap:22px}
+.lx-home-v2 .hero h1{font-size:clamp(6rem,20vw,14rem);margin:0;line-height:.85;letter-spacing:-.095em}
+.lx-home-v2 .intro{font:400 clamp(14px,2vw,20px)/1.5 'Inter',Arial,sans-serif;letter-spacing:.01em;color:#b0b3aa;margin:8px 0 0}
+.lx-home-v2 section.content-section{padding:62px 0}
+.lx-home-v2 .section-head{margin-bottom:25px;align-items:center}
+.lx-home-v2 .section-title{font-size:.77rem;font-weight:600;letter-spacing:.16em;color:#d4d7cf}
+.lx-home-v2 .section-index{font-size:.69rem;color:#92968e;letter-spacing:.05em}
+.lx-home-v2 .project{grid-template-columns:42px minmax(185px,1fr) minmax(170px,.9fr) 24px;gap:25px;min-height:112px;padding:24px 15px 24px 5px;align-items:center;border-radius:0;transform:none!important}
+.lx-home-v2 .project:hover{background:#1b1d19}
+.lx-home-v2 .project h3{font-size:clamp(20px,2.3vw,27px);letter-spacing:-.055em}
+.lx-home-v2 .project h3 a{display:block}
+.lx-home-v2 .project p{font-size:13px;color:#a6aba0;padding:0;line-height:1.5}
+.lx-home-v2 .project::after{display:none}
+.lx-project-type{display:block;font:10px/1.5 'JetBrains Mono',monospace;letter-spacing:.09em;color:#999e93;text-transform:uppercase;margin-top:7px}
+.lx-project-arrow{width:19px;height:19px;color:#c1c6b9;justify-self:end;transition:transform .23s var(--lx-ease)}
+.lx-home-v2 .project:is(:hover,:focus-within) .lx-project-arrow{transform:translate(3px,-3px)}
+.lx-home-v2 .other-links.lx-showcase{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;border:0}
+.lx-home-v2 .lx-showcase li{border:0;min-width:0}
+.lx-home-v2 .lx-showcase a{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;padding:0;background:#171915;border:1px solid #343831;border-radius:15px;overflow:hidden;transition:transform .3s var(--lx-ease),border-color .25s,background .25s;height:100%}
+.lx-home-v2 .lx-showcase a:is(:hover,:focus-visible){padding:0;transform:translateY(-5px);border-color:#6a7163;background:#1d201b}
+.lx-showcase-visual{aspect-ratio:5/4;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#222520;position:relative}
+.lx-showcase-brat{background:#8ace00}
+.lx-showcase-brat>span{color:#141414;font:400 clamp(56px,8.5vw,128px)/1 Arial,Helvetica,sans-serif;letter-spacing:-.09em;filter:blur(.4px)}
+.lx-showcase-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 32%;filter:grayscale(.18);transition:transform .7s var(--lx-ease),filter .4s}
+.lx-showcase a:hover img{transform:scale(1.055);filter:grayscale(0)}
+.lx-showcase-body{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 17px 0;color:#e8e9e3}
+.lx-showcase-body strong{font-size:17px;font-weight:600;letter-spacing:-.04em}
+.lx-showcase-arrow{width:17px;height:17px;color:#b7bdb1}
+.lx-showcase-meta{font:11px/1.5 'JetBrains Mono',monospace;color:#a2a69d;padding:5px 17px 19px}
+.lx-home-v2 .contact-list a{grid-template-columns:minmax(100px,.8fr) minmax(0,1.2fr) 22px;min-height:62px;align-items:center;column-gap:16px;padding:16px 12px;font-size:15px}
+.lx-home-v2 .contact-list a strong{font-weight:600}
+.lx-home-v2 .contact-list a .lx-icon{grid-column:3;width:18px;height:18px;color:#abb0a5}
+.lx-home-v2 .contact-list a::after{display:none}
+.lx-home-v2 .contact-list a span:not(.lx-icon){grid-column:2;white-space:nowrap}
+.lx-home-v2 .contact-list a:is(:hover,:focus-visible){padding-left:17px;background:#1b1d19}
+.lx-home-v2 .lx-back-to-top{display:grid;place-items:center}
+.lx-home-v2 .lx-back-to-top .lx-icon{width:20px;height:20px;transform:rotate(-45deg)}
+.lx-home-v2 .terminal-window{background:#191b18}
+.lx-home-v2 .terminal-trigger kbd{border-radius:5px}
+@media(max-width:790px){
+.lx-home-v2 .site-header{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto}
+.lx-home-v2 .site-nav{grid-row:2;grid-column:1/-1;margin:0}
+.lx-home-v2 .header-side{grid-column:2;grid-row:1}
+.lx-home-v2 .project{grid-template-columns:30px minmax(0,1fr) 24px;gap:4px 14px}
+.lx-home-v2 .project-number{grid-column:1;grid-row:1/span 2}
+.lx-home-v2 .project h3{grid-column:2;grid-row:1}
+.lx-home-v2 .project>div{grid-column:2;grid-row:2}
+.lx-home-v2 .lx-project-arrow{grid-column:3;grid-row:1/span 2}
+.lx-home-v2 .lx-showcase-body strong{font-size:15px}
+}
+@media(max-width:600px){
+.lx-home-v2 .hero{min-height:0;padding:75px 0 72px;gap:15px}
+.lx-home-v2 .hero h1{font-size:clamp(6rem,27vw,9rem)}
+.lx-home-v2 .intro{font-size:14px;margin:4px 0}
+.lx-home-v2 section.content-section{padding:42px 0}
+.lx-home-v2 .lx-showcase{gap:10px}
+.lx-home-v2 .other-links.lx-showcase{grid-template-columns:1fr}
+.lx-home-v2 .lx-showcase a{display:grid;grid-template-columns:112px minmax(0,1fr);grid-template-rows:1fr auto;min-height:115px}
+.lx-home-v2 .lx-showcase-visual{grid-row:1/span 2;grid-column:1;aspect-ratio:1;height:100%}
+.lx-home-v2 .lx-showcase-brat>span{font-size:53px}
+.lx-home-v2 .lx-showcase-body{padding:20px 15px 0;grid-row:1;grid-column:2}
+.lx-home-v2 .lx-showcase-meta{padding:0 15px 19px;grid-row:2;grid-column:2}
+.lx-home-v2 .project{min-height:104px;padding:17px 6px 17px 0}
+.lx-home-v2 .project h3{font-size:21px}
+.lx-home-v2 .contact-list a{grid-template-columns:88px minmax(0,1fr) 18px;font-size:13px;padding:14px 3px;gap:8px}
+.lx-home-v2 .contact-list a span:not(.lx-icon){font-size:11px;white-space:normal;overflow-wrap:anywhere}
+.lx-home-v2 .lx-menu-word{display:none}
+.lx-home-v2 .lx-route-menu>summary{gap:6px;padding:8px 10px}
+}
+
+/* Fidelity fix: sections remain readable before entering the viewport. */
+@media(prefers-reduced-motion:no-preference){
+html.lx-motion-ready .lx-reveal:not(.is-visible){opacity:1;transform:translateY(9px)}
+}
